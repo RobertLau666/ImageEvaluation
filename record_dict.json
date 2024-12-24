@@ -1,0 +1,18 @@
+{
+    "./test_images/test_images_1": {
+        "average saturation": 70.83403901883534,
+        "average_PSNR_score": 7.289147809740328,
+        "average_SSIM_score": 0.19229470042863483,
+        "average_aesthetic_predictor_score": 5.547463417053223,
+        "average_skytnt_anime_aesthetic_score": 0.36774230301380156,
+        "average_nsfw_score": 0.0632169061806053
+    },
+    "./test_images/test_images_2": {
+        "average saturation": 73.14979101110387,
+        "average_PSNR_score": 7.5285347139762955,
+        "average_SSIM_score": 0.12093097034392095,
+        "average_aesthetic_predictor_score": 6.426172733306885,
+        "average_skytnt_anime_aesthetic_score": 0.4780025467276573,
+        "average_nsfw_score": 0.005414966342505068
+    }
+}
