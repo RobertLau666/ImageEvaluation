@@ -51,11 +51,7 @@ class ImageEvaluation():
             "average skytnt anime aesthetic score": average_skytnt_anime_aesthetic_score,
             "average nsfw score": average_nsfw_score,
         }
-        # weighted_final_score = 0
-        # # all_weights = 0
-        # for k, v in score_json.items():
-        #     weighted_final_score += self.score_weight_json[k] * v
-            # all_weights += self.score_weight_json[k]
+        
         weighted_final_score = sum(self.score_weight_json[k] * v for k, v in score_json.items())
         all_weights = sum(self.score_weight_json.values())
         score_json["weighted_final_score"] = weighted_final_score / all_weights
