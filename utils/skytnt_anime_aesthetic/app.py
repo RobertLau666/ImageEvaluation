@@ -38,5 +38,5 @@ if __name__ == "__main__":
         for image_name in tqdm(image_names):
             image_path = os.path.join(image_dir, image_name)
             image_pred_scores.append(predict(image_path))
-        image_pred_avg_score = sum(image_pred_scores)/len(image_pred_scores)
+        image_pred_avg_score = sum(image_pred_scores) / len(image_pred_scores)
         print(f"image_pred_avg_score: {image_pred_avg_score}")

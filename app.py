@@ -39,6 +39,7 @@ class ImageEvaluation():
         average_skytnt_anime_aesthetic_score = sum(skytnt_anime_aesthetic_scores) / len(skytnt_anime_aesthetic_scores)
         average_nsfw_score = sum(nsfw_scores) / len(nsfw_scores)
 
+        print(f"Executing calculate_FID_score...")
         # FID_score = calculate_FID_score(real_images_folder, resized_images_folder)
 
         score_json = {
