@@ -1,6 +1,5 @@
 import os
 import cv2
-import glob
 from skimage.metrics import structural_similarity as ssim
 from pytorch_fid import fid_score
 from tqdm import tqdm
@@ -152,4 +151,3 @@ def resize_images_in_folder(generated_images_folder, resized_folder, target_size
             cv2.imwrite(resized_file_path, img_resized)
 
     print(f"Resized images are saved to: {resized_folder}")
-    

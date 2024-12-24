@@ -84,7 +84,7 @@ if __name__ == "__main__":
     aesthetic_predictor = ImprovedAestheticPredictor()
     image_dirs = [
         "/maindata/data/shared/public/chenyu.liu/others/images_evaluation/talkie_imgs",
-        # "/maindata/data/shared/public/chenyu.liu/others/images_evaluation/transfer_drawing_imgs"
+        "/maindata/data/shared/public/chenyu.liu/others/images_evaluation/transfer_drawing_imgs"
     ]
     for image_dir in tqdm(image_dirs):
         print(f"image_dir: {image_dir}")
@@ -92,7 +92,6 @@ if __name__ == "__main__":
         image_pred_scores = []
         for image_name in tqdm(image_names):
             image_path = os.path.join(image_dir, image_name)
-            prediction = aesthetic_predictor(image_path)
-            image_pred_scores.append(prediction)
+            image_pred_scores.append(aesthetic_predictor(image_path))
         image_pred_avg_score = sum(image_pred_scores)/len(image_pred_scores)
         print(f"Aesthetic score predicted by the model: {image_pred_avg_score}")

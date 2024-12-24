@@ -1,9 +1,7 @@
 import os
 import cv2
 import numpy as np
-import gradio as gr
 import onnxruntime as rt
-from huggingface_hub import hf_hub_download
 from tqdm import tqdm
 from PIL import Image
 
@@ -28,15 +26,7 @@ class SkytntAnimeAesthetic():
         return pred
 
 if __name__ == "__main__":
-    # model_path = hf_hub_download(repo_id="skytnt/anime-aesthetic", filename="model.onnx")
-    # model = rt.InferenceSession(model_path, providers=['CPUExecutionProvider'])
-    # examples = [[f"examples/{x:02d}.jpg"] for x in range(0, 2)]
-    # app = gr.Interface(predict, gr.Image(label="input image"), gr.Number(label="score"),title="Anime Aesthetic Predict",
-    #                    description='![Visitors](https://api.visitorbadge.io/api/visitors?path=skytnt.anime-aesthetic-predict&countColor=%23263759&style=flat&labelStyle=lower)',
-    #                    allow_flagging="never", examples=examples, cache_examples=False)
-    # app.launch()
-
-
+    predict = SkytntAnimeAesthetic()
     image_dirs = [
         "/maindata/data/shared/public/chenyu.liu/others/images_evaluation/talkie_imgs",
         "/maindata/data/shared/public/chenyu.liu/others/images_evaluation/transfer_drawing_imgs"
@@ -47,9 +37,6 @@ if __name__ == "__main__":
         image_pred_scores = []
         for image_name in tqdm(image_names):
             image_path = os.path.join(image_dir, image_name)
-            # image = Image.open(image_path)
-            img = Image.open(image_path).convert('RGB')
-            img = np.array(img)
-            image_pred_scores.append(predict(img))
+            image_pred_scores.append(predict(image_path))
         image_pred_avg_score = sum(image_pred_scores)/len(image_pred_scores)
         print(f"image_pred_avg_score: {image_pred_avg_score}")

@@ -1,11 +1,6 @@
 import os
 import json
-import cv2
-import glob
-from skimage.metrics import structural_similarity as ssim
-from pytorch_fid import fid_score
 from tqdm import tqdm
-import numpy as np
 from utils import ImprovedAestheticPredictor, SkytntAnimeAesthetic, calculate_average_saturation, calculate_average_PSNR_SSIM_score, calculate_FID_score, resize_images_in_folder, API_ViT_v3
 
 

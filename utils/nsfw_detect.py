@@ -1,14 +1,6 @@
 import os
-import time
 from PIL import Image
-import numpy as np
-import sys
-import io
-import base64
-from nudenet import NudeDetector
-import clip
 import torch
-import requests
 from transformers import AutoProcessor, FocalNetForImageClassification
 from torchvision import transforms
 from tqdm import tqdm
@@ -49,10 +41,8 @@ class API_ViT_v3:
         return is_nsfw_img, unsafe_score
 
 
-# nsfw_model = API_ViT_v3(model_path="../models/diffuser_backend/nsfw_detector/nsfw-image-detection-large",device="cpu")
-
 if __name__ == "__main__":
-    nsfw_model = API_ViT_v3(model_path="/maindata/data/shared/public/chenyu.liu/models/diffuser_backend/nsfw_detector/nsfw-image-detection-large",device="cpu")
+    nsfw_model = API_ViT_v3()
     image_dirs = [
         "/maindata/data/shared/public/chenyu.liu/others/images_evaluation/test_images/talkie_imgs",
         "/maindata/data/shared/public/chenyu.liu/others/images_evaluation/test_images/transfer_drawing_imgs"
@@ -63,8 +53,7 @@ if __name__ == "__main__":
         image_pred_scores = []
         for image_name in tqdm(image_names):
             image_path = os.path.join(image_dir, image_name)
-            img = Image.open(image_path).convert("RGB")
-            is_nsfw_img, nsfw_score = nsfw_model(img)
+            is_nsfw_img, nsfw_score = nsfw_model(image_path)
             image_pred_scores.append(nsfw_score)
-        image_pred_avg_score = sum(image_pred_scores)/len(image_pred_scores)
+        image_pred_avg_score = sum(image_pred_scores) / len(image_pred_scores)
         print(f"image_pred_avg_score: {image_pred_avg_score}")

@@ -12,8 +12,8 @@ cd ImageEvaluation
 pip install -r requirements.txt
 ```
 ## Models
-1. download models from [improved-aesthetic-predictor](https://github.com/christophschuhmann/improved-aesthetic-predictor), [skytnt_anime_aesthetic](https://huggingface.co/skytnt/anime-aesthetic/tree/main), [TostAI/nsfw-image-detection-large](https://huggingface.co/TostAI/nsfw-image-detection-large/tree/main).
-2. place the model folder ```images_evaluation_models``` in the same level of directory as the project folder, the directory structure is as follows:
+1. Download models from [improved-aesthetic-predictor](https://github.com/christophschuhmann/improved-aesthetic-predictor), [skytnt_anime_aesthetic](https://huggingface.co/skytnt/anime-aesthetic/tree/main), [TostAI/nsfw-image-detection-large](https://huggingface.co/TostAI/nsfw-image-detection-large/tree/main), place them in folder ```images_evaluation_models```.
+2. Place the folder ```images_evaluation_models``` in the same level of directory as the project folder ```ImageEvaluation```, the directory structure is as follows:
 ```
 | ImageEvaluation/
 | images_evaluation_models/
