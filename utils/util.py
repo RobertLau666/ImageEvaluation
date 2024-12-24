@@ -126,6 +126,26 @@ def calculate_FID_score(real_images_folder, generated_images_folder):
 
     return FID_score
 
+def calculate_variance_score(generated_images_folder):
+    variance_score_list = []
+
+    image_list = []
+    for root, directories, files in os.walk(generated_images_folder):
+        for file in files:
+            file_path = os.path.join(root, file)
+            image_list.append(file_path)
+
+    for image in image_list:
+        test_image = cv2.imread(image, cv2.IMREAD_GRAYSCALE)
+        variance = cv2.meanStdDev(test_image)[1] # (0～INF)
+        variance = variance[0][0]
+        variance_score = 1 - variance / 1000.0
+        variance_score_list.append(variance_score)
+    average_variance_score = sum(variance_score_list) / len(variance_score_list) # (0~1)
+    # print(f'average_variance_score: {average_variance_score}')
+
+    return average_variance_score
+
 def resize_images_in_folder(generated_images_folder, resized_folder, target_size=(299, 299)):
     # 创建新的文件夹，后缀加上_resized
     

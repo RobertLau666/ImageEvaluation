@@ -1,7 +1,8 @@
 import os
 import json
 from tqdm import tqdm
-from utils import ImprovedAestheticPredictor, SkytntAnimeAesthetic, calculate_average_saturation, calculate_average_PSNR_SSIM_score, calculate_FID_score, resize_images_in_folder, API_ViT_v3
+from utils import ImprovedAestheticPredictor, SkytntAnimeAesthetic, calculate_average_saturation, calculate_average_PSNR_SSIM_score, calculate_FID_score, calculate_variance_score, resize_images_in_folder, API_ViT_v3
+import config
 
 
 class ImageEvaluation():
@@ -10,6 +11,7 @@ class ImageEvaluation():
         self.skytnt_anime_aesthetic_model = SkytntAnimeAesthetic()
         self.nsfw_model = API_ViT_v3()
         self.reference_image_path = "./test_images/ref_img.webp"
+        self.score_weight_json = config.score_weight_json
 
     def __call__(self, images_folder):
         resized_images_folder = images_folder + "_resized"
@@ -19,6 +21,9 @@ class ImageEvaluation():
         average_saturation = calculate_average_saturation(images_folder)
         print(f"Executing calculate_average_PSNR_SSIM_score...")
         average_PSNR_score, average_SSIM_score = calculate_average_PSNR_SSIM_score(resized_images_folder, self.reference_image_path)
+        print(f"Executing calculate_variance_score...")
+        average_variance_score = calculate_variance_score(images_folder)
+
         aesthetic_predictor_scores = []
         skytnt_anime_aesthetic_scores = []
         nsfw_scores = []
@@ -38,12 +43,19 @@ class ImageEvaluation():
 
         score_json = {
             "average saturation": average_saturation,
-            "average_PSNR_score": average_PSNR_score,
-            "average_SSIM_score": average_SSIM_score,
-            "average_aesthetic_predictor_score": average_aesthetic_predictor_score,
-            "average_skytnt_anime_aesthetic_score": average_skytnt_anime_aesthetic_score,
-            "average_nsfw_score": average_nsfw_score,
+            "average PSNR score": average_PSNR_score,
+            "average SSIM score": average_SSIM_score,
+            "average variance score": average_variance_score,
+            "average aesthetic predictor score": average_aesthetic_predictor_score,
+            "average skytnt anime aesthetic score": average_skytnt_anime_aesthetic_score,
+            "average nsfw score": average_nsfw_score,
         }
+        weighted_final_score = 0
+        all_weights = 0
+        for k, v in score_json.items():
+            weighted_final_score += self.score_weight_json[k] * v
+            all_weights += self.score_weight_json[k]
+        score_json["weighted_final_score"] = weighted_final_score / all_weights
         return score_json
 
 
@@ -57,7 +69,7 @@ if __name__ == "__main__":
     if not os.path.exists(record_dict_path):
         record_dict = {}
     else:
-        with open(record_dict_path, 'r', encoding='utf-8') as f:  # 可存储dict和list
+        with open(record_dict_path, 'r', encoding='utf-8') as f:
             record_dict = json.load(f)
     for generated_images_folder in tqdm(generated_images_folders):
         print(f"\nProcessing folder {generated_images_folder} ...")

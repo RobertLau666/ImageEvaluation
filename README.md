@@ -1,12 +1,11 @@
 # ImageEvaluation
-ImageEvaluation: A image indicator evaluation pipeline
+ImageEvaluation is an image quality evaluation pipeline that automatically analyzes and scores images based on various metrics such as saturation, aesthetics, nsfw. 
 ## Install
 ```
 git clone https://github.com/RobertLau666/ImageEvaluation.git
 
 conda create -n imageevaluation python=3.10
-conda activate imagetagger
-pip install --upgrade pip
+conda activate imageevaluation
 
 cd ImageEvaluation
 pip install -r requirements.txt
