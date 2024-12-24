@@ -33,17 +33,9 @@ python app.py
 ```
 ## Result
 "./test_images/test_images_1"
-<div style="white-space: nowrap;">
-    <img src="test_images/test_images_1/0.png" style="display: inline-block; margin-right: 10px;">
-    <img src="test_images/test_images_1/1.png" style="display: inline-block; margin-right: 10px;">
-    <img src="test_images/test_images_1/2.png" style="display: inline-block; margin-right: 10px;">
-    <img src="test_images/test_images_1/3.png" style="display: inline-block; margin-right: 10px;">
-    <img src="test_images/test_images_1/4.png" style="display: inline-block;">
-</div>
-
-<!-- |  |  |  |  |  |
+|  |  |  |  |  |
 |------|------|------|------|------|
-| ![0.png](test_images/test_images_1/0.png) | ![1.png](test_images/test_images_1/1.png) | ![2.png](test_images/test_images_1/2.png) | ![3.png](test_images/test_images_1/3.png) | ![4.png](test_images/test_images_1/4.png) |  -->
+| ![0.png](test_images/test_images_1/0.png) | ![1.png](test_images/test_images_1/1.png) | ![2.png](test_images/test_images_1/2.png) | ![3.png](test_images/test_images_1/3.png) | ![4.png](test_images/test_images_1/4.png) | 
 ```json
 {
     "average saturation": 70.83403901883534,
@@ -58,17 +50,9 @@ python app.py
 ```
 
 "./test_images/test_images_2"
-<div style="white-space: nowrap;">
-    <img src="test_images/test_images_2/0.png" style="display: inline-block; margin-right: 10px;">
-    <img src="test_images/test_images_2/1.png" style="display: inline-block; margin-right: 10px;">
-    <img src="test_images/test_images_2/2.png" style="display: inline-block; margin-right: 10px;">
-    <img src="test_images/test_images_2/3.png" style="display: inline-block; margin-right: 10px;">
-    <img src="test_images/test_images_2/4.png" style="display: inline-block;">
-</div>
-
-<!-- |  |  |  |  |  |
+|  |  |  |  |  |
 |------|------|------|------|------|
-| ![0.png](test_images/test_images_2/0.png) | ![1.png](test_images/test_images_2/1.png) | ![2.png](test_images/test_images_2/2.png) | ![3.png](test_images/test_images_2/3.png) | ![4.png](test_images/test_images_2/4.png) |  -->
+| ![0.png](test_images/test_images_2/0.png) | ![1.png](test_images/test_images_2/1.png) | ![2.png](test_images/test_images_2/2.png) | ![3.png](test_images/test_images_2/3.png) | ![4.png](test_images/test_images_2/4.png) | 
 ```json
 {
     "average saturation": 73.14979101110387,
