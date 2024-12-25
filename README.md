@@ -65,3 +65,10 @@ python app.py
     "weighted_final_score": 12.663068364942928
 }
 ```
+<div style="white-space: nowrap;">
+    <img src="test_images/test_images_1/0.png" style="display: inline-block; margin-right: 10px; max-width: 100%; height: auto;">
+    <img src="test_images/test_images_1/1.png" style="display: inline-block; margin-right: 10px; max-width: 100%; height: auto;">
+    <img src="test_images/test_images_1/2.png" style="display: inline-block; margin-right: 10px; max-width: 100%; height: auto;">
+    <img src="test_images/test_images_1/3.png" style="display: inline-block; margin-right: 10px; max-width: 100%; height: auto;">
+    <img src="test_images/test_images_1/4.png" style="display: inline-block; max-width: 100%; height: auto;">
+</div>
