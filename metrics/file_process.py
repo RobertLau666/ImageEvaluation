@@ -3,46 +3,12 @@ import csv
 import requests
 import pandas as pd
 import cv2
-import imageio
-import torchvision
-import torch
-import torch.nn as nn
 from tqdm import tqdm
 import json
 import re
-import os
 from datetime import datetime
 from PIL import Image
 from io import BytesIO
-
-
-# def resize_images_in_folder(generated_images_folder, resized_folder, target_size=(299, 299)):
-#     # 创建新的文件夹，后缀加上_resized
-#         resized_images_folder = generated_images_folder + "_resized"
-#     if (not os.path.exists(resized_images_folder)) or len(os.listdir(resized_images_folder)) <= len(os.listdir(generated_images_folder)):
-    
-#     if not os.path.exists(resized_folder):
-#         os.makedirs(resized_folder)
-
-#     # 遍历原文件夹中的图片
-#     for filename in tqdm(os.listdir(generated_images_folder)):
-#         file_path = os.path.join(generated_images_folder, filename)
-        
-#         # 判断文件是否为图片
-#         if os.path.isfile(file_path) and filename.lower().endswith(('png', 'jpg', 'jpeg', 'bmp', 'gif')):
-#             # 读取图片
-#             img = cv2.imread(file_path)
-            
-#             # Resize图片
-#             img_resized = cv2.resize(img, target_size)
-
-#             # 生成保存图片的新路径
-#             resized_file_path = os.path.join(resized_folder, filename)
-
-#             # 保存resize后的图片到新文件夹
-#             cv2.imwrite(resized_file_path, img_resized)
-
-#     print(f"Resized images are saved to: {resized_folder}")
 
 
 video_suffix = ['.mp4', '.avi', '.mov', '.mkv', '.flv', '.wmv', '.webm']

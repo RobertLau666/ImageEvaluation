@@ -2,17 +2,6 @@ import cv2
 from skimage.metrics import structural_similarity as ssim
 from pytorch_fid import fid_score
 import numpy as np
-import csv
-import requests
-import numpy as np
-import pandas as pd
-import imageio
-import torchvision
-import torch
-import torch.nn as nn
-import json
-import re
-import os
 import config
 
 

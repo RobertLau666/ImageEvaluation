@@ -1,15 +1,11 @@
 import os
-import csv
-import requests
 import numpy as np
 import pandas as pd
 import cv2
-import imageio
 import torchvision
 import torch
 import torch.nn as nn
 from tqdm import tqdm
-import json
 from PIL import Image
 from metrics.file_process import *
 

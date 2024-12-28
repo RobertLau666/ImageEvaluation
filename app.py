@@ -3,10 +3,6 @@ import json
 from tqdm import tqdm
 import config
 from metrics import *
-import requests
-from PIL import Image
-import numpy as np
-from io import BytesIO
 
 
 class ImageEvaluation():
