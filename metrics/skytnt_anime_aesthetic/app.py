@@ -4,6 +4,7 @@ import numpy as np
 import onnxruntime as rt
 from tqdm import tqdm
 from PIL import Image
+from metrics.norm import skytnt_anime_aesthetic_score_norm
 
 
 class SkytntAnimeAesthetic():
@@ -27,11 +28,12 @@ class SkytntAnimeAesthetic():
         img_input[ph // 2:ph // 2 + h, pw // 2:pw // 2 + w] = cv2.resize(image, (w, h))
         img_input = np.transpose(img_input, (2, 0, 1))
         img_input = img_input[np.newaxis, :]
-        pred = self.model.run(None, {"img": img_input})[0].item()
-        return pred
+        skytnt_anime_aesthetic_score = self.model.run(None, {"img": img_input})[0].item()
+        skytnt_anime_aesthetic_score_normed = skytnt_anime_aesthetic_score_norm(skytnt_anime_aesthetic_score)
+        return skytnt_anime_aesthetic_score_normed
 
 if __name__ == "__main__":
-    predict = SkytntAnimeAesthetic()
+    skytnt_anime_aesthetic_model = SkytntAnimeAesthetic()
     image_dirs = [
         "/maindata/data/shared/public/chenyu.liu/others/images_evaluation/talkie_imgs",
         "/maindata/data/shared/public/chenyu.liu/others/images_evaluation/transfer_drawing_imgs"
@@ -42,6 +44,6 @@ if __name__ == "__main__":
         image_pred_scores = []
         for image_name in tqdm(image_names):
             image_path = os.path.join(image_dir, image_name)
-            image_pred_scores.append(predict(image_path))
+            image_pred_scores.append(skytnt_anime_aesthetic_model(image_path))
         image_pred_avg_score = sum(image_pred_scores) / len(image_pred_scores)
         print(f"image_pred_avg_score: {image_pred_avg_score}")

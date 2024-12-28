@@ -23,7 +23,7 @@ model_params = {
         "score_weight": 1.0,
         "use": True,
     },
-    "aesthetic_predictor": {
+    "improved_aesthetic_predictor": {
         "score_weight": 1.0,
         "use": True,
     },
@@ -49,6 +49,7 @@ test_images_dirs_or_csvs = [
     "data/test_images_dirs/test_images_dir_2",
     "data/test_images_csvs/test_images_csv_1.csv",
 ]
+save_as_excel = True
 output_dir = "output"
 json_dir = f"{output_dir}/json"
 xlsx_dir = f"{output_dir}/xlsx"
@@ -56,5 +57,3 @@ if not os.path.exists(json_dir):
     os.makedirs(json_dir, exist_ok=True)
 if not os.path.exists(xlsx_dir):
     os.makedirs(xlsx_dir, exist_ok=True)
-record_dict_path = f'{json_dir}/result.json'
-save_as_excel = True

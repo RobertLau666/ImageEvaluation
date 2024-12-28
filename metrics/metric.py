@@ -3,25 +3,29 @@ from skimage.metrics import structural_similarity as ssim
 from pytorch_fid import fid_score
 import numpy as np
 import config
+from metrics.norm import *
 
 
 def calculate_saturation_score(img_numpy):
     hsv_image = cv2.cvtColor(img_numpy, cv2.COLOR_BGR2HSV)
     saturation_channel = hsv_image[:, :, 1]
-    mean_saturation = np.mean(saturation_channel)
-    return mean_saturation
+    saturation_score = np.mean(saturation_channel)
+    saturation_score_normed = saturation_norm(saturation_score)
+    return saturation_score_normed
 
 PSNR_reference_image = cv2.resize(cv2.imread(config.model_params["PSNR"]["PSNR_reference_image_path"]), (299, 299))
 def calculate_PSNR_score(img_numpy):
     img_numpy = cv2.resize(img_numpy, (PSNR_reference_image.shape[1], PSNR_reference_image.shape[0]))
     PSNR_score = cv2.PSNR(PSNR_reference_image, img_numpy)
-    return PSNR_score
+    PSNR_score_normed = PSNR_norm(PSNR_score)
+    return PSNR_score_normed
 
 SSIM_reference_image = cv2.resize(cv2.imread(config.model_params["SSIM"]["SSIM_reference_image_path"]), (299, 299))
 def calculate_SSIM_score(img_numpy):
     img_numpy = cv2.resize(img_numpy, (SSIM_reference_image.shape[1], SSIM_reference_image.shape[0]))
     SSIM_score = ssim(SSIM_reference_image, img_numpy, win_size=3, data_range=255, multichannel=True)
-    return SSIM_score
+    SSIM_score_normed = SSIM_norm(SSIM_score)
+    return SSIM_score_normed
 
 def calculate_FID_score(real_images_folder, generated_images_folder):
     '''
@@ -43,6 +47,6 @@ def calculate_variance_score(img_numpy):
     # test_image = cv2.imread(image, cv2.IMREAD_GRAYSCALE)
     img_numpy = cv2.cvtColor(img_numpy, cv2.COLOR_BGR2GRAY)
     variance = cv2.meanStdDev(img_numpy)[1] # (0～INF)
-    variance = variance[0][0]
-    variance_score = 1 - variance / 1000.0
-    return variance_score
+    variance_score = variance[0][0]
+    variance_score_normed = variance_norm(variance_score)
+    return variance_score_normed

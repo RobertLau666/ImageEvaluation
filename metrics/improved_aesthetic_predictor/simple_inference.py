@@ -8,7 +8,7 @@ import pytorch_lightning as pl
 import torch.nn as nn
 from tqdm import tqdm
 import clip
-
+from metrics.norm import improved_aesthetic_predictor_norm
 
 class MLP(pl.LightningModule):
     def __init__(self, input_size, xcol='emb', ycol='avg_rating'):
@@ -82,12 +82,13 @@ class ImprovedAestheticPredictor():
             image_features = self.model2.encode_image(image)
         im_emb_arr = self.normalized(image_features.cpu().detach().numpy())
         prediction = self.model(torch.from_numpy(im_emb_arr).to(self.device).type(torch.cuda.FloatTensor))
-        prediction = prediction.cpu().item()
-        return prediction
+        improved_aesthetic_predictor_score = prediction.cpu().item()
+        improved_aesthetic_predictor_score_normed = improved_aesthetic_predictor_norm(improved_aesthetic_predictor_score)
+        return improved_aesthetic_predictor_score_normed
 
 
 if __name__ == "__main__":
-    aesthetic_predictor = ImprovedAestheticPredictor()
+    improved_aesthetic_predictor_model = ImprovedAestheticPredictor()
     image_dirs = [
         "/maindata/data/shared/public/chenyu.liu/others/images_evaluation/talkie_imgs",
         "/maindata/data/shared/public/chenyu.liu/others/images_evaluation/transfer_drawing_imgs"
@@ -98,6 +99,6 @@ if __name__ == "__main__":
         image_pred_scores = []
         for image_name in tqdm(image_names):
             image_path = os.path.join(image_dir, image_name)
-            image_pred_scores.append(aesthetic_predictor(image_path))
+            image_pred_scores.append(improved_aesthetic_predictor_model(image_path))
         image_pred_avg_score = sum(image_pred_scores) / len(image_pred_scores)
         print(f"Aesthetic score predicted by the model: {image_pred_avg_score}")

@@ -16,8 +16,8 @@ class ImageEvaluation():
     
     def init_use_models(self):
         print("Initializing use models...")
-        if "aesthetic_predictor" in self.use_model_names:
-            self.aesthetic_predictor_model = ImprovedAestheticPredictor()
+        if "improved_aesthetic_predictor" in self.use_model_names:
+            self.improved_aesthetic_predictor_model = ImprovedAestheticPredictor()
         if "skytnt_anime_aesthetic" in self.use_model_names:
             self.skytnt_anime_aesthetic_model = SkytntAnimeAesthetic()
         if "nsfw_detect" in self.use_model_names:
@@ -59,8 +59,8 @@ class ImageEvaluation():
             SSIM_scores = []
         if "variance" in self.use_model_names:
             variance_scores = []
-        if "aesthetic_predictor" in self.use_model_names:
-            aesthetic_predictor_scores = []
+        if "improved_aesthetic_predictor" in self.use_model_names:
+            improved_aesthetic_predictor_scores = []
         if "skytnt_anime_aesthetic" in self.use_model_names:
             skytnt_anime_aesthetic_scores = []
         if "nsfw_detect" in self.use_model_names:
@@ -85,9 +85,9 @@ class ImageEvaluation():
             if "variance" in self.use_model_names:
                 variance_score = calculate_variance_score(img_numpy)
                 variance_scores.append(variance_score)
-            if "aesthetic_predictor" in self.use_model_names:
-                aesthetic_predictor_score = self.aesthetic_predictor_model(img_numpy)
-                aesthetic_predictor_scores.append(aesthetic_predictor_score)
+            if "improved_aesthetic_predictor" in self.use_model_names:
+                improved_aesthetic_predictor_score = self.improved_aesthetic_predictor_model(img_numpy)
+                improved_aesthetic_predictor_scores.append(improved_aesthetic_predictor_score)
             if "skytnt_anime_aesthetic" in self.use_model_names:
                 skytnt_anime_aesthetic_score = self.skytnt_anime_aesthetic_model(img_numpy)
                 skytnt_anime_aesthetic_scores.append(skytnt_anime_aesthetic_score)
@@ -120,7 +120,13 @@ class ImageEvaluation():
 
         score_json = {}
         for use_model_name in self.use_model_names:
-            exec(f'score_json["average {use_model_name} score"] = sum({use_model_name}_scores) / len({use_model_name}_scores)')
+            if use_model_name == "nsfw_detect_train":
+                average_nsfw_detect_train_score = 0
+                for nsfw_detect_train_score in nsfw_detect_train_scores:
+                    average_nsfw_detect_train_score += (1 if int(nsfw_detect_train_score) >= 1 else 0)
+                score_json[f"average {use_model_name} score"] = 1 - average_nsfw_detect_train_score / len(nsfw_detect_train_scores)
+            else:
+                exec(f'score_json["average {use_model_name} score"] = sum({use_model_name}_scores) / len({use_model_name}_scores)')
 
         average_weighted_score = sum([config.model_params[use_model_name]["score_weight"] * score_json[f"average {use_model_name} score"] for use_model_name in self.use_model_names]) / sum([config.model_params[use_model_name]["score_weight"] for use_model_name in self.use_model_names])
         score_json["average weighted score"] = average_weighted_score
@@ -131,7 +137,7 @@ class ImageEvaluation():
 if __name__ == "__main__":
     img_eval = ImageEvaluation()
 
-    record_dict_path = config.record_dict_path
+    record_dict_path = f"{config.json_dir}/result_{get_formatted_current_time()}.json"
     if not os.path.exists(record_dict_path):
         record_dict = {}
     else:
@@ -145,5 +151,6 @@ if __name__ == "__main__":
         print(f"\nProcessing {test_images_dir_or_csv} ...")
         score_json = img_eval(test_images_dir_or_csv)
         record_dict[test_images_dir_or_csv] = score_json
+        
     with open(record_dict_path, 'w', encoding='utf-8') as file:
         file.write(json.dumps(record_dict, indent=4, ensure_ascii=False))
