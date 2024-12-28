@@ -54,14 +54,13 @@ class ImageEvaluation():
     def __call__(self, images_dir_or_csv):
         img_paths_or_urls = self.get_img_paths_or_urls(images_dir_or_csv)
         
-        save_as_excel = config.save_as_excel
-        if save_as_excel:
-            columns = ["img_path_or_url"] + self.use_metric_names
-            output_excel_file = f'{config.xlsx_dir}/result_{os.path.splitext(os.path.basename(images_dir_or_csv))[0]}_{get_formatted_current_time()}.xlsx'
-            print(f"images metric scores will save at: {output_excel_file}")
-            if not os.path.exists(output_excel_file):
-                df = pd.DataFrame(columns=columns)
-                df.to_excel(output_excel_file, index=False)
+        # save_as_excel
+        column_titles = ["img_path_or_url"] + [f"{use_metric_name}_score_normed" for use_metric_name in self.use_metric_names]
+        result_excel_path = f'{config.xlsx_dir}/result_{os.path.splitext(os.path.basename(images_dir_or_csv))[0]}_{get_formatted_current_time()}.xlsx'
+        print(f"images metric scores will save at: {result_excel_path}")
+        if not os.path.exists(result_excel_path):
+            df = pd.DataFrame(columns=column_titles)
+            df.to_excel(result_excel_path, index=False)
 
         if "saturation" in self.use_metric_names:
             saturation_scores, saturation_scores_normed, saturation_times = [], [], []
@@ -81,10 +80,18 @@ class ImageEvaluation():
             nsfw_detect_train_scores, nsfw_detect_train_scores_normed, nsfw_detect_train_times = [], [], []
         
         # 可以单图评估的
-        for img_path_or_url in tqdm(img_paths_or_urls):
+        img_path_or_url_contiue_path = f'{config.txt_dir}/contiue_{os.path.splitext(os.path.basename(images_dir_or_csv))[0]}_{get_formatted_current_time()}.txt'
+        for index, img_path_or_url in enumerate(tqdm(img_paths_or_urls)):
             img_numpy = self.get_img_numpy(img_path_or_url)
             if img_numpy is None:
+                with open(img_path_or_url_contiue_path, 'a', encoding='utf-8') as file:
+                    file.write(f"{index} {img_path_or_url}\n")
                 continue
+            
+            result_excel_ = {
+                "img_path_or_url": img_path_or_url,
+            }
+            exec(f'all_weighted_score_normed = 0')
             for use_metric_name in self.use_metric_names:
                 exec(f't_{use_metric_name}_start = time.time()')
                 if use_metric_name in self.use_metric_forms["function"]:
@@ -96,55 +103,53 @@ class ImageEvaluation():
                 exec(f'{use_metric_name}_scores_normed.append({use_metric_name}_score_normed)')
                 exec(f'{use_metric_name}_times.append(t_{use_metric_name})')
 
-            if save_as_excel:
-                img_result = {
-                    "img_path_or_url": img_path_or_url,
-                }
-                for column in columns[1:]:
-                    exec(f'img_result["{column}"] = {column}_score_normed')
-                single_df = pd.DataFrame([img_result])
-                with pd.ExcelWriter(output_excel_file, mode='a', if_sheet_exists='overlay', engine='openpyxl') as writer:
-                    existing_df = pd.read_excel(output_excel_file)
-                    existing_df = existing_df.dropna(axis=1, how='all')
-                    single_df = single_df.dropna(axis=1, how='all')
-                    result_df = pd.concat([existing_df, single_df], ignore_index=True)
-                    result_df.to_excel(writer, index=False)
+                exec(f'all_weighted_score_normed += {use_metric_name}_score_normed * config.metric_params["{use_metric_name}"]["score_normed_weight"]')
+                exec(f'result_excel_["{use_metric_name}_score_normed"] = {use_metric_name}_score_normed')
+
+            # save_as_excel
+            exec(f'result_excel_["average_weighted_score_normed"] = all_weighted_score_normed / sum([config.metric_params[use_metric_name]["score_normed_weight"] for use_metric_name in self.use_metric_names])')
+            single_df = pd.DataFrame([result_excel_])
+            with pd.ExcelWriter(result_excel_path, mode='a', if_sheet_exists='overlay', engine='openpyxl') as writer:
+                existing_df = pd.read_excel(result_excel_path)
+                existing_df = existing_df.dropna(axis=1, how='all')
+                single_df = single_df.dropna(axis=1, how='all')
+                result_df = pd.concat([existing_df, single_df], ignore_index=True)
+                result_df.to_excel(writer, index=False)
         
         # # 必须组图评估的
         # if "FID" in self.use_metric_names:
-        #     FID_score = calculate_FID_score(img_paths_or_urls)
+        #     FID_score, FID_score_normed = calculate_FID_score(img_paths_or_urls)
 
-        score_json = {}
+        result_json_ = {}
         for use_metric_name in self.use_metric_names:
-            exec(f'score_json["{use_metric_name}"] = {{}}')
-            exec(f'score_json["{use_metric_name}"][f"average {use_metric_name} score"] = sum({use_metric_name}_scores) / len({use_metric_name}_scores)')
-            exec(f'score_json["{use_metric_name}"][f"average {use_metric_name} score normed"] = sum({use_metric_name}_scores_normed) / len({use_metric_name}_scores_normed)')
-            exec(f'score_json["{use_metric_name}"][f"average {use_metric_name} time"] = sum({use_metric_name}_times) / len({use_metric_name}_times)')
+            exec(f'result_json_["{use_metric_name}"] = {{}}')
+            exec(f'result_json_["{use_metric_name}"][f"average_{use_metric_name}_score"] = sum({use_metric_name}_scores) / len({use_metric_name}_scores)')
+            exec(f'result_json_["{use_metric_name}"][f"average_{use_metric_name}_score_normed"] = sum({use_metric_name}_scores_normed) / len({use_metric_name}_scores_normed)')
+            exec(f'result_json_["{use_metric_name}"][f"average_{use_metric_name}_time"] = sum({use_metric_name}_times) / len({use_metric_name}_times)')
+        result_json_["average_weighted_score_normed"] = sum([config.metric_params[use_metric_name]["score_normed_weight"] * result_json_[use_metric_name][f"average_{use_metric_name}_score_normed"] for use_metric_name in self.use_metric_names]) / sum([config.metric_params[use_metric_name]["score_normed_weight"] for use_metric_name in self.use_metric_names])
 
-        score_json["average weighted score normed"] = sum([config.metric_params[use_metric_name]["score_normed_weight"] * score_json[use_metric_name][f"average {use_metric_name} score normed"] for use_metric_name in self.use_metric_names]) / sum([config.metric_params[use_metric_name]["score_normed_weight"] for use_metric_name in self.use_metric_names])
-
-        return score_json
+        return result_json_
 
 
 if __name__ == "__main__":
     img_eval = ImageEvaluation()
 
-    record_dict_path = f"{config.json_dir}/result_{get_formatted_current_time()}.json"
-    print(f"images group average metric scores will save at: {record_dict_path}")
+    result_json_path = f"{config.json_dir}/result_{get_formatted_current_time()}.json"
+    print(f"images group average metric scores will save at: {result_json_path}")
 
     for test_images_dir_or_csv in tqdm(config.test_images_dirs_or_csvs):
-        if not os.path.exists(record_dict_path):
-            record_dict = {}
+        if not os.path.exists(result_json_path):
+            result_json = {}
         else:
             try:
-                with open(record_dict_path, 'r', encoding='utf-8') as f:
-                    record_dict = json.load(f)
+                with open(result_json_path, 'r', encoding='utf-8') as f:
+                    result_json = json.load(f)
             except json.decoder.JSONDecodeError as e:
-                record_dict = {}
+                result_json = {}
 
         print(f"\nProcessing {test_images_dir_or_csv}...")
-        score_json = img_eval(test_images_dir_or_csv)
-        record_dict[test_images_dir_or_csv] = score_json
+        result_json_ = img_eval(test_images_dir_or_csv)
+        result_json[test_images_dir_or_csv] = result_json_
         
-        with open(record_dict_path, 'w', encoding='utf-8') as file:
-            file.write(json.dumps(record_dict, indent=4, ensure_ascii=False))
+        with open(result_json_path, 'w', encoding='utf-8') as file:
+            file.write(json.dumps(result_json, indent=4, ensure_ascii=False))
