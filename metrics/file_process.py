@@ -39,7 +39,6 @@ def log_csv(img_results, save_csv_path):
 
     print(f"数据已写入 CSV 文件: {save_csv_path}")
 
-
 def read_excel(excel_path, begin_r, end_r, url_c):
     if excel_path.endswith('.csv'):
         data = pd.read_csv(excel_path)
@@ -93,7 +92,6 @@ def get_image_array_from_img_url(img_url, timeout=5, retry_count=3):
         except Exception as e:
             pass
     return image_array
-
 
 def is_url(string):
     url_pattern = re.compile(r'^(https?://|ftp://|file://)?[a-zA-Z0-9.-]+(\.[a-zA-Z]{2,})+(:\d+)?(/.*)?$')

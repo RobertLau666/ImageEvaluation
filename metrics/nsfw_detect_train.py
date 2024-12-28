@@ -10,6 +10,7 @@ from PIL import Image
 from metrics.file_process import *
 from metrics.norm import nsfw_detect_train_score_norm
 
+
 class NSFWSelfTrainBinary():
     def __init__(self, model_url):
         self.CONFIG = {
@@ -113,12 +114,12 @@ if __name__ == "__main__":
     nsfw_model = NSFWSelfTrainBinary(model_url=model_url)
 
     # input_csv_path = '测试样本.csv'
-    input_csv_path = '2024-12-26-14-13-23_EXPORT_CSV_17057688_351_0.csv'
-    begin_r = 9990
+    input_csv_path = '../data/test_images_csvs/test_images_csv_1.csv'
+    begin_r = 0
     end_r = -1
     url_c = 6
     
-    all_files = read_csv(input_csv_path, begin_r, end_r, url_c)
+    all_files = read_excel(input_csv_path, begin_r, end_r, url_c)
     all_files = get_img_urls(all_files)
     total_num = len(all_files)
     print(f'文件数量: {total_num}')

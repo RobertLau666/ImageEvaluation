@@ -53,16 +53,16 @@ class API_ViT_v3:
 if __name__ == "__main__":
     nsfw_detect_model = API_ViT_v3()
     image_dirs = [
-        "/maindata/data/shared/public/chenyu.liu/others/images_evaluation/test_images/talkie_imgs",
-        "/maindata/data/shared/public/chenyu.liu/others/images_evaluation/test_images/transfer_drawing_imgs"
+        "../data/test_images_dirs/test_images_dir_1",
+        "../data/test_images_dirs/test_images_dir_2"
     ]
     for image_dir in tqdm(image_dirs):
-        print(f"image_dir: {image_dir}")
+        print(f"Processing {image_dir}...")
         image_names = os.listdir(image_dir)
-        image_pred_scores = []
+        nsfw_detect_scores = []
         for image_name in tqdm(image_names):
             image_path = os.path.join(image_dir, image_name)
-            nsfw_score = nsfw_detect_model(image_path)
-            image_pred_scores.append(nsfw_score)
-        image_pred_avg_score = sum(image_pred_scores) / len(image_pred_scores)
-        print(f"image_pred_avg_score: {image_pred_avg_score}")
+            nsfw_detect_score, nsfw_detect_score_normed = nsfw_detect_model(image_path)
+            nsfw_detect_scores.append(nsfw_detect_score)
+        average_nsfw_detect_score = sum(nsfw_detect_scores) / len(nsfw_detect_scores)
+        print(f"average_nsfw_detect_score: {average_nsfw_detect_score}")

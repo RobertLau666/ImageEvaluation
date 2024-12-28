@@ -10,6 +10,7 @@ from tqdm import tqdm
 import clip
 from metrics.norm import improved_aesthetic_predictor_norm
 
+
 class MLP(pl.LightningModule):
     def __init__(self, input_size, xcol='emb', ycol='avg_rating'):
         super().__init__()
@@ -56,9 +57,9 @@ class MLP(pl.LightningModule):
 
 
 class ImprovedAestheticPredictor():
-    def __init__(self):
+    def __init__(self, model_path="models/improved_aesthetic_predictor_models/sac+logos+ava1-l14-linearMSE.pth"):
         self.model = MLP(768)  # CLIP embedding dim is 768 for CLIP ViT L 14
-        s = torch.load("./models/improved_aesthetic_predictor_models/sac+logos+ava1-l14-linearMSE.pth")   # load the model you trained previously or the model available in this repo
+        s = torch.load(model_path)
         self.model.load_state_dict(s)
         self.model.to("cuda")
         self.model.eval()
@@ -90,15 +91,16 @@ class ImprovedAestheticPredictor():
 if __name__ == "__main__":
     improved_aesthetic_predictor_model = ImprovedAestheticPredictor()
     image_dirs = [
-        "/maindata/data/shared/public/chenyu.liu/others/images_evaluation/talkie_imgs",
-        "/maindata/data/shared/public/chenyu.liu/others/images_evaluation/transfer_drawing_imgs"
+        "../data/test_images_dirs/test_images_dir_1",
+        "../data/test_images_dirs/test_images_dir_2"
     ]
     for image_dir in tqdm(image_dirs):
-        print(f"image_dir: {image_dir}")
+        print(f"Processing {image_dir}...")
         image_names = os.listdir(image_dir)
-        image_pred_scores = []
+        improved_aesthetic_predictor_scores = []
         for image_name in tqdm(image_names):
             image_path = os.path.join(image_dir, image_name)
-            image_pred_scores.append(improved_aesthetic_predictor_model(image_path))
-        image_pred_avg_score = sum(image_pred_scores) / len(image_pred_scores)
-        print(f"Aesthetic score predicted by the model: {image_pred_avg_score}")
+            improved_aesthetic_predictor_score, improved_aesthetic_predictor_score_normed = improved_aesthetic_predictor_model(image_path)
+            improved_aesthetic_predictor_scores.append(improved_aesthetic_predictor_score)
+        average_improved_aesthetic_predictor_score = sum(improved_aesthetic_predictor_scores) / len(improved_aesthetic_predictor_scores)
+        print(f"average_improved_aesthetic_predictor_score: {average_improved_aesthetic_predictor_score}")

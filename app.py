@@ -12,7 +12,6 @@ class ImageEvaluation():
         self.init_use_metrics()
 
     def get_use_metric_names(self):
-        # self.use_metric_names = [metric_name for metric_name, metric_param in config.metric_params.items() if metric_param["use"]]
         self.use_metric_names = []
         self.use_metric_forms = {}
         for metric_name, metric_param in config.metric_params.items():
@@ -29,9 +28,9 @@ class ImageEvaluation():
     def init_use_metrics(self):
         print("Initializing use metrics...")
         if "improved_aesthetic_predictor" in self.use_metric_names:
-            self.improved_aesthetic_predictor_model = ImprovedAestheticPredictor()
+            self.improved_aesthetic_predictor_model = ImprovedAestheticPredictor(model_path=config.metric_params["improved_aesthetic_predictor"]["improved_aesthetic_predictor_model_path"])
         if "skytnt_anime_aesthetic" in self.use_metric_names:
-            self.skytnt_anime_aesthetic_model = SkytntAnimeAesthetic()
+            self.skytnt_anime_aesthetic_model = SkytntAnimeAesthetic(model_path=config.metric_params["skytnt_anime_aesthetic"]["skytnt_anime_aesthetic_model_path"])
         if "nsfw_detect" in self.use_metric_names:
             self.nsfw_detect_model = API_ViT_v3(model_path=config.metric_params["nsfw_detect"]["nsfw_detect_model_path"])
         if "nsfw_detect_train" in self.use_metric_names:
@@ -97,74 +96,15 @@ class ImageEvaluation():
                 exec(f'{use_metric_name}_scores_normed.append({use_metric_name}_score_normed)')
                 exec(f'{use_metric_name}_times.append(t_{use_metric_name})')
 
-
-            # if "saturation" in self.use_metric_names:
-            #     t_saturation_start = time.time()
-            #     saturation_score, saturation_score_normed = calculate_saturation_score(img_numpy)
-            #     t_saturation = time.time() - t_saturation_start
-            #     saturation_scores.append(saturation_score)
-            #     saturation_scores_normed.append(saturation_score_normed)
-            #     saturation_times.append(t_saturation)
-            # if "PSNR" in self.use_metric_names:
-            #     t_PSNR_start = time.time()
-            #     PSNR_score, PSNR_score_normed = calculate_PSNR_score(img_numpy)
-            #     t_PSNR = time.time() - t_PSNR_start
-            #     PSNR_scores.append(PSNR_score)
-            #     PSNR_scores_normed.append(PSNR_score_normed)
-            #     PSNR_times.append(t_PSNR)
-            # if "SSIM" in self.use_metric_names:
-            #     t_SSIM_start = time.time()
-            #     SSIM_score, SSIM_score_normed = calculate_SSIM_score(img_numpy)
-            #     t_SSIM = time.time() - t_SSIM_start
-            #     SSIM_scores.append(SSIM_score)
-            #     SSIM_scores_normed.append(SSIM_score_normed)
-            #     SSIM_times.append(t_SSIM)
-            # if "variance" in self.use_metric_names:
-            #     t_variance_start = time.time()
-            #     variance_score, variance_score_normed = calculate_variance_score(img_numpy)
-            #     t_variance = time.time() - t_variance_start
-            #     variance_scores.append(variance_score)
-            #     variance_scores_normed.append(variance_score_normed)
-            #     variance_times.append(t_variance)
-            # if "improved_aesthetic_predictor" in self.use_metric_names:
-            #     t_improved_aesthetic_predictor_start = time.time()
-            #     improved_aesthetic_predictor_score, improved_aesthetic_predictor_score_normed = self.improved_aesthetic_predictor_model(img_numpy)
-            #     t_improved_aesthetic_predictor = time.time() - t_improved_aesthetic_predictor_start
-            #     improved_aesthetic_predictor_scores.append(improved_aesthetic_predictor_score)
-            #     improved_aesthetic_predictor_scores_normed.append(improved_aesthetic_predictor_score_normed)
-            #     improved_aesthetic_predictor_times.append(t_improved_aesthetic_predictor)
-            # if "skytnt_anime_aesthetic" in self.use_metric_names:
-            #     t_skytnt_anime_aesthetic_start = time.time()
-            #     skytnt_anime_aesthetic_score, skytnt_anime_aesthetic_score_normed = self.skytnt_anime_aesthetic_model(img_numpy)
-            #     t_skytnt_anime_aesthetic = time.time() - t_skytnt_anime_aesthetic_start
-            #     skytnt_anime_aesthetic_scores.append(skytnt_anime_aesthetic_score)
-            #     skytnt_anime_aesthetic_scores_normed.append(skytnt_anime_aesthetic_score_normed)
-            #     skytnt_anime_aesthetic_times.append(t_skytnt_anime_aesthetic)
-            # if "nsfw_detect" in self.use_metric_names:
-            #     t_nsfw_detect_start = time.time()
-            #     nsfw_detect_score, nsfw_detect_score_normed = self.nsfw_detect_model(img_numpy)
-            #     t_nsfw_detect = time.time() - t_nsfw_detect_start
-            #     nsfw_detect_scores.append(nsfw_detect_score)
-            #     nsfw_detect_scores_normed.append(nsfw_detect_score_normed)
-            #     nsfw_detect_times.append(t_nsfw_detect)
-            # if "nsfw_detect_train" in self.use_metric_names:
-            #     t_nsfw_detect_train_start = time.time()
-            #     nsfw_detect_train_score, nsfw_detect_train_score_normed = self.nsfw_detect_train_model(img_numpy)
-            #     t_nsfw_detect_train = time.time() - t_nsfw_detect_train_start
-            #     nsfw_detect_train_scores.append(nsfw_detect_train_score)
-            #     nsfw_detect_train_scores_normed.append(nsfw_detect_train_score_normed)
-            #     nsfw_detect_train_times.append(t_nsfw_detect_train)
-        
             if save_as_excel:
                 img_result = {
                     "img_path_or_url": img_path_or_url,
                 }
                 for column in columns[1:]:
-                    exec(f'img_result["{column}"] = {column}_score')
+                    exec(f'img_result["{column}"] = {column}_score_normed')
                 single_df = pd.DataFrame([img_result])
                 with pd.ExcelWriter(output_excel_file, mode='a', if_sheet_exists='overlay', engine='openpyxl') as writer:
                     existing_df = pd.read_excel(output_excel_file)
-                    # 去除全 NA 的列
                     existing_df = existing_df.dropna(axis=1, how='all')
                     single_df = single_df.dropna(axis=1, how='all')
                     result_df = pd.concat([existing_df, single_df], ignore_index=True)
@@ -176,19 +116,12 @@ class ImageEvaluation():
 
         score_json = {}
         for use_metric_name in self.use_metric_names:
-            # if use_metric_name == "nsfw_detect_train":
-            #     average_nsfw_detect_train_score = 0
-            #     for nsfw_detect_train_score in nsfw_detect_train_scores:
-            #         average_nsfw_detect_train_score += (1 if int(nsfw_detect_train_score) >= 1 else 0)
-            #     score_json[f"average {use_metric_name} score"] = 1 - average_nsfw_detect_train_score / len(nsfw_detect_train_scores)
-            # else:
             exec(f'score_json["{use_metric_name}"] = {{}}')
             exec(f'score_json["{use_metric_name}"][f"average {use_metric_name} score"] = sum({use_metric_name}_scores) / len({use_metric_name}_scores)')
             exec(f'score_json["{use_metric_name}"][f"average {use_metric_name} score normed"] = sum({use_metric_name}_scores_normed) / len({use_metric_name}_scores_normed)')
             exec(f'score_json["{use_metric_name}"][f"average {use_metric_name} time"] = sum({use_metric_name}_times) / len({use_metric_name}_times)')
 
-        average_weighted_score_normed = sum([config.metric_params[use_metric_name]["score_normed_weight"] * score_json[use_metric_name][f"average {use_metric_name} score normed"] for use_metric_name in self.use_metric_names]) / sum([config.metric_params[use_metric_name]["score_normed_weight"] for use_metric_name in self.use_metric_names])
-        score_json["average weighted score normed"] = average_weighted_score_normed
+        score_json["average weighted score normed"] = sum([config.metric_params[use_metric_name]["score_normed_weight"] * score_json[use_metric_name][f"average {use_metric_name} score normed"] for use_metric_name in self.use_metric_names]) / sum([config.metric_params[use_metric_name]["score_normed_weight"] for use_metric_name in self.use_metric_names])
 
         return score_json
 

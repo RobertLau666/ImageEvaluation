@@ -29,11 +29,13 @@ metric_params = {
         "use_form": "function",
     },
     "improved_aesthetic_predictor": {
+        "improved_aesthetic_predictor_model_path": "models/improved_aesthetic_predictor_models/sac+logos+ava1-l14-linearMSE.pth",
         "score_normed_weight": 1.0,
         "use": True,
         "use_form": "class",
     },
     "skytnt_anime_aesthetic": {
+        "skytnt_anime_aesthetic_model_path": "models/skytnt_anime_aesthetic_models/model.onnx",
         "score_normed_weight": 1.0,
         "use": True,
         "use_form": "class",
