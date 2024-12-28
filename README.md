@@ -42,7 +42,6 @@ data/test_images_dirs/test_images_dir_1
 | ![0.png](data/test_images_dirs/test_images_dir_1/0.png) | ![1.png](data/test_images_dirs/test_images_dir_1/1.png) | ![2.png](data/test_images_dirs/test_images_dir_1/2.png) | ![3.png](data/test_images_dirs/test_images_dir_1/3.png) | ![4.png](data/test_images_dirs/test_images_dir_1/4.png) | 
 ```json
 {
-"data/test_images_dirs/test_images_dir_1": {
     "saturation": {
         "average_saturation_score": 70.83403901883534,
         "average_saturation_score_normed": 0.5896600860005143,
