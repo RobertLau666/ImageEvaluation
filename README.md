@@ -13,7 +13,7 @@ cd ImageEvaluation
 pip install -r requirements.txt
 ```
 ## Models
-1. Manually download models from [improved-aesthetic-predictor](https://github.com/christophschuhmann/improved-aesthetic-predictor), [skytnt_anime_aesthetic](https://huggingface.co/skytnt/anime-aesthetic/tree/main), [TostAI/nsfw-image-detection-large](https://huggingface.co/TostAI/nsfw-image-detection-large/tree/main), [ViT-L-14.pt](https://openaipublic.azureedge.net/clip/models/b8cca3fd41ae0c99ba7e8951adf17d267cdb84cd88be6f7c2e0eca1737a03836/ViT-L-14.pt), place them in folder ```images_evaluation_models```, in addition, other models are downloaded automatically.
+1. Manually download models from [improved-aesthetic-predictor](https://github.com/christophschuhmann/improved-aesthetic-predictor), [skytnt_anime_aesthetic](https://huggingface.co/skytnt/anime-aesthetic/tree/main), [TostAI/nsfw-image-detection-large](https://huggingface.co/TostAI/nsfw-image-detection-large/tree/main), [ViT-L-14.pt](https://openaipublic.azureedge.net/clip/models/b8cca3fd41ae0c99ba7e8951adf17d267cdb84cd88be6f7c2e0eca1737a03836/ViT-L-14.pt), place them in folder ```images_evaluation_models```, in addition, other models will be downloaded automatically when the program starts.
 2. Place the folder ```images_evaluation_models``` in the same level of directory as the project folder ```ImageEvaluation```, the directory structure is as follows:
 ```
 | ImageEvaluation/
@@ -36,13 +36,12 @@ Revise parameters in the ```config.py```
 python app.py
 ```
 ## Result
-data/test_images_dirs/test_images_dir_1
+data/input/test_images_dirs/test_images_dir_1
 |  |  |  |  |  |
 |------|------|------|------|------|
-| ![0.png](data/test_images_dirs/test_images_dir_1/0.png) | ![1.png](data/test_images_dirs/test_images_dir_1/1.png) | ![2.png](data/test_images_dirs/test_images_dir_1/2.png) | ![3.png](data/test_images_dirs/test_images_dir_1/3.png) | ![4.png](data/test_images_dirs/test_images_dir_1/4.png) | 
+| ![0.png](data/input/test_images_dirs/test_images_dir_1/0.png) | ![1.png](data/input/test_images_dirs/test_images_dir_1/1.png) | ![2.png](data/input/test_images_dirs/test_images_dir_1/2.png) | ![3.png](data/input/test_images_dirs/test_images_dir_1/3.png) | ![4.png](data/input/test_images_dirs/test_images_dir_1/4.png) | 
 ```json
 {
-"data/test_images_dirs/test_images_dir_1": {
     "saturation": {
         "average_saturation_score": 70.83403901883534,
         "average_saturation_score_normed": 0.5896600860005143,
@@ -87,10 +86,10 @@ data/test_images_dirs/test_images_dir_1
 }
 ```
 
-data/test_images_dirs/test_images_dir_2
+data/input/test_images_dirs/test_images_dir_2
 |  |  |  |  |  |
 |------|------|------|------|------|
-| ![0.png](data/test_images_dirs/test_images_dir_2/0.png) | ![1.png](data/test_images_dirs/test_images_dir_2/1.png) | ![2.png](data/test_images_dirs/test_images_dir_2/2.png) | ![3.png](data/test_images_dirs/test_images_dir_2/3.png) | ![4.png](data/test_images_dirs/test_images_dir_2/4.png) | 
+| ![0.png](data/input/test_images_dirs/test_images_dir_2/0.png) | ![1.png](data/input/test_images_dirs/test_images_dir_2/1.png) | ![2.png](data/input/test_images_dirs/test_images_dir_2/2.png) | ![3.png](data/input/test_images_dirs/test_images_dir_2/3.png) | ![4.png](data/input/test_images_dirs/test_images_dir_2/4.png) | 
 ```json
 {
     "saturation": {
@@ -137,7 +136,7 @@ data/test_images_dirs/test_images_dir_2
 }
 ```
 
-data/test_images_csvs/test_images_csv_1.csv
+data/input/test_images_csvs/test_images_csv_1.csv
 |  |  |  |  |  |
 |------|------|------|------|------|
 | ![0.png](https://ali-us-sync-image.oss-us-east-1.aliyuncs.com/linky_imggen_ugc_fast/6153196_2130_26854028_1735193596652262465.webp) | ![1.png](https://ali-us-sync-image.oss-us-east-1.aliyuncs.com/linky_imggen_ugc_fast/6153196_2130_26854028_1735193596659913873.webp) | ![2.png](https://ali-us-sync-image.oss-us-east-1.aliyuncs.com/linky_imggen_ugc_fast/6153196_2130_26854028_1735193596621611725.webp) | ![3.png](https://ali-us-sync-image.oss-us-east-1.aliyuncs.com/linky_imggen_ugc_fast/6153196_2130_26854028_1735193596643293286.webp) | ![4.png](https://ali-us-sync-image.oss-us-east-1.aliyuncs.com/linky_imggen_ugc/6674062_2112_26854026_1735193594012334015.webp) | 

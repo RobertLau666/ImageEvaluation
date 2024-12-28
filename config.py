@@ -7,13 +7,13 @@ metric_params = {
         "use_form": "function",
     },
     "PSNR": {
-        "PSNR_reference_image_path": "data/PSNR_reference_image.webp",
+        "PSNR_reference_image_path": "data/input/PSNR_reference_image.webp",
         "score_normed_weight": 1.0,
         "use": True,
         "use_form": "function",
     },
     "SSIM": {
-        "SSIM_reference_image_path": "data/SSIM_reference_image.webp",
+        "SSIM_reference_image_path": "data/input/SSIM_reference_image.webp",
         "score_normed_weight": 1.0,
         "use": True,
         "use_form": "function",
@@ -56,11 +56,11 @@ metric_params = {
 
 # I/O
 test_images_dirs_or_csvs = [
-    "data/test_images_dirs/test_images_dir_1",
-    "data/test_images_dirs/test_images_dir_2",
-    "data/test_images_csvs/test_images_csv_1.csv",
+    "data/input/test_images_dirs/test_images_dir_1",
+    "data/input/test_images_dirs/test_images_dir_2",
+    "data/input/test_images_csvs/test_images_csv_1.csv",
 ]
-output_dir = "output"
+output_dir = "data/output"
 json_dir = f"{output_dir}/json"
 xlsx_dir = f"{output_dir}/xlsx"
 txt_dir = f"{output_dir}/txt"

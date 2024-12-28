@@ -91,8 +91,8 @@ class ImprovedAestheticPredictor():
 if __name__ == "__main__":
     improved_aesthetic_predictor_model = ImprovedAestheticPredictor()
     image_dirs = [
-        "../data/test_images_dirs/test_images_dir_1",
-        "../data/test_images_dirs/test_images_dir_2"
+        "../data/input/test_images_dirs/test_images_dir_1",
+        "../data/input/test_images_dirs/test_images_dir_2"
     ]
     for image_dir in tqdm(image_dirs):
         print(f"Processing {image_dir}...")
