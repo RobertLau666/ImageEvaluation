@@ -47,7 +47,7 @@ class API_ViT_v3:
         is_nsfw_img = True if label == "UNSAFE" else False
         nsfw_detect_score = unsafe_score
         nsfw_detect_score_normed = nsfw_detect_score_norm(nsfw_detect_score)
-        return is_nsfw_img, nsfw_detect_score_normed
+        return nsfw_detect_score, nsfw_detect_score_normed
 
 
 if __name__ == "__main__":
@@ -62,7 +62,7 @@ if __name__ == "__main__":
         image_pred_scores = []
         for image_name in tqdm(image_names):
             image_path = os.path.join(image_dir, image_name)
-            is_nsfw_img, nsfw_score = nsfw_detect_model(image_path)
+            nsfw_score = nsfw_detect_model(image_path)
             image_pred_scores.append(nsfw_score)
         image_pred_avg_score = sum(image_pred_scores) / len(image_pred_scores)
         print(f"image_pred_avg_score: {image_pred_avg_score}")

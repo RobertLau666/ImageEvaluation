@@ -8,7 +8,7 @@ import torch.nn as nn
 from tqdm import tqdm
 from PIL import Image
 from metrics.file_process import *
-
+from metrics.norm import nsfw_detect_train_score_norm
 
 class NSFWSelfTrainBinary():
     def __init__(self, model_url):
@@ -103,8 +103,9 @@ class NSFWSelfTrainBinary():
                 pro1=float(prob[0][1]), 
                 pro2=float(prob[0][2])
             )
-        predict = img_result["predict"]
-        return predict
+        nsfw_detect_model_train_score = img_result["predict"]
+        nsfw_detect_model_train_score_normed = nsfw_detect_train_score_norm(nsfw_detect_model_train_score)
+        return nsfw_detect_model_train_score, nsfw_detect_model_train_score_normed
 
 
 if __name__ == "__main__":

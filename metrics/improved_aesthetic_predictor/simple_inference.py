@@ -84,7 +84,7 @@ class ImprovedAestheticPredictor():
         prediction = self.model(torch.from_numpy(im_emb_arr).to(self.device).type(torch.cuda.FloatTensor))
         improved_aesthetic_predictor_score = prediction.cpu().item()
         improved_aesthetic_predictor_score_normed = improved_aesthetic_predictor_norm(improved_aesthetic_predictor_score)
-        return improved_aesthetic_predictor_score_normed
+        return improved_aesthetic_predictor_score, improved_aesthetic_predictor_score_normed
 
 
 if __name__ == "__main__":

@@ -30,7 +30,7 @@ class SkytntAnimeAesthetic():
         img_input = img_input[np.newaxis, :]
         skytnt_anime_aesthetic_score = self.model.run(None, {"img": img_input})[0].item()
         skytnt_anime_aesthetic_score_normed = skytnt_anime_aesthetic_score_norm(skytnt_anime_aesthetic_score)
-        return skytnt_anime_aesthetic_score_normed
+        return skytnt_anime_aesthetic_score, skytnt_anime_aesthetic_score_normed
 
 if __name__ == "__main__":
     skytnt_anime_aesthetic_model = SkytntAnimeAesthetic()

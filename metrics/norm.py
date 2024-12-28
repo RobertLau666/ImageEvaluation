@@ -105,3 +105,19 @@ def nsfw_detect_score_norm(nsfw_detect_score):
     nsfw_detect_score_normed = 1 - nsfw_detect_score
     return nsfw_detect_score_normed
 
+
+def nsfw_detect_train_score_norm(nsfw_detect_train_score):
+    '''
+    自训练的三分类黄图检测模型
+    
+    reflects 
+    Range: [0, 1, 2], where:
+        0 represents 无风险
+        1 represents 中风险
+        2 represents 高风险
+    
+    Function source: https://zh.numberempire.com/graphingcalculator.php?functions=1-0.5*x&xmin=0&xmax=2&ymin=0&ymax=1&var=x
+    Chosen function: 1-0.5*x
+    '''
+    nsfw_detect_train_score_normed = 1 - 0.5 * nsfw_detect_train_score
+    return nsfw_detect_train_score_normed

@@ -1,45 +1,54 @@
 import os
 
-model_params = {
+metric_params = {
     "saturation": {
-        "score_weight": 1.0,
+        "score_normed_weight": 1.0,
         "use": True,
+        "use_form": "function",
     },
     "PSNR": {
         "PSNR_reference_image_path": "data/PSNR_reference_image.webp",
-        "score_weight": 1.0,
+        "score_normed_weight": 1.0,
         "use": True,
+        "use_form": "function",
     },
     "SSIM": {
         "SSIM_reference_image_path": "data/SSIM_reference_image.webp",
-        "score_weight": 1.0,
+        "score_normed_weight": 1.0,
         "use": True,
+        "use_form": "function",
     },
     "FID": {
-        "score_weight": 1.0,
+        "score_normed_weight": 1.0,
         "use": False,
+        "use_form": "function",
     },
     "variance": {
-        "score_weight": 1.0,
+        "score_normed_weight": 1.0,
         "use": True,
+        "use_form": "function",
     },
     "improved_aesthetic_predictor": {
-        "score_weight": 1.0,
+        "score_normed_weight": 1.0,
         "use": True,
+        "use_form": "class",
     },
     "skytnt_anime_aesthetic": {
-        "score_weight": 1.0,
+        "score_normed_weight": 1.0,
         "use": True,
+        "use_form": "class",
     },
     "nsfw_detect": {
         "nsfw_detect_model_path": "models/nsfw_detect_models/nsfw-image-detection-large",
-        "score_weight": 1.0,
+        "score_normed_weight": 1.0,
         "use": True,
+        "use_form": "class",
     },
     "nsfw_detect_train": {
         "nsfw_detect_train_model_url": "https://av-audit-sync-bj-1256122840.cos.ap-beijing.myqcloud.com/hub/models/porn_2024/convnext_epoch_21_0.029230860349222027_0.8878468151621727.pth",
-        "score_weight": 1.0,
+        "score_normed_weight": 1.0,
         "use": True,
+        "use_form": "class",
     }
 }
 
