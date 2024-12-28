@@ -42,47 +42,48 @@ data/test_images_dirs/test_images_dir_1
 | ![0.png](data/test_images_dirs/test_images_dir_1/0.png) | ![1.png](data/test_images_dirs/test_images_dir_1/1.png) | ![2.png](data/test_images_dirs/test_images_dir_1/2.png) | ![3.png](data/test_images_dirs/test_images_dir_1/3.png) | ![4.png](data/test_images_dirs/test_images_dir_1/4.png) | 
 ```json
 {
+"data/test_images_dirs/test_images_dir_1": {
     "saturation": {
-        "average saturation score": 70.83403901883534,
-        "average saturation score normed": 0.5896600860005143,
-        "average saturation time": 0.0040226936340332035
+        "average_saturation_score": 70.83403901883534,
+        "average_saturation_score_normed": 0.5896600860005143,
+        "average_saturation_time": 0.005653810501098633
     },
     "PSNR": {
-        "average PSNR score": 7.5399527297575615,
-        "average PSNR score normed": 0.6914899355883903,
-        "average PSNR time": 0.0006435394287109375
+        "average_PSNR_score": 7.5399527297575615,
+        "average_PSNR_score_normed": 0.6914899355883903,
+        "average_PSNR_time": 0.0007008552551269531
     },
     "SSIM": {
-        "average SSIM score": 0.15270395908780157,
-        "average SSIM score normed": 0.5763519795439007,
-        "average SSIM time": 0.031089258193969727
+        "average_SSIM_score": 0.15270395908780157,
+        "average_SSIM_score_normed": 0.5763519795439007,
+        "average_SSIM_time": 0.032104873657226564
     },
     "variance": {
-        "average variance score": 74.87552555096171,
-        "average variance score normed": 0.9558609204319042,
-        "average variance time": 0.000299072265625
+        "average_variance_score": 74.87552555096171,
+        "average_variance_score_normed": 0.9558609204319042,
+        "average_variance_time": 0.00026154518127441406
     },
     "improved_aesthetic_predictor": {
-        "average improved_aesthetic_predictor score": 5.360999965667725,
-        "average improved_aesthetic_predictor score normed": 0.6152347618901257,
-        "average improved_aesthetic_predictor time": 0.6183845043182373
+        "average_improved_aesthetic_predictor_score": 5.360940265655517,
+        "average_improved_aesthetic_predictor_score_normed": 0.6152332070890697,
+        "average_improved_aesthetic_predictor_time": 0.7181931018829346
     },
     "skytnt_anime_aesthetic": {
-        "average skytnt_anime_aesthetic score": 0.2086948871612549,
-        "average skytnt_anime_aesthetic score normed": 0.2086948871612549,
-        "average skytnt_anime_aesthetic time": 1.8350161552429198
+        "average_skytnt_anime_aesthetic_score": 0.2086948871612549,
+        "average_skytnt_anime_aesthetic_score_normed": 0.2086948871612549,
+        "average_skytnt_anime_aesthetic_time": 2.0195918560028074
     },
     "nsfw_detect": {
-        "average nsfw_detect score": 0.008214050624519586,
-        "average nsfw_detect score normed": 0.9917859493754804,
-        "average nsfw_detect time": 1.353853178024292
+        "average_nsfw_detect_score": 0.008214050624519586,
+        "average_nsfw_detect_score_normed": 0.9917859493754804,
+        "average_nsfw_detect_time": 1.0932815074920654
     },
     "nsfw_detect_train": {
-        "average nsfw_detect_train score": 0.0,
-        "average nsfw_detect_train score normed": 1.0,
-        "average nsfw_detect_train time": 0.08027291297912598
+        "average_nsfw_detect_train_score": 0.0,
+        "average_nsfw_detect_train_score_normed": 1.0,
+        "average_nsfw_detect_train_time": 0.07868819236755371
     },
-    "average weighted score normed": 0.7036348149989463
+    "average_weighted_score_normed": 0.7036346206488143
 }
 ```
 
@@ -93,46 +94,46 @@ data/test_images_dirs/test_images_dir_2
 ```json
 {
     "saturation": {
-        "average saturation score": 73.14979101110387,
-        "average saturation score normed": 0.6587717069691541,
-        "average saturation time": 0.02006239891052246
+        "average_saturation_score": 73.14979101110387,
+        "average_saturation_score_normed": 0.6587717069691541,
+        "average_saturation_time": 0.01709885597229004
     },
     "PSNR": {
-        "average PSNR score": 7.634088893999828,
-        "average PSNR score normed": 0.6943166760699839,
-        "average PSNR time": 0.0008485794067382812
+        "average_PSNR_score": 7.634088893999828,
+        "average_PSNR_score_normed": 0.6943166760699839,
+        "average_PSNR_time": 0.0012720108032226562
     },
     "SSIM": {
-        "average SSIM score": 0.09929010141219313,
-        "average SSIM score normed": 0.5496450507060965,
-        "average SSIM time": 0.03200430870056152
+        "average_SSIM_score": 0.09929010141219313,
+        "average_SSIM_score_normed": 0.5496450507060965,
+        "average_SSIM_time": 0.029761075973510742
     },
     "variance": {
-        "average variance score": 67.21171594506887,
-        "average variance score normed": 0.9518829295543035,
-        "average variance time": 0.0024723529815673826
+        "average_variance_score": 67.21171594506887,
+        "average_variance_score_normed": 0.9518829295543035,
+        "average_variance_time": 0.0025892257690429688
     },
     "improved_aesthetic_predictor": {
-        "average improved_aesthetic_predictor score": 6.158458995819092,
-        "average improved_aesthetic_predictor score normed": 0.6478174253901161,
-        "average improved_aesthetic_predictor time": 0.13774194717407226
+        "average_improved_aesthetic_predictor_score": 6.158406829833984,
+        "average_improved_aesthetic_predictor_score_normed": 0.6478174505594718,
+        "average_improved_aesthetic_predictor_time": 0.12464461326599122
     },
     "skytnt_anime_aesthetic": {
-        "average skytnt_anime_aesthetic score": 0.23886614739894868,
-        "average skytnt_anime_aesthetic score normed": 0.23886614739894868,
-        "average skytnt_anime_aesthetic time": 2.178910160064697
+        "average_skytnt_anime_aesthetic_score": 0.23886614739894868,
+        "average_skytnt_anime_aesthetic_score_normed": 0.23886614739894868,
+        "average_skytnt_anime_aesthetic_time": 2.1637445449829102
     },
     "nsfw_detect": {
-        "average nsfw_detect score": 0.008378814160823821,
-        "average nsfw_detect score normed": 0.9916211858391761,
-        "average nsfw_detect time": 1.3233444213867187
+        "average_nsfw_detect_score": 0.008378814160823821,
+        "average_nsfw_detect_score_normed": 0.9916211858391761,
+        "average_nsfw_detect_time": 1.350627326965332
     },
     "nsfw_detect_train": {
-        "average nsfw_detect_train score": 0.0,
-        "average nsfw_detect_train score normed": 1.0,
-        "average nsfw_detect_train time": 0.2500930309295654
+        "average_nsfw_detect_train_score": 0.0,
+        "average_nsfw_detect_train_score_normed": 1.0,
+        "average_nsfw_detect_train_time": 0.27475199699401853
     },
-    "average weighted score normed": 0.7166151402409724
+    "average_weighted_score_normed": 0.7166151433871418
 }
 ```
 
@@ -143,45 +144,45 @@ data/test_images_csvs/test_images_csv_1.csv
 ```json
 {
     "saturation": {
-        "average saturation score": 110.68278628414751,
-        "average saturation score normed": 0.7550276252166752,
-        "average saturation time": 0.012196922302246093
+        "average_saturation_score": 110.68278628414751,
+        "average_saturation_score_normed": 0.7550276252166752,
+        "average_saturation_time": 0.014221906661987305
     },
     "PSNR": {
-        "average PSNR score": 7.412721149820788,
-        "average PSNR score normed": 0.6889811394075319,
-        "average PSNR time": 0.0006587982177734375
+        "average_PSNR_score": 7.412721149820788,
+        "average_PSNR_score_normed": 0.6889811394075319,
+        "average_PSNR_time": 0.0007189750671386719
     },
     "SSIM": {
-        "average SSIM score": -0.006803741715732356,
-        "average SSIM score normed": 0.4965981291421338,
-        "average SSIM time": 0.029495048522949218
+        "average_SSIM_score": -0.006803741715732356,
+        "average_SSIM_score_normed": 0.4965981291421338,
+        "average_SSIM_time": 0.03112316131591797
     },
     "variance": {
-        "average variance score": 72.05969989333389,
-        "average variance score normed": 0.9557043066971325,
-        "average variance time": 0.0018590927124023438
+        "average_variance_score": 72.05969989333389,
+        "average_variance_score_normed": 0.9557043066971325,
+        "average_variance_time": 0.0021104812622070312
     },
     "improved_aesthetic_predictor": {
-        "average improved_aesthetic_predictor score": 6.39928674697876,
-        "average improved_aesthetic_predictor score normed": 0.6568607965578881,
-        "average improved_aesthetic_predictor time": 0.09588418006896973
+        "average_improved_aesthetic_predictor_score": 6.399631309509277,
+        "average_improved_aesthetic_predictor_score_normed": 0.6568734389586496,
+        "average_improved_aesthetic_predictor_time": 0.0980806827545166
     },
     "skytnt_anime_aesthetic": {
-        "average skytnt_anime_aesthetic score": 0.4729860067367554,
-        "average skytnt_anime_aesthetic score normed": 0.4729860067367554,
-        "average skytnt_anime_aesthetic time": 2.0671417713165283
+        "average_skytnt_anime_aesthetic_score": 0.4729860067367554,
+        "average_skytnt_anime_aesthetic_score_normed": 0.4729860067367554,
+        "average_skytnt_anime_aesthetic_time": 2.13018536567688
     },
     "nsfw_detect": {
-        "average nsfw_detect score": 0.004239956592209637,
-        "average nsfw_detect score normed": 0.9957600434077903,
-        "average nsfw_detect time": 1.2007087230682374
+        "average_nsfw_detect_score": 0.004239956592209637,
+        "average_nsfw_detect_score_normed": 0.9957600434077903,
+        "average_nsfw_detect_time": 1.0196954250335692
     },
     "nsfw_detect_train": {
-        "average nsfw_detect_train score": 0.2,
-        "average nsfw_detect_train score normed": 0.9,
-        "average nsfw_detect_train time": 0.2710900783538818
+        "average_nsfw_detect_train_score": 0.2,
+        "average_nsfw_detect_train_score_normed": 0.9,
+        "average_nsfw_detect_train_time": 0.27601122856140137
     },
-    "average weighted score normed": 0.7402397558957384
+    "average_weighted_score_normed": 0.7402413361958335
 }
 ```
