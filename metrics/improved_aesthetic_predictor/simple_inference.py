@@ -70,13 +70,19 @@ class ImprovedAestheticPredictor():
         l2[l2 == 0] = 1
         return a / np.expand_dims(l2, axis)
 
-    def __call__(self, image_path):
-        pil_image = Image.open(image_path)
+    def __call__(self, image_):
+        if isinstance(image_, str):
+            pil_image = Image.open(image_)
+        if isinstance(image_, np.ndarray):
+            pil_image = Image.fromarray(image_)
+        if isinstance(image_, Image.Image):
+            pass
         image = self.preprocess(pil_image).unsqueeze(0).to(self.device)
         with torch.no_grad():
             image_features = self.model2.encode_image(image)
         im_emb_arr = self.normalized(image_features.cpu().detach().numpy())
         prediction = self.model(torch.from_numpy(im_emb_arr).to(self.device).type(torch.cuda.FloatTensor))
+        prediction = prediction.cpu().item()
         return prediction
 
 

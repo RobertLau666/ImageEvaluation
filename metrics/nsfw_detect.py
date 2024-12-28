@@ -4,10 +4,11 @@ import torch
 from transformers import AutoProcessor, FocalNetForImageClassification
 from torchvision import transforms
 from tqdm import tqdm
+import numpy as np
 
 
 class API_ViT_v3:
-    def __init__(self, model_path="./models/nsfw_detector_models/nsfw-image-detection-large", device="cpu"):
+    def __init__(self, model_path="models/nsfw_detect_models/nsfw-image-detection-large", device="cpu"):
         self.feature_extractor = AutoProcessor.from_pretrained(model_path)
         self.nsfw_model = FocalNetForImageClassification.from_pretrained(model_path)
         self.nsfw_model.eval()
@@ -25,9 +26,14 @@ class API_ViT_v3:
         self.THRESHOLD = 0.4
 
     @torch.no_grad()
-    def __call__(self, image_path):
+    def __call__(self, image_):
         """Detects whether the image is NSFW or not and returns the label with confidence."""
-        pil_image = Image.open(image_path).convert("RGB")
+        if isinstance(image_, str):
+            pil_image = Image.open(image_).convert("RGB")
+        if isinstance(image_, np.ndarray):
+            pil_image = Image.fromarray(image_)
+        if isinstance(image_, Image.Image):
+            pass
         inputs = self.feature_extractor(images=pil_image, return_tensors="pt")
         outputs = self.nsfw_model(**inputs)
         probabilities = torch.nn.functional.softmax(outputs.logits, dim=-1)

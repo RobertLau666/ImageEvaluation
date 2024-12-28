@@ -10,16 +10,21 @@ class SkytntAnimeAesthetic():
     def __init__(self, model_path="/maindata/data/shared/public/chenyu.liu/others/images_evaluation/skytnt_anime-aesthetic/model.onnx"):
         self.model = rt.InferenceSession(model_path, providers=['CPUExecutionProvider'])
     
-    def __call__(self, image_path):
-        img = Image.open(image_path).convert('RGB')
-        img = np.array(img)
-        img = img.astype(np.float32) / 255
+    def __call__(self, image_):
+        if isinstance(image_, str):
+            image = Image.open(image_).convert('RGB')
+            image = np.array(image)
+        if isinstance(image_, np.ndarray):
+            image = image_
+        if isinstance(image_, Image.Image):
+            image = np.array(image)
+        image = image.astype(np.float32) / 255
         s = 768
-        h, w = img.shape[:-1]
+        h, w = image.shape[:-1]
         h, w = (s, int(s * w / h)) if h > w else (int(s * h / w), s)
         ph, pw = s - h, s - w
         img_input = np.zeros([s, s, 3], dtype=np.float32)
-        img_input[ph // 2:ph // 2 + h, pw // 2:pw // 2 + w] = cv2.resize(img, (w, h))
+        img_input[ph // 2:ph // 2 + h, pw // 2:pw // 2 + w] = cv2.resize(image, (w, h))
         img_input = np.transpose(img_input, (2, 0, 1))
         img_input = img_input[np.newaxis, :]
         pred = self.model.run(None, {"img": img_input})[0].item()
