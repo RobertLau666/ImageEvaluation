@@ -1,8 +1,9 @@
 __pycache__
 .cache
 lightning_logs
-input/
-!input/test_images_*
-!input/PSNR_reference_image.webp
-!input/SSIM_reference_image.webp
+# input/
+# !input/demo
+# !input/test_images_*
+# !input/PSNR_reference_image.webp
+# !input/SSIM_reference_image.webp
 output

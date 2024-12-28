@@ -35,8 +35,8 @@ class SkytntAnimeAesthetic():
 if __name__ == "__main__":
     skytnt_anime_aesthetic_model = SkytntAnimeAesthetic()
     image_dirs = [
-        "../data/input/test_images_dirs/test_images_dir_1",
-        "../data/input/test_images_dirs/test_images_dir_2"
+        "../data/input/demo/test_images_dirs/test_images_dir_1",
+        "../data/input/demo/test_images_dirs/test_images_dir_2"
     ]
     for image_dir in tqdm(image_dirs):
         print(f"Processing {image_dir}...")
