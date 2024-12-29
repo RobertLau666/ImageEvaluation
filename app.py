@@ -34,7 +34,7 @@ class ImageEvaluation():
         if "nsfw_detect" in self.metric_names:
             self.nsfw_detect_model = API_ViT_v3(model_path=config.metric_params["nsfw_detect"]["nsfw_detect_model_path"])
         if "nsfw_detect_train" in self.metric_names:
-            self.nsfw_detect_train_model = NSFWSelfTrainBinary(model_url=config.metric_params["nsfw_detect_train"]["nsfw_detect_train_model_url"])
+            self.nsfw_detect_train_model = NSFWSelfTrainCls(model_url=config.metric_params["nsfw_detect_train"]["nsfw_detect_train_model_url"])
 
     def get_img_paths_or_urls(self, images_dir_or_csv):
         img_paths_or_urls = []

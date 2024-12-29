@@ -11,7 +11,7 @@ from metrics.file_process import *
 from metrics.norm import nsfw_detect_train_score_norm
 
 
-class NSFWSelfTrainBinary():
+class NSFWSelfTrainCls():
     def __init__(self, model_url):
         self.CONFIG = {
             "size": (224, 224),
@@ -111,7 +111,7 @@ class NSFWSelfTrainBinary():
 
 if __name__ == "__main__":
     model_url = 'https://av-audit-sync-bj-1256122840.cos.ap-beijing.myqcloud.com/hub/models/porn_2024/convnext_epoch_21_0.029230860349222027_0.8878468151621727.pth'
-    nsfw_model = NSFWSelfTrainBinary(model_url=model_url)
+    nsfw_model = NSFWSelfTrainCls(model_url=model_url)
 
     # input_csv_path = '测试样本.csv'
     input_csv_path = '../data/test_images_csvs/test_images_csv_1.csv'
