@@ -115,27 +115,27 @@ if __name__ == "__main__":
 
     # input_csv_path = '测试样本.csv'
     input_csv_path = '../data/test_images_csvs/test_images_csv_1.csv'
-    begin_r = 0
-    end_r = -1
-    url_c = 6
+    begin_row = 0
+    end_row = -1
+    img_info_column = 6
     
-    all_files = read_excel(input_csv_path, begin_r, end_r, url_c)
-    all_files = get_img_urls(all_files)
-    total_num = len(all_files)
-    print(f'文件数量: {total_num}')
+    img_infos = get_img_infos(input_csv_path, begin_row, end_row, img_info_column)
+    img_urls = get_img_urls(img_infos)
+    img_url_num = len(img_urls)
+    print(f'文件数量: {img_url_num}')
 
     save_as_excel = True
     if save_as_excel:
         columns = ["url", "predict", "pro0", "pro1", "pro2"]
-        output_file = f'result_{os.path.splitext(os.path.basename(input_csv_path))[0]}_totalnum{total_num}_beginr{begin_r}_{get_formatted_current_time()}.xlsx'
+        output_file = f'result_{os.path.splitext(os.path.basename(input_csv_path))[0]}_totalnum{img_url_num}_beginr{begin_row}_{get_formatted_current_time()}.xlsx'
         if not os.path.exists(output_file):
             df = pd.DataFrame(columns=columns)
             df.to_excel(output_file, index=False)
 
-    for index, url in enumerate(tqdm(all_files)):
+    for index, url in enumerate(tqdm(img_urls)):
         img_result = nsfw_model(url)
         if index % 100 == 0:
-            print(f'已完成 {index}/{total_num}')
+            print(f'已完成 {index}/{img_url_num}')
 
         if save_as_excel:
             single_df = pd.DataFrame([img_result])

@@ -40,7 +40,7 @@ class ImageEvaluation():
         img_paths_or_urls = []
         if images_dir_or_csv.endswith(('.csv', '.xlsx')):
             self.is_excel_file = True
-            img_infos = read_excel(images_dir_or_csv, begin_r=0, end_r=-1, url_c=6)
+            img_infos = get_img_infos(images_dir_or_csv, begin_row=0, end_row=-1, img_info_column=6)
             img_paths_or_urls = get_img_urls(img_infos)
         else:
             self.is_excel_file = False
@@ -101,10 +101,8 @@ class ImageEvaluation():
                 exec(f'{metric_name}_scores.append({metric_name}_score)')
                 exec(f'{metric_name}_scores_normed.append({metric_name}_score_normed)')
                 exec(f'{metric_name}_times.append(t_{metric_name})')
-
                 exec(f'all_weighted_score_normed += {metric_name}_score_normed * config.metric_params["{metric_name}"]["score_normed_weight"]')
                 exec(f'result_excel_["{metric_name}_score_normed"] = {metric_name}_score_normed')
-
             exec(f'result_excel_["average_weighted_score_normed"] = all_weighted_score_normed / sum([config.metric_params[metric_name]["score_normed_weight"] for metric_name in self.metric_names])')
             single_df = pd.DataFrame([result_excel_])
             with pd.ExcelWriter(result_excel_path, mode='a', if_sheet_exists='overlay', engine='openpyxl') as writer:

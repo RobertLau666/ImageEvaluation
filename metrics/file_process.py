@@ -39,23 +39,20 @@ def log_csv(img_results, save_csv_path):
 
     print(f"数据已写入 CSV 文件: {save_csv_path}")
 
-def read_excel(excel_path, begin_r, end_r, url_c):
+def get_img_infos(excel_path, begin_row, end_row, img_info_column):
     if excel_path.endswith('.csv'):
         data = pd.read_csv(excel_path)
     elif excel_path.endswith('.xlsx'):
         data = pd.read_excel(excel_path)
     num_rows = len(data)
+    img_infos = data.iloc[:, img_info_column].tolist()[begin_row:(num_rows if end_row == -1 else end_row)]
+    return img_infos
 
-    first_column = data.iloc[:, url_c]
-    first_url_list = first_column.tolist()[begin_r:(num_rows if end_r == -1 else end_r)]
-
-    return first_url_list
-
-def get_img_urls(all_files):
+def get_img_urls(img_infos):
     img_urls = []
-    for index, all_file in enumerate(tqdm(all_files)):
-        all_file_dict = json.loads(all_file)
-        push_data = all_file_dict["push_data"]
+    for index, img_info in enumerate(tqdm(img_infos)):
+        img_info_dict = json.loads(img_info)
+        push_data = img_info_dict["push_data"]
         img_url = ''
         if "img_url" in push_data:
             img_url = push_data["img_url"]

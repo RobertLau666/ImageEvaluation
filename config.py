@@ -2,55 +2,55 @@ import os
 
 metric_params = {
     "saturation": {
-        "score_normed_weight": 1.0,
         "use": True,
         "use_form": "function",
+        "score_normed_weight": 1.0,
     },
     "PSNR": {
-        "PSNR_reference_image_path": "data/input/demo/PSNR_reference_image.webp",
-        "score_normed_weight": 1.0,
         "use": True,
         "use_form": "function",
+        "score_normed_weight": 1.0,
+        "PSNR_reference_image_path": "data/input/demo/PSNR_reference_image.webp",
     },
     "SSIM": {
-        "SSIM_reference_image_path": "data/input/demo/SSIM_reference_image.webp",
-        "score_normed_weight": 1.0,
         "use": True,
         "use_form": "function",
+        "score_normed_weight": 1.0,
+        "SSIM_reference_image_path": "data/input/demo/SSIM_reference_image.webp",
     },
     "FID": {
-        "score_normed_weight": 1.0,
         "use": False,
         "use_form": "function",
+        "score_normed_weight": 1.0,
     },
     "variance": {
-        "score_normed_weight": 1.0,
         "use": True,
         "use_form": "function",
+        "score_normed_weight": 1.0,
     },
     "improved_aesthetic_predictor": {
-        "improved_aesthetic_predictor_model_path": "models/improved_aesthetic_predictor_models/sac+logos+ava1-l14-linearMSE.pth",
-        "score_normed_weight": 1.0,
         "use": True,
         "use_form": "class",
+        "score_normed_weight": 1.0,
+        "improved_aesthetic_predictor_model_path": "models/improved_aesthetic_predictor_models/sac+logos+ava1-l14-linearMSE.pth",
     },
     "skytnt_anime_aesthetic": {
-        "skytnt_anime_aesthetic_model_path": "models/skytnt_anime_aesthetic_models/model.onnx",
-        "score_normed_weight": 1.0,
         "use": True,
         "use_form": "class",
+        "score_normed_weight": 1.0,
+        "skytnt_anime_aesthetic_model_path": "models/skytnt_anime_aesthetic_models/model.onnx",
     },
     "nsfw_detect": {
-        "nsfw_detect_model_path": "models/nsfw_detect_models/nsfw-image-detection-large",
-        "score_normed_weight": 1.0,
         "use": True,
         "use_form": "class",
+        "score_normed_weight": 1.0,
+        "nsfw_detect_model_path": "models/nsfw_detect_models/nsfw-image-detection-large",
     },
     "nsfw_detect_train": {
-        "nsfw_detect_train_model_url": "https://av-audit-sync-bj-1256122840.cos.ap-beijing.myqcloud.com/hub/models/porn_2024/convnext_epoch_21_0.029230860349222027_0.8878468151621727.pth",
-        "score_normed_weight": 1.0,
         "use": True,
         "use_form": "class",
+        "score_normed_weight": 1.0,
+        "nsfw_detect_train_model_url": "https://av-audit-sync-bj-1256122840.cos.ap-beijing.myqcloud.com/hub/models/porn_2024/convnext_epoch_21_0.029230860349222027_0.8878468151621727.pth",
     }
 }
 
