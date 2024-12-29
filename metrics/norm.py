@@ -1,5 +1,5 @@
 '''
-This script normalizes various image quality scores (PSNR, SSIM, Variance, etc.) to the range [0, 1].
+This script normalizes various image metric scores (PSNR, SSIM, Variance, etc.) to the range [0, 1].
 '''
 
 def saturation_norm(saturation_score):
@@ -10,7 +10,7 @@ def saturation_norm(saturation_score):
         255 represents full saturation, i.e., maximum color intensity.
     
     Function source: https://zh.numberempire.com/graphingcalculator.php?functions=2*x%2F(2*x%2B10)%2Cx%2F(x%2B10)%2C0.5*x%2F(0.5*x%2B10)%2C0.3*x%2F(0.3*x%2B10)%2C0.1*x%2F(0.1*x%2B10)&xmin=0&xmax=300&ymin=0&ymax=1&var=x
-    Chosen function: 0.3*x / (0.3*x + 10)
+    Chosen function: 0.3*x/(0.3*x+10)
     '''
     saturation_score_normed = 0.3 * saturation_score / (0.3 * saturation_score + 10)
     return saturation_score_normed
