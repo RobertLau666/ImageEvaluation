@@ -80,6 +80,7 @@ class ImageEvaluation():
         
         # 可以对单张图评估的指标
         img_path_or_url_contiue_path = f'{config.txt_dir}/skip_{os.path.splitext(os.path.basename(images_dir_or_csv))[0]}_{get_formatted_current_time()}.txt'
+        print(f"Skipped image paths or urls will save at: {img_path_or_url_contiue_path}")
         for index, img_path_or_url in enumerate(tqdm(img_paths_or_urls)):
             img_numpy = self.get_img_numpy(img_path_or_url)
             if img_numpy is None:
@@ -129,8 +130,6 @@ if __name__ == "__main__":
     img_eval = ImageEvaluation()
 
     result_json_path = f"{config.json_dir}/result_{get_formatted_current_time()}.json"
-    print(f"Group image metric average scores will save at: : {result_json_path}")
-
     for test_images_dir_or_csv in tqdm(config.test_images_dirs_or_csvs):
         if not os.path.exists(result_json_path):
             result_json = {}
@@ -141,9 +140,10 @@ if __name__ == "__main__":
             except json.decoder.JSONDecodeError as e:
                 result_json = {}
 
-        print(f"\nProcessing {test_images_dir_or_csv}...")
+        print(f"\n\nProcessing {test_images_dir_or_csv}...")
         result_json_ = img_eval(test_images_dir_or_csv)
         result_json[test_images_dir_or_csv] = result_json_
         
         with open(result_json_path, 'w', encoding='utf-8') as file:
             file.write(json.dumps(result_json, indent=4, ensure_ascii=False))
+    print(f"\nGroup image metric average scores saved at: {result_json_path}")

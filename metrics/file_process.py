@@ -61,7 +61,7 @@ def get_img_urls(img_infos):
         img_urls.append(img_url)
     return img_urls
 
-def download_img(url, timeout=5, retry_count=3):
+def download_img(url, timeout=30, retry_count=3):
     img = None
     for _ in range(retry_count):
         try:
@@ -72,10 +72,8 @@ def download_img(url, timeout=5, retry_count=3):
             break
         except Exception as e:
             pass
-    
     if img is None:
         print(f'[ERROR] url: {url}')
-    # return url, img
     return img
 
 def get_image_array_from_img_url(img_url, timeout=5, retry_count=3):
