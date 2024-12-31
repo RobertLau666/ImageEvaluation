@@ -12,23 +12,27 @@ from metrics.norm import nsfw_detect_train_score_norm
 
 
 class NSFWSelfTrainCls():
-    def __init__(self, model_url):
+    def __init__(self, model_path_or_url):
         self.CONFIG = {
             "size": (224, 224),
             'mean': (0.428, 0.442, 0.496),  # BGR order
             'var': (0.240, 0.251, 0.279),   # BGR order
         }
-        self.model_url = model_url
+        self.model_path_or_url = model_path_or_url
         self.load_model()
 
     def load_model(self):
-        self.model_dir = 'models/nsfw_detect_train_models'
-        if not os.path.exists(self.model_dir):
-            os.makedirs(self.model_dir)
-        model_path = os.path.join(self.model_dir, os.path.basename(self.model_url))
-        if not os.path.exists(model_path):
-            print(f'模型权重不存在, 即将下载到路径: {model_path}')
-            download_file(self.model_url, model_path)
+        if is_url(self.model_path_or_url):
+            self.model_dir = 'models/nsfw_detect_train_models'
+            if not os.path.exists(self.model_dir):
+                os.makedirs(self.model_dir)
+            model_path = os.path.join(self.model_dir, os.path.basename(self.model_path_or_url))
+            if not os.path.exists(model_path):
+                print(f'The model weights do not exist and will be downloaded to the path:{model_path}')
+                download_file(self.model_path_or_url, model_path)
+        else:
+            if not os.path.exists(self.model_path_or_url):
+                raise FileNotFoundError(f"The image path {self.model_path_or_url} does not exist.")
         
         self.model = torchvision.models.convnext_tiny(pretrained=True)
         self.model.classifier[2] = nn.Linear(in_features=768, out_features=3, bias=True)
@@ -110,8 +114,8 @@ class NSFWSelfTrainCls():
 
 
 if __name__ == "__main__":
-    model_url = 'https://av-audit-sync-bj-1256122840.cos.ap-beijing.myqcloud.com/hub/models/porn_2024/convnext_epoch_21_0.029230860349222027_0.8878468151621727.pth'
-    nsfw_model = NSFWSelfTrainCls(model_url=model_url)
+    model_path_or_url = 'https://av-audit-sync-bj-1256122840.cos.ap-beijing.myqcloud.com/hub/models/porn_2024/convnext_epoch_21_0.029230860349222027_0.8878468151621727.pth'
+    nsfw_model = NSFWSelfTrainCls(model_path_or_url=model_path_or_url)
 
     # input_csv_path = '测试样本.csv'
     input_csv_path = '../data/test_images_csvs/test_images_csv_1.csv'

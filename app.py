@@ -34,9 +34,9 @@ class ImageEvaluation():
         if "nsfw_detect" in self.metric_names:
             self.nsfw_detect_model = API_ViT_v3(model_path=config.metric_params["nsfw_detect"]["nsfw_detect_model_path"])
         if "nsfw_detect_train" in self.metric_names:
-            self.nsfw_detect_train_model = NSFWSelfTrainCls(model_url=config.metric_params["nsfw_detect_train"]["nsfw_detect_train_model_url"])
+            self.nsfw_detect_train_model = NSFWSelfTrainCls(model_url=config.metric_params["nsfw_detect_train"]["nsfw_detect_train_model_path_or_url"])
         if "children_detect_train" in self.metric_names:
-            self.children_detect_train_model = ChildrenSelfTrainCls(model_url=config.metric_params["children_detect_train"]["children_detect_train_model_path"])
+            self.children_detect_train_model = ChildrenSelfTrainCls(model_url=config.metric_params["children_detect_train"]["children_detect_train_model_path_or_url"])
 
     def get_img_paths_or_urls(self, images_dir_or_csv):
         img_paths_or_urls = []
@@ -145,8 +145,7 @@ if __name__ == "__main__":
                 result_json = {}
 
         print(f"\n\nProcessing {test_images_dir_or_csv}...")
-        result_json_ = img_eval(test_images_dir_or_csv)
-        result_json[test_images_dir_or_csv] = result_json_
+        result_json[test_images_dir_or_csv] = img_eval(test_images_dir_or_csv)
         
         with open(result_json_path, 'w', encoding='utf-8') as file:
             file.write(json.dumps(result_json, indent=4, ensure_ascii=False))

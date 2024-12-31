@@ -4,13 +4,6 @@ import cv2
 import torchvision
 import torch
 import torch.nn as nn
-# from dataset import *
-# from config import CONFIG
-# from augmentation import *
-# from torch.utils.data import DataLoader, WeightedRandomSampler
-# from loss import *
-# from util.metrics import *
-# from util.step_with_lr import *
 from tqdm import tqdm
 from PIL import Image
 from torchvision import transforms
@@ -19,11 +12,28 @@ from metrics.norm import children_detect_train_score_norm
 
 
 class ChildrenSelfTrainCls():
-    def __init__(self, model_url):
+    def __init__(self, model_path_or_url):
+        self.model_path_or_url = model_path_or_url
+        self.load_model()
+
+    def load_model(self):
+        if is_url(self.model_path_or_url):
+            self.model_dir = 'models/children_detect_train_models'
+            if not os.path.exists(self.model_dir):
+                os.makedirs(self.model_dir)
+            model_path = os.path.join(self.model_dir, os.path.basename(self.model_path_or_url))
+            if not os.path.exists(model_path):
+                print(f'The model weights do not exist and will be downloaded to the path:{model_path}')
+                download_file(self.model_path_or_url, model_path)
+        else:
+            if not os.path.exists(self.model_path_or_url):
+                raise FileNotFoundError(f"The image path {self.model_path_or_url} does not exist.")
+            
         self.model = torchvision.models.convnext_tiny(pretrained=True)
         self.model.classifier[2] = nn.Linear(in_features=768, out_features=2, bias=True)
         # model.load_state_dict(torch.load('./output_focal_convnext/mobilenet_epoch_5_0.062183827365894666_0.8977556109725686.pth'))
-        self.model.load_state_dict(torch.load(model_url))
+        self.model.load_state_dict(torch.load(self.model_path_or_url))
+        self.model.cuda()
 
     def __call__(self, image_):
         if isinstance(image_, str):
@@ -44,6 +54,8 @@ class ChildrenSelfTrainCls():
         image = transform(image).unsqueeze(0)
         
         with torch.no_grad():
+            self.model.eval()
+            image = image.cuda()
             pred = self.model(image)
             prob = nn.Softmax(dim=1)(pred)
             output = prob.max(dim=1)[1].cpu().numpy()
@@ -61,7 +73,7 @@ class ChildrenSelfTrainCls():
 
 
 if __name__ == "__main__":
-    children_detect_model = ChildrenSelfTrainCls(model_url="/maindata/data/shared/public/chenyu.liu/others/1_image_eval/children/linky_children_train/output_focal_convnext/convnext_epoch_2_0.011210116249878839_0.9750623441396509.pth")
+    children_detect_model = ChildrenSelfTrainCls(model_path_or_url="/maindata/data/shared/public/chenyu.liu/others/1_image_eval/children/linky_children_train/output_focal_convnext/convnext_epoch_2_0.011210116249878839_0.9750623441396509.pth")
     image_dirs = [
         # "../data/input/demo/test_images_dirs/test_images_dir_1",
         "/maindata/data/shared/public/chenyu.liu/others/ImageEvaluation/data/input/demo/test_images_dirs/test_images_dir_1"
