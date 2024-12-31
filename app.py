@@ -34,30 +34,25 @@ class ImageEvaluation():
         if "nsfw_detect" in self.metric_names:
             self.nsfw_detect_model = API_ViT_v3(model_path=config.metric_params["nsfw_detect"]["nsfw_detect_model_path"])
         if "nsfw_detect_train" in self.metric_names:
-            self.nsfw_detect_train_model = NSFWSelfTrainCls(model_url=config.metric_params["nsfw_detect_train"]["nsfw_detect_train_model_path_or_url"])
+            self.nsfw_detect_train_model = NSFWSelfTrainCls(model_path_or_url=config.metric_params["nsfw_detect_train"]["nsfw_detect_train_model_path_or_url"])
         if "children_detect_train" in self.metric_names:
-            self.children_detect_train_model = ChildrenSelfTrainCls(model_url=config.metric_params["children_detect_train"]["children_detect_train_model_path_or_url"])
+            self.children_detect_train_model = ChildrenSelfTrainCls(model_path_or_url=config.metric_params["children_detect_train"]["children_detect_train_model_path_or_url"])
 
     def get_img_paths_or_urls(self, images_dir_or_csv):
         img_paths_or_urls = []
-        if images_dir_or_csv.endswith(('.csv', '.xlsx')):
-            self.is_excel_file = True
-            img_infos = get_img_infos(images_dir_or_csv, begin_row=0, end_row=-1, img_info_column=6)
-            img_paths_or_urls = get_img_urls(img_infos)
+        if images_dir_or_csv.endswith(('.csv', '.xlsx', '.txt')):
+            self.is_img_url_file = True
+            img_paths_or_urls = get_img_urls(images_dir_or_csv)
         else:
-            self.is_excel_file = False
+            self.is_img_url_file = False
             img_paths_or_urls = [os.path.join(images_dir_or_csv, img_name) for img_name in sorted(os.listdir(images_dir_or_csv))]
         return img_paths_or_urls
-
-    def get_img_numpy(self, img_path_or_url):
-        img_numpy = get_image_array_from_img_url(img_path_or_url) if self.is_excel_file else cv2.imread(img_path_or_url)
-        return img_numpy
 
     def __call__(self, images_dir_or_csv):
         img_paths_or_urls = self.get_img_paths_or_urls(images_dir_or_csv)
         
         column_titles = ["img_path_or_url"] + [f"{metric_name}_score_normed" for metric_name in self.metric_names]
-        result_excel_path = f'{config.xlsx_dir}/result_{os.path.splitext(os.path.basename(images_dir_or_csv))[0]}_{get_formatted_current_time()}.xlsx'
+        result_excel_path = f'{config.xlsx_dir}/{os.path.basename(images_dir_or_csv)}_result_{get_formatted_current_time()}.xlsx'
         print(f"Every image metric scores will save at: {result_excel_path}")
         if not os.path.exists(result_excel_path):
             df = pd.DataFrame(columns=column_titles)
@@ -83,10 +78,10 @@ class ImageEvaluation():
             children_detect_train_scores, children_detect_train_scores_normed, children_detect_train_times = [], [], []
 
         # 可以对单张图评估的指标
-        img_path_or_url_contiue_path = f'{config.txt_dir}/skip_{os.path.splitext(os.path.basename(images_dir_or_csv))[0]}_{get_formatted_current_time()}.txt'
+        img_path_or_url_contiue_path = f'{config.txt_dir}/{os.path.basename(images_dir_or_csv)}_skip_{get_formatted_current_time()}.txt'
         print(f"Skipped image paths or urls will save at: {img_path_or_url_contiue_path}")
         for index, img_path_or_url in enumerate(tqdm(img_paths_or_urls)):
-            img_numpy = self.get_img_numpy(img_path_or_url)
+            img_numpy = get_image_numpy_from_img_url(img_path_or_url) if self.is_img_url_file else cv2.imread(img_path_or_url)
             if img_numpy is None:
                 with open(img_path_or_url_contiue_path, 'a', encoding='utf-8') as file:
                     file.write(f"{index} {img_path_or_url}\n")

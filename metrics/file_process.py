@@ -9,6 +9,7 @@ import re
 from datetime import datetime
 from PIL import Image
 from io import BytesIO
+from pathlib import Path
 
 
 video_suffix = ['.mp4', '.avi', '.mov', '.mkv', '.flv', '.wmv', '.webm']
@@ -39,27 +40,40 @@ def log_csv(img_results, save_csv_path):
 
     print(f"数据已写入 CSV 文件: {save_csv_path}")
 
-def get_img_infos(excel_path, begin_row, end_row, img_info_column):
+def get_img_infos(excel_path, begin_row, end_row):
     if excel_path.endswith('.csv'):
         data = pd.read_csv(excel_path)
     elif excel_path.endswith('.xlsx'):
         data = pd.read_excel(excel_path)
     num_rows = len(data)
-    img_infos = data.iloc[:, img_info_column].tolist()[begin_row:(num_rows if end_row == -1 else end_row)]
+    img_infos = data.iloc[:, 0].tolist()[begin_row:(num_rows if end_row == -1 else end_row)]
     return img_infos
 
-def get_img_urls(img_infos):
-    img_urls = []
-    for index, img_info in enumerate(tqdm(img_infos)):
-        img_info_dict = json.loads(img_info)
-        push_data = img_info_dict["push_data"]
-        img_url = ''
-        if "img_url" in push_data:
-            img_url = push_data["img_url"]
-        elif "images" in push_data:
-            img_url = push_data["images"][0]
-        img_urls.append(img_url)
-    return img_urls
+# def get_img_urls(img_infos):
+#     img_urls = []
+#     for index, img_info in enumerate(tqdm(img_infos)):
+#         img_info_dict = json.loads(img_info)
+#         push_data = img_info_dict["push_data"]
+#         img_url = ''
+#         if "img_url" in push_data:
+#             img_url = push_data["img_url"]
+#         elif "images" in push_data:
+#             img_url = push_data["images"][0]
+#         img_urls.append(img_url)
+#     return img_urls
+
+def get_img_urls(images_file_path, begin_row=0, end_row=-1):
+    file_extension = Path(images_file_path).suffix
+    if file_extension in ['.csv', '.xlsx']:
+        data = pd.read_csv(images_file_path) if file_extension == '.csv' else pd.read_excel(images_file_path)
+        num_rows = len(data)
+        img_paths_or_urls = data.iloc[:, 0].tolist()[begin_row:(num_rows if end_row == -1 else end_row)]
+    elif file_extension in ['.txt']:
+        img_paths_or_urls = []
+        with open(images_file_path, "r", encoding='utf-8') as file:
+            for line in file.readlines():
+                img_paths_or_urls.append(line.strip())
+    return img_paths_or_urls
 
 def download_img(url, timeout=30, retry_count=3):
     img = None
@@ -67,8 +81,8 @@ def download_img(url, timeout=30, retry_count=3):
         try:
             response = requests.get(url, timeout=timeout)
             response.raise_for_status()  # 检查HTTP请求是否成功
-            image_array = np.asarray(bytearray(response.content), dtype="uint8")
-            img = cv2.imdecode(image_array, cv2.IMREAD_COLOR)
+            image_numpy = np.asarray(bytearray(response.content), dtype="uint8")
+            img = cv2.imdecode(image_numpy, cv2.IMREAD_COLOR)
             break
         except Exception as e:
             pass
@@ -76,17 +90,17 @@ def download_img(url, timeout=30, retry_count=3):
         print(f'[ERROR] url: {url}')
     return img
 
-def get_image_array_from_img_url(img_url, timeout=5, retry_count=3):
-    image_array = None
+def get_image_numpy_from_img_url(img_url, timeout=5, retry_count=3):
+    image_numpy = None
     for _ in range(retry_count):
         try:
             response = requests.get(img_url, timeout=timeout)
             image_pil = Image.open(BytesIO(response.content))
-            image_array = np.array(image_pil)
+            image_numpy = np.array(image_pil)
             break
         except Exception as e:
             pass
-    return image_array
+    return image_numpy
 
 def is_url(string):
     url_pattern = re.compile(r'^(https?://|ftp://|file://)?[a-zA-Z0-9.-]+(\.[a-zA-Z]{2,})+(:\d+)?(/.*)?$')
