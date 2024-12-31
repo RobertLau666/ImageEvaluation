@@ -51,6 +51,12 @@ metric_params = {
         "use_form": "class",
         "score_normed_weight": 1.0,
         "nsfw_detect_train_model_url": "https://av-audit-sync-bj-1256122840.cos.ap-beijing.myqcloud.com/hub/models/porn_2024/convnext_epoch_21_0.029230860349222027_0.8878468151621727.pth",
+    },
+    "children_detect_train": {
+        "use": True,
+        "use_form": "class",
+        "score_normed_weight": 1.0,
+        "children_detect_train_model_path": "/maindata/data/shared/public/chenyu.liu/others/1_image_eval/children/linky_children_train/checkpoint/output_focal_convnext/convnext_epoch_2_0.011210116249878839_0.9750623441396509.pth",
     }
 }
 

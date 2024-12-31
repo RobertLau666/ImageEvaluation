@@ -114,3 +114,18 @@ def nsfw_detect_train_score_norm(nsfw_detect_train_score):
     '''
     nsfw_detect_train_score_normed = 1 - 0.5 * nsfw_detect_train_score
     return nsfw_detect_train_score_normed
+
+def children_detect_train_score_norm(children_detect_train_score):
+    '''
+    自训练的二分类黄图检测模型
+    
+    children_detect_train_score: reflects 
+    Range: [0, 1], where:
+        0 represents 成人
+        1 represents 幼童
+    
+    Function source: https://zh.numberempire.com/graphingcalculator.php?functions=1-x&xmin=0&xmax=1&ymin=0&ymax=1&var=x
+    Chosen function: 1-x
+    '''
+    children_detect_train_score_normed = 1 - children_detect_train_score
+    return children_detect_train_score_normed

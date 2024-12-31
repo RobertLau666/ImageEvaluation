@@ -15,7 +15,7 @@ class ImageEvaluation():
         self.metric_names = []
         self.metric_forms = {}
         for metric_name, metric_param in config.metric_params.items():
-            if metric_param["use"]:
+            if metric_param.get("use", False):
                 self.metric_names.append(metric_name)
             if metric_param["use_form"] not in self.metric_forms:
                 self.metric_forms[metric_param["use_form"]] = [metric_name]
@@ -35,6 +35,8 @@ class ImageEvaluation():
             self.nsfw_detect_model = API_ViT_v3(model_path=config.metric_params["nsfw_detect"]["nsfw_detect_model_path"])
         if "nsfw_detect_train" in self.metric_names:
             self.nsfw_detect_train_model = NSFWSelfTrainCls(model_url=config.metric_params["nsfw_detect_train"]["nsfw_detect_train_model_url"])
+        if "children_detect_train" in self.metric_names:
+            self.children_detect_train_model = ChildrenSelfTrainCls(model_url=config.metric_params["children_detect_train"]["children_detect_train_model_path"])
 
     def get_img_paths_or_urls(self, images_dir_or_csv):
         img_paths_or_urls = []
@@ -77,7 +79,9 @@ class ImageEvaluation():
             nsfw_detect_scores, nsfw_detect_scores_normed, nsfw_detect_times = [], [], []
         if "nsfw_detect_train" in self.metric_names:
             nsfw_detect_train_scores, nsfw_detect_train_scores_normed, nsfw_detect_train_times = [], [], []
-        
+        if "children_detect_train" in self.metric_names:
+            children_detect_train_scores, children_detect_train_scores_normed, children_detect_train_times = [], [], []
+
         # 可以对单张图评估的指标
         img_path_or_url_contiue_path = f'{config.txt_dir}/skip_{os.path.splitext(os.path.basename(images_dir_or_csv))[0]}_{get_formatted_current_time()}.txt'
         print(f"Skipped image paths or urls will save at: {img_path_or_url_contiue_path}")

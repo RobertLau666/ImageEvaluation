@@ -59,10 +59,13 @@ if __name__ == "__main__":
     for image_dir in tqdm(image_dirs):
         print(f"Processing {image_dir}...")
         image_names = os.listdir(image_dir)
-        nsfw_detect_scores = []
+        nsfw_detect_scores, nsfw_detect_scores_normed = [], []
         for image_name in tqdm(image_names):
             image_path = os.path.join(image_dir, image_name)
             nsfw_detect_score, nsfw_detect_score_normed = nsfw_detect_model(image_path)
             nsfw_detect_scores.append(nsfw_detect_score)
+            nsfw_detect_scores_normed.append(nsfw_detect_score_normed)
         average_nsfw_detect_score = sum(nsfw_detect_scores) / len(nsfw_detect_scores)
+        average_nsfw_detect_score_normed = sum(nsfw_detect_scores_normed) / len(nsfw_detect_scores_normed)
         print(f"average_nsfw_detect_score: {average_nsfw_detect_score}")
+        print(f"average_nsfw_detect_score_normed: {average_nsfw_detect_score_normed}")

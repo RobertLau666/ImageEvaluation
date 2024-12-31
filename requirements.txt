@@ -3,3 +3,4 @@ pytorch_fid==0.3.0
 scikit-image==0.24.0
 torchvision==0.15.2
 torch==2.0.1
+pytorch_lightning==1.5.9
