@@ -191,20 +191,21 @@ def plot_predict_pie_by_type(csv_path, predict_name):
     plt.tight_layout()
 
     # 将所有图表拼接在一起并保存
-    plt_name = f'{config.png_dir}/{csv_name}_type:{unique_types}_predictname:{predict_name}_totalcount:{all_rows_num}.png'
-    # plt.title(plt_name)
-    fig.suptitle(plt_name, fontsize=16, ha='center')  # ha='center' 保证标题居中
-    plt.savefig(plt_name)
+    plt_save_path = f'{config.png_dir}/{csv_name}_type:{unique_types}_predictname:{predict_name}_totalcount:{all_rows_num}.png'
+    # plt.title(plt_save_path)
+    fig.suptitle(os.path.basename(plt_save_path), fontsize=8, ha='center')  # ha='center' 保证标题居中
+    plt.savefig(plt_save_path)
     plt.close()
 
-def create_html_report(csv_path, predict_name):
+def create_html_report(csv_path):
     df = pd.read_csv(csv_path)
-    # HTML模板
+    column_titles = list(df.columns)
+
     html_content = """
     <!DOCTYPE html>
     <html>
     <head>
-        <title>Prediction Results Visualization</title>
+        <title>Results Visualization</title>
         <style>
             body { font-family: Arial, sans-serif; margin: 20px; }
             .filter-section { margin: 20px 0; padding: 10px; background-color: #f8f9fa; border-radius: 5px; }
@@ -218,8 +219,8 @@ def create_html_report(csv_path, predict_name):
             }
             table { border-collapse: collapse; width: 100%; margin-top: 20px; }
             th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
-            th { background-color: #f2f2f2; }
-            .image-cell { width: 200px; }
+            th { background-color: #f2f2f2; cursor: pointer; }
+            .image-cell { width: 1000px; }
             .image-cell img {
                 width: 100%;
                 height: auto;
@@ -237,19 +238,13 @@ def create_html_report(csv_path, predict_name):
         </style>
     </head>
     <body>
-        <h1>Prediction Results Analysis</h1>
+        <h1>Results Analysis</h1>
         <div class="filter-section">
             <h3>Filters:</h3>
             <select id="typeFilter" onchange="filterResults()">
-                <option value="all">All Types</option>
+                <option value="all">All types</option>
                 {% for type in types %}
                 <option value="{{ type }}">{{ type }}</option>
-                {% endfor %}
-            </select>
-            <select id="predictFilter" onchange="filterResults()">
-                <option value="all">All Predictions</option>
-                {% for pred in predictions %}
-                <option value="{{ pred }}">Class {{ pred }}</option>
                 {% endfor %}
             </select>
             <div id="stats" class="stats"></div>
@@ -259,55 +254,122 @@ def create_html_report(csv_path, predict_name):
         </div>
         <script>
             let allData = {{ data_json }};
+            let sortOrder = {
+                type: true,   // true for ascending, false for descending
+                others: true
+            };
+
             function filterResults() {
                 let typeFilter = document.getElementById('typeFilter').value;
-                let predictFilter = document.getElementById('predictFilter').value;
                 let filteredData = allData.filter(row => {
-                    return (typeFilter === 'all' || row.type === typeFilter) &&
-                           (predictFilter === 'all' || row.predict.toString() === predictFilter);
+                    return (typeFilter === 'all' || row.type === typeFilter);
                 });
                 updateStats(filteredData);
                 updateTable(filteredData);
             }
+
             function updateStats(data) {
                 let stats = `Showing ${data.length} results`;
                 document.getElementById('stats').textContent = stats;
             }
+
             function updateTable(data) {
                 let table = '<table>';
-                table += '<tr><th>Type</th><th>Predict</th><th>Image</th><th>Probabilities</th></tr>';
+                table += `
+                    <tr>
+                        <th onclick="sortTable('type')">type <span id="type-arrow">&#8597;</span></th>
+                        <th>image</th>
+                        <th>others</th>
+                    </tr>`;
                 data.forEach(row => {
                     table += `<tr>
-                        <td>${row.type}</td>
-                        <td>Class ${row.predict}</td>
+                        <td class="prob-cell">${row.type}</td>
                         <td class="image-cell"><img src="${row.url}" alt="Generated Image"></td>
-                        <td>no_probabilities</td>
+                        <td>others</td>
                     </tr>`;
                 });
                 table += '</table>';
                 document.getElementById('resultTable').innerHTML = table;
             }
-            // 初始化显示
+
+            function sortTable(column) {
+                // Toggle the sort order
+                sortOrder[column] = !sortOrder[column];
+
+                // 更新箭头符号
+                updateArrow(column);
+
+                // Get the currently filtered data
+                let typeFilter = document.getElementById('typeFilter').value;
+                let filteredData = allData.filter(row => {
+                    return (typeFilter === 'all' || row.type === typeFilter);
+                });
+
+                // Sort filtered data
+                filteredData.sort((a, b) => {
+                    if (column === 'type') {
+                        // For 'type', we use string comparison
+                        if (a[column] < b[column]) return sortOrder[column] ? -1 : 1;
+                        if (a[column] > b[column]) return sortOrder[column] ? 1 : -1;
+                    } else {
+                        // For other columns (numeric), we use numerical comparison
+                        if (a[column] < b[column]) return sortOrder[column] ? -1 : 1;
+                        if (a[column] > b[column]) return sortOrder[column] ? 1 : -1;
+                    }
+                    return 0;
+                });
+
+                // Reapply filters
+                updateStats(filteredData);
+                updateTable(filteredData);
+            }
+
+            function updateArrow(column) {
+                let arrows = document.querySelectorAll('th span');
+                arrows.forEach(arrow => arrow.innerHTML = '&#8597;'); // Reset all arrows
+
+                let arrow = document.getElementById(column + '-arrow');
+                if (sortOrder[column]) {
+                    arrow.innerHTML = '&#8593;';  // 升序箭头
+                } else {
+                    arrow.innerHTML = '&#8595;';  // 降序箭头
+                }
+            }
+
+            // Initialize display
             filterResults();
         </script>
     </body>
     </html>
     """
+    
     # 准备数据
     types = df['type'].unique().tolist()
-    predictions = df[predict_name].unique().tolist()
+    # predicts = df[predict_name].unique().tolist()
     data_json = df.to_json(orient='records')
     
     # 替换模板中的变量
     html_content = html_content.replace("row.type", "row.type")
-    html_content = html_content.replace("row.predict", f"row.{predict_name}")
+    # html_content = html_content.replace("row.predict", f"row.{predict_name}")
     html_content = html_content.replace("row.url", "row.img_path_or_url")
-
-    html_content = html_content.replace("{{ data_json }}", data_json)
+    others = []
+    for column_title in column_titles:
+        if column_title not in ['type', 'img_path_or_url']:
+            others.append(column_title)
+    sortOrder_str = ',\n                '.join(f"{other}: true" for other in others)
+    th_str = '\n                        '.join([f"<th onclick=\"sortTable('{other}')\">{other} <span id=\"{other}-arrow\">&#8597;</span></th>" for other in others])
+    td_str = '\n                        '.join([f"<td class=\"prob-cell\">${{row.{other}}}</td>" for other in others])
+    html_content = html_content.replace("others: true", sortOrder_str)
+    html_content = html_content.replace("<th>others</th>", th_str)
+    html_content = html_content.replace("<td>others</td>", td_str)
+    
+    # 定义下拉列表
     html_content = html_content.replace("{% for type in types %}", "\n".join([f'<option value="{t}">{t}</option>' for t in types]))
-    html_content = html_content.replace("{% for pred in predictions %}", "\n".join([f'<option value="{p}">Class {p}</option>' for p in predictions]))
+    # html_content = html_content.replace("{% for pred in predicts %}", "\n".join([f'<option value="{p}">{p}</option>' for p in predicts]))
+    html_content = html_content.replace("{{ data_json }}", data_json)
+    
     # 保存HTML文件
-    html_path = os.path.join(config.html_dir, os.path.splitext(os.path.basename(csv_path))[0] + f'_type:{types}_predictname:{predict_name}_totalcount:{len(types)}.html')
+    html_path = os.path.join(config.html_dir, os.path.splitext(os.path.basename(csv_path))[0] + f'_type:{types}_totalcount:{len(column_titles)}.html')
     with open(html_path, 'w', encoding='utf-8') as f:
         f.write(html_content)
     print(f"HTML report has been generated as '{html_path}'")
