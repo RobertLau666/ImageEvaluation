@@ -72,9 +72,12 @@ output_dir = "data/output"
 json_dir = f"{output_dir}/json"
 xlsx_dir = f"{output_dir}/xlsx"
 txt_dir = f"{output_dir}/txt"
+html_dir = f"{output_dir}/html"
 if not os.path.exists(json_dir):
     os.makedirs(json_dir, exist_ok=True)
 if not os.path.exists(xlsx_dir):
     os.makedirs(xlsx_dir, exist_ok=True)
 if not os.path.exists(txt_dir):
     os.makedirs(txt_dir, exist_ok=True)
+if not os.path.exists(html_dir):
+    os.makedirs(html_dir, exist_ok=True)
