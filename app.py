@@ -119,7 +119,7 @@ class ImageEvaluation():
         xlsx_to_csv(result_xlsx_path, result_csv_path)
         
         for predict_name in ["nsfw_detect_train_score_normed", "children_detect_train_score_normed"]:
-            plot_predict_pie_by_type(result_csv_path, predict_name)
+            plot_by_predict_name(result_csv_path, predict_name)
         create_html_report(result_csv_path)
 
         result_json_ = {}

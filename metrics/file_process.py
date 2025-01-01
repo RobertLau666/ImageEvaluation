@@ -141,7 +141,7 @@ def xlsx_to_csv(xlsx_file, csv_file):
     df.to_csv(csv_file, index=False)  # index=False 表示不保存行索引
     print(f"The file {xlsx_file} was successfully converted and saved as {csv_file}")
 
-def plot_predict_pie_by_type(csv_path, predict_name):
+def plot_by_predict_name(csv_path, predict_name):
     csv_name = os.path.splitext(os.path.basename(csv_path))[0]
     # csv_name = os.path.basename(csv_path)
     # 读取 CSV 文件
@@ -153,11 +153,12 @@ def plot_predict_pie_by_type(csv_path, predict_name):
 
     # 创建一个大图来拼接所有的饼状图
     num_types = len(unique_types)
+    per_fig_size = 6
     num_cols = 3  # 设定每行 3 个图
     num_rows = math.ceil(num_types / num_cols)  # 计算所需行数
 
     # 创建子图
-    fig, axes = plt.subplots(num_rows, num_cols, figsize=(15, 5 * num_rows))
+    fig, axes = plt.subplots(num_rows, num_cols, figsize=(per_fig_size * num_cols, per_fig_size * num_rows))
     axes = axes.flatten()  # 将 axes 转化为一维数组，方便迭代
 
     # 遍历所有 unique 的 type 值，分别绘制饼状图
@@ -192,8 +193,8 @@ def plot_predict_pie_by_type(csv_path, predict_name):
 
     # 将所有图表拼接在一起并保存
     plt_save_path = f'{config.png_dir}/{csv_name}_type:{unique_types}_predictname:{predict_name}_totalcount:{all_rows_num}.png'
-    # plt.title(plt_save_path)
-    fig.suptitle(os.path.basename(plt_save_path), fontsize=8, ha='center')  # ha='center' 保证标题居中
+    fig.subplots_adjust(top=0.85)  # 调整子图布局，使得底部留出足够空间放置标题
+    fig.suptitle(os.path.basename(plt_save_path), fontsize=10, ha='center', fontweight='bold', color='black')
     plt.savefig(plt_save_path)
     plt.close()
 
