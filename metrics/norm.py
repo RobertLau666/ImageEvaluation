@@ -18,9 +18,9 @@ def saturation_norm(saturation_score):
 def PSNR_norm(PSNR_score):
     '''
     PSNR_score: The PSNR (Peak Signal-to-Noise Ratio) score of the image
-    Range: Typically, PSNR values range from 0 to infinity, where:
+    Range: 0 to infinity typically, where:
         0 represents the worst image quality, indicating maximum noise.
-        Higher PSNR values represent better image quality, with higher values indicating minimal noise and better similarity to the reference image.
+        Higher values represent better image quality, with higher values indicating minimal noise and better similarity to the reference image.
     
     Function source: https://zh.numberempire.com/graphingcalculator.php?functions=3*x%2F(3*x%2B10)%2Cx%2F(x%2B10)%2C0.5*x%2F(0.5*x%2B10)%2C0.3*x%2F(0.3*x%2B10)%2C0.1*x%2F(0.1*x%2B10)&xmin=0&xmax=30&ymin=0&ymax=1&var=x
     Chosen function: 3*x/(3*x+10)
@@ -46,7 +46,7 @@ def variance_norm(variance_score):
     variance_score: reflects the dispersion of the image gray value, that is, the contrast of the image.
     Range: 0 to infinity, where:
         0 represents the simplest image, with minimal variation (i.e., no texture or noise).
-        Higher variance values represents the most complex image, with high variation (i.e., a high level of texture or noise).
+        Higher values represents the most complex image, with high variation (i.e., a high level of texture or noise).
     
     Function source: https://zh.numberempire.com/graphingcalculator.php?functions=3*x%2F(3*x%2B10)%2Cx%2F(x%2B10)%2C0.5*x%2F(0.5*x%2B10)%2C0.3*x%2F(0.3*x%2B10)%2C0.1*x%2F(0.1*x%2B10)&xmin=0&xmax=30&ymin=0&ymax=1&var=x
     Chosen function: 3*x/(3*x+10)
@@ -61,7 +61,7 @@ def improved_aesthetic_predictor_norm(improved_aesthetic_predictor_score):
     improved_aesthetic_predictor_score: reflects 
     Range: 0 to infinity, where:
         0 represents 
-        Higher variance values represents 
+        Higher values represents 
     
     Function source: https://zh.numberempire.com/graphingcalculator.php?functions=5*x%2F(5*x%2B10)%2C3*x%2F(3*x%2B10)%2Cx%2F(x%2B10)%2C0.5*x%2F(0.5*x%2B10)%2C0.3*x%2F(0.3*x%2B10)%2C0.1*x%2F(0.1*x%2B10)&xmin=0&xmax=30&ymin=0&ymax=1&var=x
     Chosen function: 5*x/(5*x+10)
@@ -117,7 +117,7 @@ def nsfw_detect_train_score_norm(nsfw_detect_train_score):
 
 def children_detect_train_score_norm(children_detect_train_score):
     '''
-    自训练的二分类黄图检测模型
+    自训练的二分类幼图检测模型
     
     children_detect_train_score: reflects 
     Range: [0, 1], where:

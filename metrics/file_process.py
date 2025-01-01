@@ -10,6 +10,10 @@ from datetime import datetime
 from PIL import Image
 from io import BytesIO
 from pathlib import Path
+import matplotlib.pyplot as plt
+import math
+import os
+import config
 
 
 video_suffix = ['.mp4', '.avi', '.mov', '.mkv', '.flv', '.wmv', '.webm']
@@ -40,8 +44,8 @@ def get_img_infos(excel_path, begin_row, end_row):
         data = pd.read_csv(excel_path)
     elif excel_path.endswith('.xlsx'):
         data = pd.read_excel(excel_path)
-    num_rows = len(data)
-    img_infos = data.iloc[:, 0].tolist()[begin_row:(num_rows if end_row == -1 else end_row)]
+    all_rows_num = len(data)
+    img_infos = data.iloc[:, 0].tolist()[begin_row:(all_rows_num if end_row == -1 else end_row)]
     return img_infos
 
 # def get_img_urls(img_infos):
@@ -58,17 +62,33 @@ def get_img_infos(excel_path, begin_row, end_row):
 #     return img_urls
 
 def get_img_urls(images_file_path, begin_row=0, end_row=-1):
+    '''
+    images_file_path的后缀必须是'.csv', '.xlsx', '.txt', '.log'之一
+    每一行的格式必须是img_url或者img_url,type
+    '''
+    img_paths_or_urls, types = [], []
     file_extension = Path(images_file_path).suffix
     if file_extension in ['.csv', '.xlsx']:
         data = pd.read_csv(images_file_path) if file_extension == '.csv' else pd.read_excel(images_file_path)
-        num_rows = len(data)
-        img_paths_or_urls = data.iloc[:, 0].tolist()[begin_row:(num_rows if end_row == -1 else end_row)]
+        all_rows_num = len(data)
+        img_paths_or_urls = data.iloc[:, 0].tolist()[begin_row:(all_rows_num if end_row == -1 else end_row)] # img_paths_or_urls = data['image_path'].tolist()[begin_row:(all_rows_num if end_row == -1 else end_row)]
+        if len(data.columns) > 1: # 有第2列，必须得是type
+            types = data.iloc[:, 1].tolist()[begin_row:(all_rows_num if end_row == -1 else end_row)] # types = data['type'].tolist()[begin_row:(all_rows_num if end_row == -1 else end_row)]
+        else:
+            types = ['no_type'] * len(img_paths_or_urls)
     elif file_extension in ['.txt', '.log']:
-        img_paths_or_urls = []
         with open(images_file_path, "r", encoding='utf-8') as file:
-            for line in file.readlines():
-                img_paths_or_urls.append(line.strip())
-    return img_paths_or_urls
+            lines = file.readlines()
+            all_rows_num = len(lines)
+            for index, line in enumerate(lines):
+                if index >= begin_row and index <= (all_rows_num if end_row == -1 else end_row):
+                    line_list = line.strip().split(' ')
+                    img_paths_or_urls.append(line_list[0])
+                    if len(line_list) > 1: # 有第2列，必须得是type
+                        types.append(line_list[1])
+                    else:
+                        types.append('no_type')
+    return img_paths_or_urls, types
 
 def download_img(url, timeout=30, retry_count=3):
     img = None
@@ -103,14 +123,186 @@ def is_url(string):
 
 def get_formatted_current_time():
     current_time = datetime.now()
-    formatted_current_time = current_time.strftime("%Y%m%d_%H%M%S")
+    formatted_current_time = current_time.strftime("%Y%m%d%H%M%S")
     return formatted_current_time
 
 def get_nsfw_rate(output_file):
     df = pd.read_excel(output_file, engine='openpyxl')
-    num_rows = len(df)
+    all_rows_num = len(df)
     nsfw_score = 0
     for index, row in tqdm(df.iterrows(), total=df.shape[0]):
         nsfw_score += (1 if int(row[1]) >= 1 else 0)
-    nsfw_rate = 1 - nsfw_score / num_rows
+    nsfw_rate = 1 - nsfw_score / all_rows_num
     return nsfw_rate
+
+def xlsx_to_csv(xlsx_file, csv_file):
+    df = pd.read_excel(xlsx_file)
+    df.to_csv(csv_file, index=False)  # index=False 表示不保存行索引
+    print(f"The file {xlsx_file} was successfully converted and saved as {csv_file}")
+
+def plot_predict_pie_by_type(csv_path, predict_name):
+    csv_name = os.path.splitext(os.path.basename(csv_path))[0]
+    # csv_name = os.path.basename(csv_path)
+    # 读取 CSV 文件
+    df = pd.read_csv(csv_path)
+
+    # 获取所有 unique 的 type 值
+    unique_types = df["type"].unique()
+
+    # 创建一个大图来拼接所有的饼状图
+    num_types = len(unique_types)
+    num_cols = 3  # 设定每行 3 个图
+    num_rows = math.ceil(num_types / num_cols)  # 计算所需行数
+
+    # 创建子图
+    fig, axes = plt.subplots(num_rows, num_cols, figsize=(15, 5 * num_rows))
+    axes = axes.flatten()  # 将 axes 转化为一维数组，方便迭代
+
+    # 遍历所有 unique 的 type 值，分别绘制饼状图
+    for i, type in enumerate(unique_types):
+        # 筛选出 type 为当前类别的所有行
+        filtered_df = df[df["type"] == type]
+
+        # 统计 predict 列中各个值的数量
+        predict_counts = filtered_df[predict_name].value_counts()
+
+        # 计算当前 type 的总数
+        total_count = filtered_df.shape[0]
+
+        # 获取当前的子图
+        ax = axes[i]
+
+        # 绘制饼状图
+        ax.pie(predict_counts, labels=predict_counts.index, autopct='%1.1f%%', startangle=90)
+        ax.set_title(f'type: {type} \npredictname: {predict_name} \ntotalcount: {total_count}/{num_types}={total_count/num_types}')
+        ax.axis('equal')  # 使饼图为圆形
+
+        # 保存每个饼状图
+        plt.figure(figsize=(7, 7))
+        plt.pie(predict_counts, labels=predict_counts.index, autopct='%1.1f%%', startangle=90)
+        plt.title(f'type: {type} \npredictname: {predict_name} \ntotalcount: {total_count}/{num_types}={total_count/num_types}')
+        plt.axis('equal')
+        # plt.savefig(f'{config.png_dir}/{csv_name}_type:{type}_predictname:{predict_name}_totalcount:{total_count}.png')
+        plt.close()
+
+    # 调整布局，防止图表重叠
+    plt.tight_layout()
+
+    # 将所有图表拼接在一起并保存
+    plt.savefig(f'{config.png_dir}/{csv_name}_type:{unique_types}_predictname:{predict_name}_totalcount:{num_types}.png')
+    plt.close()
+
+def create_html_report(csv_path, predict_name):
+    df = pd.read_csv(csv_path)
+    # HTML模板
+    html_content = """
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Prediction Results Visualization</title>
+        <style>
+            body { font-family: Arial, sans-serif; margin: 20px; }
+            .filter-section { margin: 20px 0; padding: 10px; background-color: #f8f9fa; border-radius: 5px; }
+            .visualization-section { margin: 20px 0; }
+            select {
+                padding: 8px;
+                margin: 5px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                min-width: 150px;
+            }
+            table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+            th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+            th { background-color: #f2f2f2; }
+            .image-cell { width: 200px; }
+            .image-cell img {
+                width: 100%;
+                height: auto;
+                border-radius: 4px;
+                transition: transform 0.3s ease;
+            }
+            .image-cell img:hover {
+                transform: scale(1.5);
+            }
+            .stats { margin: 20px 0; }
+            .prob-cell {
+                font-family: monospace;
+                white-space: pre;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Prediction Results Analysis</h1>
+        <div class="filter-section">
+            <h3>Filters:</h3>
+            <select id="typeFilter" onchange="filterResults()">
+                <option value="all">All Types</option>
+                {% for type in types %}
+                <option value="{{ type }}">{{ type }}</option>
+                {% endfor %}
+            </select>
+            <select id="predictFilter" onchange="filterResults()">
+                <option value="all">All Predictions</option>
+                {% for pred in predictions %}
+                <option value="{{ pred }}">Class {{ pred }}</option>
+                {% endfor %}
+            </select>
+            <div id="stats" class="stats"></div>
+        </div>
+        <div class="visualization-section">
+            <div id="resultTable"></div>
+        </div>
+        <script>
+            let allData = {{ data_json }};
+            function filterResults() {
+                let typeFilter = document.getElementById('typeFilter').value;
+                let predictFilter = document.getElementById('predictFilter').value;
+                let filteredData = allData.filter(row => {
+                    return (typeFilter === 'all' || row.type === typeFilter) &&
+                           (predictFilter === 'all' || row.predict.toString() === predictFilter);
+                });
+                updateStats(filteredData);
+                updateTable(filteredData);
+            }
+            function updateStats(data) {
+                let stats = `Showing ${data.length} results`;
+                document.getElementById('stats').textContent = stats;
+            }
+            function updateTable(data) {
+                let table = '<table>';
+                table += '<tr><th>Type</th><th>Predict</th><th>Image</th><th>Probabilities</th></tr>';
+                data.forEach(row => {
+                    table += `<tr>
+                        <td>${row.type}</td>
+                        <td>Class ${row.predict}</td>
+                        <td class="image-cell"><img src="${row.url}" alt="Generated Image"></td>
+                        <td>no_probabilities</td>
+                    </tr>`;
+                });
+                table += '</table>';
+                document.getElementById('resultTable').innerHTML = table;
+            }
+            // 初始化显示
+            filterResults();
+        </script>
+    </body>
+    </html>
+    """
+    # 准备数据
+    types = df['type'].unique().tolist()
+    predictions = df[predict_name].unique().tolist()
+    data_json = df.to_json(orient='records')
+    
+    # 替换模板中的变量
+    html_content = html_content.replace("row.type", "row.type")
+    html_content = html_content.replace("row.predict", f"row.{predict_name}")
+    html_content = html_content.replace("row.url", "row.img_path_or_url")
+
+    html_content = html_content.replace("{{ data_json }}", data_json)
+    html_content = html_content.replace("{% for type in types %}", "\n".join([f'<option value="{t}">{t}</option>' for t in types]))
+    html_content = html_content.replace("{% for pred in predictions %}", "\n".join([f'<option value="{p}">Class {p}</option>' for p in predictions]))
+    # 保存HTML文件
+    html_path = os.path.join(config.html_dir, os.path.splitext(os.path.basename(csv_path))[0] + f'_type:{types}_predictname:{predict_name}_totalcount:{len(types)}.html')
+    with open(html_path, 'w', encoding='utf-8') as f:
+        f.write(html_content)
+    print(f"HTML report has been generated as '{html_path}'")
