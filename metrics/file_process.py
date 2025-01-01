@@ -192,7 +192,7 @@ def plot_by_predict_name(csv_path, predict_name):
     plt.tight_layout()
 
     # 将所有图表拼接在一起并保存
-    plt_save_path = f'{config.png_dir}/{csv_name}_type:{unique_types}_predictname:{predict_name}_totalcount:{all_rows_num}.png'
+    plt_save_path = os.path.join(config.png_dir, f'{csv_name}_type:{unique_types}_predictname:{predict_name}_totalcount:{all_rows_num}.png')
     fig.subplots_adjust(top=0.85)  # 调整子图布局，使得底部留出足够空间放置标题
     fig.suptitle(os.path.basename(plt_save_path), fontsize=10, ha='center', fontweight='bold', color='black')
     plt.savefig(plt_save_path)

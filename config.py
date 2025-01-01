@@ -78,6 +78,7 @@ test_images_dirs_or_csvs = [
 output_dir = f"data/output/{get_formatted_current_time()}_{'_'.join([os.path.basename(test_images_dir_or_csv) for test_images_dir_or_csv in test_images_dirs_or_csvs])}"
 json_dir = f"{output_dir}/json"
 xlsx_dir = f"{output_dir}/xlsx"
+csv_dir = f"{output_dir}/csv"
 txt_dir = f"{output_dir}/txt"
 html_dir = f"{output_dir}/html"
 png_dir = f"{output_dir}/png"
@@ -85,6 +86,8 @@ if not os.path.exists(json_dir):
     os.makedirs(json_dir, exist_ok=True)
 if not os.path.exists(xlsx_dir):
     os.makedirs(xlsx_dir, exist_ok=True)
+if not os.path.exists(csv_dir):
+    os.makedirs(csv_dir, exist_ok=True)
 if not os.path.exists(txt_dir):
     os.makedirs(txt_dir, exist_ok=True)
 if not os.path.exists(html_dir):
