@@ -279,13 +279,13 @@ def create_html_report(csv_path):
                 table += `
                     <tr>
                         <th onclick="sortTable('type')">type <span id="type-arrow">&#8597;</span></th>
-                        <th>image</th>
+                        <th>img_path_or_url</th>
                         <th>others</th>
                     </tr>`;
                 data.forEach(row => {
                     table += `<tr>
                         <td class="prob-cell">${row.type}</td>
-                        <td class="image-cell"><img src="${row.url}" alt="Generated Image"></td>
+                        <td class="image-cell"><img src="${row.img_path_or_url}" alt="Generated Image"></td>
                         <td>others</td>
                     </tr>`;
                 });
@@ -352,17 +352,14 @@ def create_html_report(csv_path):
     # 替换模板中的变量
     html_content = html_content.replace("row.type", "row.type")
     # html_content = html_content.replace("row.predict", f"row.{predict_name}")
-    html_content = html_content.replace("row.url", "row.img_path_or_url")
+    # html_content = html_content.replace("row.url", "row.img_path_or_url")
     others = []
     for column_title in column_titles:
         if column_title not in ['type', 'img_path_or_url']:
             others.append(column_title)
-    sortOrder_str = ',\n                '.join(f"{other}: true" for other in others)
-    th_str = '\n                        '.join([f"<th onclick=\"sortTable('{other}')\">{other} <span id=\"{other}-arrow\">&#8597;</span></th>" for other in others])
-    td_str = '\n                        '.join([f"<td class=\"prob-cell\">${{row.{other}}}</td>" for other in others])
-    html_content = html_content.replace("others: true", sortOrder_str)
-    html_content = html_content.replace("<th>others</th>", th_str)
-    html_content = html_content.replace("<td>others</td>", td_str)
+    html_content = html_content.replace("others: true", ',\n                '.join(f"{other}: true" for other in others))
+    html_content = html_content.replace("<th>others</th>", '\n                        '.join([f"<th onclick=\"sortTable('{other}')\">{other} <span id=\"{other}-arrow\">&#8597;</span></th>" for other in others]))
+    html_content = html_content.replace("<td>others</td>", '\n                        '.join([f"<td class=\"prob-cell\">${{row.{other}}}</td>" for other in others]))
     
     # 定义下拉列表
     html_content = html_content.replace("{% for type in types %}", "\n".join([f'<option value="{t}">{t}</option>' for t in types]))
