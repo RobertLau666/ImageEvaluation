@@ -17,28 +17,23 @@ img_suffix = ['.jpg', '.png', '.jpeg', '.gif', '.bmp', '.tif', '.webp']
 
 def download_file(url, save_path):
     try:
-        response = requests.get(url, stream=True)  # 流式下载
-        response.raise_for_status()  # 检查请求是否成功
+        response = requests.get(url, stream=True)
+        response.raise_for_status()
         with open(save_path, 'wb') as file:
-            for chunk in response.iter_content(chunk_size=8192):  # 分块写入
+            for chunk in response.iter_content(chunk_size=8192):
                 file.write(chunk)
-        print(f"文件已成功下载到: {save_path}")
+        print(f"The file has been successfully downloaded: {save_path}")
     except requests.exceptions.RequestException as e:
-        print(f"下载失败: {e}")
+        print(f"Download failed: {e}")
 
 def log_csv(img_results, save_csv_path):
     headers = ["url", "predict", "pro0", "pro1", "pro2"]
-
     with open(save_csv_path, mode="w", newline="") as file:
         writer = csv.writer(file)
-        
-        # 写入列名（标题行）
         writer.writerow(headers)
-
         for data in img_results:
             writer.writerow(data)
-
-    print(f"数据已写入 CSV 文件: {save_csv_path}")
+    print(f"Data has been written to : {save_csv_path}")
 
 def get_img_infos(excel_path, begin_row, end_row):
     if excel_path.endswith('.csv'):
@@ -80,7 +75,7 @@ def download_img(url, timeout=30, retry_count=3):
     for _ in range(retry_count):
         try:
             response = requests.get(url, timeout=timeout)
-            response.raise_for_status()  # 检查HTTP请求是否成功
+            response.raise_for_status()
             image_numpy = np.asarray(bytearray(response.content), dtype="uint8")
             img = cv2.imdecode(image_numpy, cv2.IMREAD_COLOR)
             break
@@ -115,9 +110,7 @@ def get_nsfw_rate(output_file):
     df = pd.read_excel(output_file, engine='openpyxl')
     num_rows = len(df)
     nsfw_score = 0
-    
     for index, row in tqdm(df.iterrows(), total=df.shape[0]):
         nsfw_score += (1 if int(row[1]) >= 1 else 0)
-    
     nsfw_rate = 1 - nsfw_score / num_rows
     return nsfw_rate
