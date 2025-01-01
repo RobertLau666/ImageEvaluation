@@ -63,13 +63,14 @@ def get_img_infos(excel_path, begin_row, end_row):
 
 def get_img_urls(images_file_path, begin_row=0, end_row=-1):
     '''
-    images_file_path的后缀必须是'.csv', '.xlsx', '.txt', '.log'之一
-    每一行的格式必须是img_url或者img_url,type
+    images_file_path: the suffix must be one of '.csv', '.xlsx', '.txt', '.log', the format of each line must be either 'img_url' or 'img_url type', column titles are not required
+    begin_row: the rows index to start reading data
+    end_row: the rows index to end reading data, -1 represents last line
     '''
     img_paths_or_urls, types = [], []
     file_extension = Path(images_file_path).suffix
     if file_extension in ['.csv', '.xlsx']:
-        data = pd.read_csv(images_file_path) if file_extension == '.csv' else pd.read_excel(images_file_path)
+        data = pd.read_csv(images_file_path, header=None) if file_extension == '.csv' else pd.read_excel(images_file_path, header=None)
         all_rows_num = len(data)
         img_paths_or_urls = data.iloc[:, 0].tolist()[begin_row:(all_rows_num if end_row == -1 else end_row)] # img_paths_or_urls = data['image_path'].tolist()[begin_row:(all_rows_num if end_row == -1 else end_row)]
         if len(data.columns) > 1: # 有第2列，必须得是type
@@ -145,6 +146,7 @@ def plot_predict_pie_by_type(csv_path, predict_name):
     # csv_name = os.path.basename(csv_path)
     # 读取 CSV 文件
     df = pd.read_csv(csv_path)
+    all_rows_num = len(df)
 
     # 获取所有 unique 的 type 值
     unique_types = df["type"].unique()
@@ -167,29 +169,32 @@ def plot_predict_pie_by_type(csv_path, predict_name):
         predict_counts = filtered_df[predict_name].value_counts()
 
         # 计算当前 type 的总数
-        total_count = filtered_df.shape[0]
+        count = filtered_df.shape[0]
 
         # 获取当前的子图
         ax = axes[i]
 
         # 绘制饼状图
         ax.pie(predict_counts, labels=predict_counts.index, autopct='%1.1f%%', startangle=90)
-        ax.set_title(f'type: {type} \npredictname: {predict_name} \ntotalcount: {total_count}/{num_types}={total_count/num_types}')
+        ax.set_title(f'type: {type} \npredictname: {predict_name} \ncount: {count}/{all_rows_num}={count/all_rows_num}')
         ax.axis('equal')  # 使饼图为圆形
 
         # 保存每个饼状图
         plt.figure(figsize=(7, 7))
         plt.pie(predict_counts, labels=predict_counts.index, autopct='%1.1f%%', startangle=90)
-        plt.title(f'type: {type} \npredictname: {predict_name} \ntotalcount: {total_count}/{num_types}={total_count/num_types}')
+        plt.title(f'type: {type} \npredictname: {predict_name} \ncount: {count}/{all_rows_num}={count/all_rows_num}')
         plt.axis('equal')
-        # plt.savefig(f'{config.png_dir}/{csv_name}_type:{type}_predictname:{predict_name}_totalcount:{total_count}.png')
+        # plt.savefig(f'{config.png_dir}/{csv_name}_type:{type}_predictname:{predict_name}_count:{count}.png')
         plt.close()
 
     # 调整布局，防止图表重叠
     plt.tight_layout()
 
     # 将所有图表拼接在一起并保存
-    plt.savefig(f'{config.png_dir}/{csv_name}_type:{unique_types}_predictname:{predict_name}_totalcount:{num_types}.png')
+    plt_name = f'{config.png_dir}/{csv_name}_type:{unique_types}_predictname:{predict_name}_totalcount:{all_rows_num}.png'
+    # plt.title(plt_name)
+    fig.suptitle(plt_name, fontsize=16, ha='center')  # ha='center' 保证标题居中
+    plt.savefig(plt_name)
     plt.close()
 
 def create_html_report(csv_path, predict_name):

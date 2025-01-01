@@ -71,12 +71,6 @@ class NSFWSelfTrainCls():
         return img
 
     def __call__(self, image_):
-        # url = image_
-        # if is_url(image_):
-        #     image = download_img(image_)
-        # else:
-        #     image = cv2.imread(image_, cv2.IMREAD_COLOR)
-
         if isinstance(image_, str):
             if is_url(image_):
                 img_numpy = download_img(image_)
@@ -99,8 +93,6 @@ class NSFWSelfTrainCls():
             pred = self.model(image)
             prob = nn.Softmax(dim=1)(pred)
             output = prob.max(dim=1)[1].cpu().numpy()
-            #             url   预测标签    类别0 概率           类别1 概率          类别2 概率   
-            # print(f'url:{url}, 预测: {output[0]}, 概率: {float(prob[0][0])} | {float(prob[0][1])} | {float(prob[0][2])}')
             img_result = dict(
                 url=image_ if isinstance(image_, str) else str(type(image_)),
                 predict=output[0], 

@@ -115,7 +115,7 @@ class ImageEvaluation():
         
         # 必须对一组图评估的指标，如FID
 
-        result_csv_path = result_xlsx_path.replace('.xlsx', '.csv')
+        result_csv_path = os.path.splitext(result_xlsx_path)[0] + '.csv'
         xlsx_to_csv(result_xlsx_path, result_csv_path)
         
         for predict_name in ["nsfw_detect_train_score_normed", "children_detect_train_score_normed"]:

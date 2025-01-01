@@ -1,4 +1,10 @@
 import os
+from datetime import datetime
+
+def get_formatted_current_time():
+    current_time = datetime.now()
+    formatted_current_time = current_time.strftime("%Y%m%d%H%M%S")
+    return formatted_current_time
 
 metric_params = {
     "saturation": {
@@ -68,7 +74,8 @@ test_images_dirs_or_csvs = [
     "data/input/demo/test_images_1.txt",
     "data/input/demo/test_images_1.log",
 ]
-output_dir = "data/output"
+
+output_dir = f"data/output/{get_formatted_current_time()}_{'_'.join([os.path.basename(test_images_dir_or_csv) for test_images_dir_or_csv in test_images_dirs_or_csvs])}"
 json_dir = f"{output_dir}/json"
 xlsx_dir = f"{output_dir}/xlsx"
 txt_dir = f"{output_dir}/txt"

@@ -3,4 +3,4 @@ __pycache__
 lightning_logs
 input/
 !input/demo/
-output
+output*

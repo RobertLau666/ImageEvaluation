@@ -31,7 +31,6 @@ class ChildrenSelfTrainCls():
             
         self.model = torchvision.models.convnext_tiny(pretrained=True)
         self.model.classifier[2] = nn.Linear(in_features=768, out_features=2, bias=True)
-        # model.load_state_dict(torch.load('./output_focal_convnext/mobilenet_epoch_5_0.062183827365894666_0.8977556109725686.pth'))
         self.model.load_state_dict(torch.load(self.model_path_or_url))
         self.model.cuda()
 
