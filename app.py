@@ -78,12 +78,12 @@ class ImageEvaluation():
             children_detect_train_scores, children_detect_train_scores_normed, children_detect_train_times = [], [], []
 
         # 可以对单张图评估的指标
-        img_path_or_url_contiue_path = f'{config.txt_dir}/{os.path.basename(images_dir_or_file)}_skip_{get_formatted_current_time()}.txt'
-        print(f"Skipped image paths or urls will save at: {img_path_or_url_contiue_path}")
+        img_path_or_url_skip_path = f'{config.txt_dir}/{os.path.basename(images_dir_or_file)}_skip_{get_formatted_current_time()}.txt'
+        print(f"Skipped image paths or urls will save at: {img_path_or_url_skip_path}")
         for index, img_path_or_url in enumerate(tqdm(img_paths_or_urls)):
             img_numpy = get_image_numpy_from_img_url(img_path_or_url) if self.is_img_url_file else cv2.imread(img_path_or_url)
             if img_numpy is None:
-                with open(img_path_or_url_contiue_path, 'a', encoding='utf-8') as file:
+                with open(img_path_or_url_skip_path, 'a', encoding='utf-8') as file:
                     file.write(f"{index} {img_path_or_url}\n")
                 continue
             
