@@ -68,7 +68,7 @@ def get_img_urls(images_file_path, begin_row=0, end_row=-1):
         data = pd.read_csv(images_file_path) if file_extension == '.csv' else pd.read_excel(images_file_path)
         num_rows = len(data)
         img_paths_or_urls = data.iloc[:, 0].tolist()[begin_row:(num_rows if end_row == -1 else end_row)]
-    elif file_extension in ['.txt']:
+    elif file_extension in ['.txt', '.log']:
         img_paths_or_urls = []
         with open(images_file_path, "r", encoding='utf-8') as file:
             for line in file.readlines():

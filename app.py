@@ -28,31 +28,31 @@ class ImageEvaluation():
     def init_metrics(self):
         print("Initializing metrics...")
         if "improved_aesthetic_predictor" in self.metric_names:
-            self.improved_aesthetic_predictor_model = ImprovedAestheticPredictor(model_path=config.metric_params["improved_aesthetic_predictor"]["improved_aesthetic_predictor_model_path"])
+            self.improved_aesthetic_predictor_model = ImprovedAestheticPredictor(model_path=config.metric_params["improved_aesthetic_predictor"]["model_path"])
         if "skytnt_anime_aesthetic" in self.metric_names:
-            self.skytnt_anime_aesthetic_model = SkytntAnimeAesthetic(model_path=config.metric_params["skytnt_anime_aesthetic"]["skytnt_anime_aesthetic_model_path"])
+            self.skytnt_anime_aesthetic_model = SkytntAnimeAesthetic(model_path=config.metric_params["skytnt_anime_aesthetic"]["model_path"])
         if "nsfw_detect" in self.metric_names:
-            self.nsfw_detect_model = API_ViT_v3(model_path=config.metric_params["nsfw_detect"]["nsfw_detect_model_path"])
+            self.nsfw_detect_model = API_ViT_v3(model_path=config.metric_params["nsfw_detect"]["model_path"])
         if "nsfw_detect_train" in self.metric_names:
-            self.nsfw_detect_train_model = NSFWSelfTrainCls(model_path_or_url=config.metric_params["nsfw_detect_train"]["nsfw_detect_train_model_path_or_url"])
+            self.nsfw_detect_train_model = NSFWSelfTrainCls(model_path_or_url=config.metric_params["nsfw_detect_train"]["model_path_or_url"])
         if "children_detect_train" in self.metric_names:
-            self.children_detect_train_model = ChildrenSelfTrainCls(model_path_or_url=config.metric_params["children_detect_train"]["children_detect_train_model_path_or_url"])
+            self.children_detect_train_model = ChildrenSelfTrainCls(model_path_or_url=config.metric_params["children_detect_train"]["model_path_or_url"])
 
-    def get_img_paths_or_urls(self, images_dir_or_csv):
+    def get_img_paths_or_urls(self, images_dir_or_file):
         img_paths_or_urls = []
-        if images_dir_or_csv.endswith(('.csv', '.xlsx', '.txt')):
+        if images_dir_or_file.endswith(('.csv', '.xlsx', '.txt', '.log')):
             self.is_img_url_file = True
-            img_paths_or_urls = get_img_urls(images_dir_or_csv)
+            img_paths_or_urls = get_img_urls(images_dir_or_file)
         else:
             self.is_img_url_file = False
-            img_paths_or_urls = [os.path.join(images_dir_or_csv, img_name) for img_name in sorted(os.listdir(images_dir_or_csv))]
+            img_paths_or_urls = [os.path.join(images_dir_or_file, img_name) for img_name in sorted(os.listdir(images_dir_or_file))]
         return img_paths_or_urls
 
-    def __call__(self, images_dir_or_csv):
-        img_paths_or_urls = self.get_img_paths_or_urls(images_dir_or_csv)
+    def __call__(self, images_dir_or_file):
+        img_paths_or_urls = self.get_img_paths_or_urls(images_dir_or_file)
         
         column_titles = ["img_path_or_url"] + [f"{metric_name}_score_normed" for metric_name in self.metric_names]
-        result_excel_path = f'{config.xlsx_dir}/{os.path.basename(images_dir_or_csv)}_result_{get_formatted_current_time()}.xlsx'
+        result_excel_path = f'{config.xlsx_dir}/{os.path.basename(images_dir_or_file)}_result_{get_formatted_current_time()}.xlsx'
         print(f"Every image metric scores will save at: {result_excel_path}")
         if not os.path.exists(result_excel_path):
             df = pd.DataFrame(columns=column_titles)
@@ -78,7 +78,7 @@ class ImageEvaluation():
             children_detect_train_scores, children_detect_train_scores_normed, children_detect_train_times = [], [], []
 
         # 可以对单张图评估的指标
-        img_path_or_url_contiue_path = f'{config.txt_dir}/{os.path.basename(images_dir_or_csv)}_skip_{get_formatted_current_time()}.txt'
+        img_path_or_url_contiue_path = f'{config.txt_dir}/{os.path.basename(images_dir_or_file)}_skip_{get_formatted_current_time()}.txt'
         print(f"Skipped image paths or urls will save at: {img_path_or_url_contiue_path}")
         for index, img_path_or_url in enumerate(tqdm(img_paths_or_urls)):
             img_numpy = get_image_numpy_from_img_url(img_path_or_url) if self.is_img_url_file else cv2.imread(img_path_or_url)
@@ -129,7 +129,7 @@ if __name__ == "__main__":
     img_eval = ImageEvaluation()
 
     result_json_path = f"{config.json_dir}/result_{get_formatted_current_time()}.json"
-    for test_images_dir_or_csv in tqdm(config.test_images_dirs_or_csvs):
+    for test_images_dir_or_file in tqdm(config.test_images_dirs_or_csvs):
         if not os.path.exists(result_json_path):
             result_json = {}
         else:
@@ -139,8 +139,8 @@ if __name__ == "__main__":
             except json.decoder.JSONDecodeError as e:
                 result_json = {}
 
-        print(f"\n\nProcessing {test_images_dir_or_csv}...")
-        result_json[test_images_dir_or_csv] = img_eval(test_images_dir_or_csv)
+        print(f"\n\nProcessing {test_images_dir_or_file}...")
+        result_json[test_images_dir_or_file] = img_eval(test_images_dir_or_file)
         
         with open(result_json_path, 'w', encoding='utf-8') as file:
             file.write(json.dumps(result_json, indent=4, ensure_ascii=False))
