@@ -139,7 +139,7 @@ class ImageEvaluation():
         return result_json_
 
 
-if __name__ == "__main__":
+def main():
     img_eval = ImageEvaluation()
 
     result_json_path = os.path.join(config.json_dir, f"{get_formatted_current_time()}_{'_'.join([os.path.basename(test_images_dir_or_file) for test_images_dir_or_file in config.test_images_dirs_or_files])}.json")
@@ -165,3 +165,6 @@ if __name__ == "__main__":
         with open(result_json_path, 'w', encoding='utf-8') as file:
             file.write(json.dumps(result_json, indent=4, ensure_ascii=False))
     print(f"\nGroup image metric average scores saved at: {result_json_path}")
+
+if __name__ == "__main__":
+    main()

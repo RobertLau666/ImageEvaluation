@@ -24,11 +24,6 @@ metric_params = {
         "score_normed_weight": 1.0,
         "SSIM_reference_image_path": "data/reference/SSIM_reference_image.webp",
     },
-    "FID": {
-        "use": False,
-        "use_form": "function",
-        "score_normed_weight": 1.0,
-    },
     "variance": {
         "use": True,
         "use_form": "function",

@@ -31,9 +31,14 @@ pip install -r requirements.txt
 |-------- model.onnx
 ```
 ## Run
+### Code
 Revise parameters ```metric_params``` and ```test_images_dirs_or_files``` in the ```config.py```
 ```
 python app.py
+```
+### Gradio
+```
+python app_gradio.py
 ```
 ## Result
 The results include the following:

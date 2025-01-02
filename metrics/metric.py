@@ -27,21 +27,21 @@ def calculate_SSIM_score(img_numpy):
     SSIM_score_normed = SSIM_norm(SSIM_score)
     return SSIM_score, SSIM_score_normed
 
-def calculate_FID_score(real_images_folder, generated_images_folder):
-    '''
-    FID（Frechet Inception Distance）分数是一种用于衡量生成模型与真实数据集之间相似性的指标，它是通过计算生成的样本与真实样本在Inception网络中特征表示上的差异程度来计算得出的。FID分数越低，表示生成的样本与真实样本之间的差异越小，生成模型的性能越好。
-    '''
-    # inception_model = torchvision.models.inception_v3(pretrained=True)
-    FID_ = fid_score.calculate_fid_given_paths([real_images_folder, generated_images_folder], # (0~INF)
-                                                    batch_size=1,
-                                                    device='cpu',
-                                                    dims=2048, num_workers=0,
-                                                    )
-    # FID_score = 1 - FID_ / 1000.0 # (0~1)
-    FID_score = FID_
-    # print(f'FID_score: {FID_score}')
+# def calculate_FID_score(real_images_folder, generated_images_folder):
+#     '''
+#     FID（Frechet Inception Distance）分数是一种用于衡量生成模型与真实数据集之间相似性的指标，它是通过计算生成的样本与真实样本在Inception网络中特征表示上的差异程度来计算得出的。FID分数越低，表示生成的样本与真实样本之间的差异越小，生成模型的性能越好。
+#     '''
+#     # inception_model = torchvision.models.inception_v3(pretrained=True)
+#     FID_ = fid_score.calculate_fid_given_paths([real_images_folder, generated_images_folder], # (0~INF)
+#                                                     batch_size=1,
+#                                                     device='cpu',
+#                                                     dims=2048, num_workers=0,
+#                                                     )
+#     # FID_score = 1 - FID_ / 1000.0 # (0~1)
+#     FID_score = FID_
+#     # print(f'FID_score: {FID_score}')
 
-    return FID_score
+#     return FID_score
 
 def calculate_variance_score(img_numpy):
     img_numpy = cv2.cvtColor(img_numpy, cv2.COLOR_BGR2GRAY)
