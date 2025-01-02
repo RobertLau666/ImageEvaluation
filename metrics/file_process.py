@@ -63,7 +63,7 @@ def get_img_infos(excel_path, begin_row, end_row):
 
 def get_img_urls(images_file_path, begin_row=0, end_row=-1):
     '''
-    images_file_path: the suffix must be one of '.csv', '.xlsx', '.txt', '.log', the format of each line must be either 'img_url' or 'img_url type', column titles are not required
+    images_file_path: the suffix must be one of '.csv', '.xlsx', '.txt', '.log', the format of each line must be either 'img_url' or 'img_url|type', column titles are not required
     begin_row: the rows index to start reading data
     end_row: the rows index to end reading data, -1 represents last line
     '''
@@ -140,6 +140,26 @@ def xlsx_to_csv(xlsx_file, csv_file):
     df = pd.read_excel(xlsx_file)
     df.to_csv(csv_file, index=False)  # index=False 表示不保存行索引
     print(f"The file {xlsx_file} was successfully converted and saved as {csv_file}")
+
+def concatenate_images(png_dir):
+    image_names = os.listdir(png_dir)
+    if len(image_names) == 0:
+        return None
+    image_paths = [os.path.join(png_dir, image_name) for image_name in image_names]
+    if len(image_names) == 1:
+        return image_paths[0]
+    else:
+        images_list = [Image.open(img_path) for img_path in image_paths]
+        total_height = sum(img.height for img in images_list)
+        max_width = max(img.width for img in images_list)
+        concatenate_image = Image.new('RGB', (max_width, total_height))
+        current_height = 0
+        for img in images_list:
+            concatenate_image.paste(img, (0, current_height))
+            current_height += img.height
+        concatenate_image_path = os.path.join(png_dir, f"{'+'.join([os.path.splitext(os.path.basename(image_path))[0] for image_path in image_paths])}.png")
+        concatenate_image.save(concatenate_image_path)
+        return concatenate_image_path
 
 def generate_plot_by_column_title(csv_path, column_title):
     csv_name = os.path.splitext(os.path.basename(csv_path))[0]

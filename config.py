@@ -6,6 +6,30 @@ def get_formatted_current_time():
     formatted_current_time = current_time.strftime("%Y%m%d%H%M%S")
     return formatted_current_time
 
+output_dir, json_dir, xlsx_dir, csv_dir, txt_dir, html_dir, png_dir = None, None, None, None, None, None, None
+def create_dirs(test_images_dirs_or_files):
+    global output_dir, json_dir, xlsx_dir, csv_dir, txt_dir, html_dir, png_dir
+    output_dir = f"data/output/{get_formatted_current_time()}_{'_'.join([os.path.basename(test_images_dir_or_file) for test_images_dir_or_file in test_images_dirs_or_files])}"
+    json_dir = f"{output_dir}/json"
+    xlsx_dir = f"{output_dir}/xlsx"
+    csv_dir = f"{output_dir}/csv"
+    txt_dir = f"{output_dir}/txt"
+    html_dir = f"{output_dir}/html"
+    png_dir = f"{output_dir}/png"
+    if not os.path.exists(json_dir):
+        os.makedirs(json_dir, exist_ok=True)
+    if not os.path.exists(xlsx_dir):
+        os.makedirs(xlsx_dir, exist_ok=True)
+    if not os.path.exists(csv_dir):
+        os.makedirs(csv_dir, exist_ok=True)
+    if not os.path.exists(txt_dir):
+        os.makedirs(txt_dir, exist_ok=True)
+    if not os.path.exists(html_dir):
+        os.makedirs(html_dir, exist_ok=True)
+    if not os.path.exists(png_dir):
+        os.makedirs(png_dir, exist_ok=True)
+
+
 metric_params = {
     "saturation": {
         "use": True,
@@ -61,7 +85,6 @@ metric_params = {
     }
 }
 
-# I/O
 test_images_dirs_or_files = [
     "data/input/demo/test_images_1",
     "data/input/demo/test_images_1.csv",
@@ -69,23 +92,3 @@ test_images_dirs_or_files = [
     "data/input/demo/test_images_1.txt",
     "data/input/demo/test_images_1.log",
 ]
-
-output_dir = f"data/output/{get_formatted_current_time()}_{'_'.join([os.path.basename(test_images_dir_or_file) for test_images_dir_or_file in test_images_dirs_or_files])}"
-json_dir = f"{output_dir}/json"
-xlsx_dir = f"{output_dir}/xlsx"
-csv_dir = f"{output_dir}/csv"
-txt_dir = f"{output_dir}/txt"
-html_dir = f"{output_dir}/html"
-png_dir = f"{output_dir}/png"
-if not os.path.exists(json_dir):
-    os.makedirs(json_dir, exist_ok=True)
-if not os.path.exists(xlsx_dir):
-    os.makedirs(xlsx_dir, exist_ok=True)
-if not os.path.exists(csv_dir):
-    os.makedirs(csv_dir, exist_ok=True)
-if not os.path.exists(txt_dir):
-    os.makedirs(txt_dir, exist_ok=True)
-if not os.path.exists(html_dir):
-    os.makedirs(html_dir, exist_ok=True)
-if not os.path.exists(png_dir):
-    os.makedirs(png_dir, exist_ok=True)

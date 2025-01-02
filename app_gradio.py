@@ -4,55 +4,46 @@ import app
 import config
 import os
 import shutil
-from metrics.file_process import get_formatted_current_time
+from metrics.file_process import get_formatted_current_time, concatenate_images
 
 def process_file(file, checked_metric_names):
-    print("file:", file)
-    print("file.name:", file.name)
-    print("checked_metric_names:", checked_metric_names)
-
-    save_dir = "/maindata/data/shared/public/chenyu.liu/others/ImageEvaluation/data/input"
-    save_path = os.path.join(save_dir, '_'.join(['uploadtime:' + get_formatted_current_time(), os.path.basename(file.name)]))
+    gradio_input_dir = "data/input/gradio"
+    if not os.path.exists(gradio_input_dir):
+        os.makedirs(gradio_input_dir, exist_ok=True)
+    save_path = os.path.join(gradio_input_dir, '_'.join(['uploadtime:' + get_formatted_current_time(), os.path.basename(file.name)]))
     shutil.move(file.name, save_path)
 
     for metric_name in list(config.metric_params.keys()):
         config.metric_params[metric_name]["use"] = True if metric_name in checked_metric_names else False
     config.test_images_dirs_or_files = [save_path]
+    config.create_dirs(config.test_images_dirs_or_files)
 
     app.main()
 
-    # df = pd.read_csv(file.name)
-
-    # with open(save_path, "wb") as f:
-    #     f.write(file.read())  # 保存文件内容
-
-    # analysis = df.groupby('event').agg(
-    #     total_images=('url', 'count'),
-    #     blocked_images=('blocked', 'sum')
-    # )
-    # analysis['block_rate'] = (analysis['blocked_images'] / analysis['total_images'] * 100).round(2).astype(str) + '%'
-    # analysis = analysis.reset_index()
-    
-    # output_csv = "results.csv"
-    # analysis.to_csv(output_csv, index=False)
     status = "process done!"
-    return status #, analysis, output_csv
+    csv_file_path = os.path.join(config.csv_dir, os.listdir(config.csv_dir)[0])
+    html_file_path = os.path.join(config.html_dir, os.listdir(config.html_dir)[0])
+    png_file_path = concatenate_images(config.png_dir)
+    json_file_path = os.path.join(config.json_dir, os.listdir(config.json_dir)[0])
+    return status, csv_file_path, html_file_path, png_file_path, json_file_path
 
 with gr.Blocks() as demo:
     gr.Markdown("#Image Analysis Tool")
-    
-    with gr.Row():
-        file = gr.File(label="Upload File", file_types=[".csv", ".xlsx", ".txt", ".log"])
+    file_label = gr.Label(value="upload file which suffix in ['.csv', '.xlsx', '.txt', '.log']\nthe format of each line must be either 'img_url' or 'img_url|type', column titles are not required")
+    file = gr.File(label="upload file", file_types=[".csv", ".xlsx", ".txt", ".log"])
     checked_metric_names = gr.CheckboxGroup(list(config.metric_params.keys()), label="metric_names", info="Check the metric names you want to detect")
     process_button = gr.Button("Process")
     status = gr.Textbox(label="Status", value="Processing not started", interactive=False)
-    result_table = gr.Dataframe(label="Analysis Results")
-    download_csv = gr.File(label="Download Results CSV")
+    with gr.Row():
+        csv_file = gr.File(label="Download csv file")
+        html_file = gr.File(label="Download html file")
+        png_file = gr.File(label="Download png file")
+        json_file = gr.File(label="Download json file")
     
     process_button.click(
         process_file,
         inputs=[file, checked_metric_names], 
-        outputs=[status] # , result_table, download_csv
+        outputs=[status, csv_file, html_file, png_file, json_file]
     )
     
 if __name__ == "__main__":

@@ -141,7 +141,7 @@ class ImageEvaluation():
 
 def main():
     img_eval = ImageEvaluation()
-
+    config.create_dirs(config.test_images_dirs_or_files)
     result_json_path = os.path.join(config.json_dir, f"{get_formatted_current_time()}_{'_'.join([os.path.basename(test_images_dir_or_file) for test_images_dir_or_file in config.test_images_dirs_or_files])}.json")
     for test_images_dir_or_file in tqdm(config.test_images_dirs_or_files):
         if not os.path.exists(result_json_path):
