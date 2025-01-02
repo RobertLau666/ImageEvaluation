@@ -157,7 +157,7 @@ def concatenate_images(png_dir):
         for img in images_list:
             concatenate_image.paste(img, (0, current_height))
             current_height += img.height
-        concatenate_image_path = os.path.join(png_dir, 'concatenate_image.png') # f"{'+'.join([os.path.splitext(os.path.basename(image_path))[0] for image_path in image_paths])}.png"
+        concatenate_image_path = os.path.join(png_dir, f'{os.path.basename(os.path.dirname(png_dir))}_concatenate_image.png') # f"{'+'.join([os.path.splitext(os.path.basename(image_path))[0] for image_path in image_paths])}.png"
         concatenate_image.save(concatenate_image_path)
         return concatenate_image_path
 
