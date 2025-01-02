@@ -75,7 +75,7 @@ test_images_dirs_or_files = [
     "data/input/demo/test_images_1.log",
 ]
 
-output_dir = f"data/output/{get_formatted_current_time()}_{'_'.join([os.path.basename(test_images_dir_or_csv) for test_images_dir_or_csv in test_images_dirs_or_files])}"
+output_dir = f"data/output/{get_formatted_current_time()}_{'_'.join([os.path.basename(test_images_dir_or_file) for test_images_dir_or_file in test_images_dirs_or_files])}"
 json_dir = f"{output_dir}/json"
 xlsx_dir = f"{output_dir}/xlsx"
 csv_dir = f"{output_dir}/csv"
