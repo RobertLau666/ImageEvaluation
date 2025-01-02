@@ -142,12 +142,12 @@ class ImageEvaluation():
 if __name__ == "__main__":
     img_eval = ImageEvaluation()
 
-    result_json_path = os.path.join(config.json_dir, f"{get_formatted_current_time()}_{'_'.join([os.path.basename(test_images_dir_or_csv) for test_images_dir_or_csv in config.test_images_dirs_or_csvs])}.json")
-    for test_images_dir_or_file in tqdm(config.test_images_dirs_or_csvs):
+    result_json_path = os.path.join(config.json_dir, f"{get_formatted_current_time()}_{'_'.join([os.path.basename(test_images_dir_or_file) for test_images_dir_or_file in config.test_images_dirs_or_files])}.json")
+    for test_images_dir_or_file in tqdm(config.test_images_dirs_or_files):
         if not os.path.exists(result_json_path):
             result_json = {
                 "metric_params": config.metric_params,
-                "test_images_dirs_or_csvs": {}
+                "test_images_dirs_or_files": {}
             }
         else:
             try:
@@ -156,11 +156,11 @@ if __name__ == "__main__":
             except json.decoder.JSONDecodeError as e:
                 result_json = {
                     "metric_params": config.metric_params,
-                    "test_images_dirs_or_csvs": {}
+                    "test_images_dirs_or_files": {}
                 }
 
         print(f"\n\nProcessing {test_images_dir_or_file}...")
-        result_json["test_images_dirs_or_csvs"][test_images_dir_or_file] = img_eval(test_images_dir_or_file)
+        result_json["test_images_dirs_or_files"][test_images_dir_or_file] = img_eval(test_images_dir_or_file)
         
         with open(result_json_path, 'w', encoding='utf-8') as file:
             file.write(json.dumps(result_json, indent=4, ensure_ascii=False))

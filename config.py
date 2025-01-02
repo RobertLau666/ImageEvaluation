@@ -67,7 +67,7 @@ metric_params = {
 }
 
 # I/O
-test_images_dirs_or_csvs = [
+test_images_dirs_or_files = [
     "data/input/demo/test_images_1",
     "data/input/demo/test_images_1.csv",
     "data/input/demo/test_images_1.xlsx",
@@ -75,7 +75,7 @@ test_images_dirs_or_csvs = [
     "data/input/demo/test_images_1.log",
 ]
 
-output_dir = f"data/output/{get_formatted_current_time()}_{'_'.join([os.path.basename(test_images_dir_or_csv) for test_images_dir_or_csv in test_images_dirs_or_csvs])}"
+output_dir = f"data/output/{get_formatted_current_time()}_{'_'.join([os.path.basename(test_images_dir_or_csv) for test_images_dir_or_csv in test_images_dirs_or_files])}"
 json_dir = f"{output_dir}/json"
 xlsx_dir = f"{output_dir}/xlsx"
 csv_dir = f"{output_dir}/csv"
