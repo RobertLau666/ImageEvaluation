@@ -7,8 +7,10 @@ import shutil
 from metrics.file_process import get_formatted_current_time, concatenate_images
 
 def process(upload_file, checked_metric_names):
+    if upload_file is None:
+        return 'Warning: please upload file!', None, None, None, None
     if len(checked_metric_names) == 0:
-        return f'Warning: please check metric_names', '', '', '', ''
+        return 'Warning: please check metric_names!', None, None, None, None
     
     gradio_input_dir = "data/input/gradio"
     if not os.path.exists(gradio_input_dir):
@@ -28,6 +30,7 @@ def process(upload_file, checked_metric_names):
     html_file_path = os.path.join(config.html_dir, os.listdir(config.html_dir)[0])
     png_file_path = concatenate_images(config.png_dir)
     json_file_path = os.path.join(config.json_dir, os.listdir(config.json_dir)[0])
+
     return status, csv_file_path, html_file_path, png_file_path, json_file_path
 
 with gr.Blocks() as demo:
@@ -38,8 +41,7 @@ with gr.Blocks() as demo:
         </div>  
         """
     )
-    gr.Markdown("1. upload file which suffix in ['.csv', '.xlsx', '.txt', '.log'] 2. the format of each line must be either 'img_url' or 'img_url|type' 3. column titles are not required")
-    upload_file = gr.File(label="upload file", file_types=[".csv", ".xlsx", ".txt", ".log"])
+    upload_file = gr.File(label="upload file: 1. upload file which suffix in ['.csv', '.xlsx', '.txt', '.log'] 2. the format of each line must be either 'img_url' or 'img_url|type' 3. column titles are not required", file_types=[".csv", ".xlsx", ".txt", ".log"])
     checked_metric_names = gr.CheckboxGroup(list(config.metric_params.keys()), label="metric_names", info="Check the metric names you want to detect")
     process_button = gr.Button("Process")
     status = gr.Textbox(label="Status", value="Processing not started", interactive=True)

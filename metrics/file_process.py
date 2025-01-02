@@ -157,7 +157,7 @@ def concatenate_images(png_dir):
         for img in images_list:
             concatenate_image.paste(img, (0, current_height))
             current_height += img.height
-        concatenate_image_path = os.path.join(png_dir, f"{'+'.join([os.path.splitext(os.path.basename(image_path))[0] for image_path in image_paths])}.png")
+        concatenate_image_path = os.path.join(png_dir, 'concatenate_image.png') # f"{'+'.join([os.path.splitext(os.path.basename(image_path))[0] for image_path in image_paths])}.png"
         concatenate_image.save(concatenate_image_path)
         return concatenate_image_path
 
@@ -170,7 +170,7 @@ def generate_plot_by_column_title(csv_path, column_title):
     all_rows_num = len(df)
 
     # 获取所有 unique 的 type 值
-    unique_types = df["type"].unique()
+    unique_types = sorted(df["type"].unique())
 
     # 创建一个大图来拼接所有的饼状图
     num_types = len(unique_types)

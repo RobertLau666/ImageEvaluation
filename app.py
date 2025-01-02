@@ -164,7 +164,7 @@ def main():
         
         with open(result_json_path, 'w', encoding='utf-8') as file:
             file.write(json.dumps(result_json, indent=4, ensure_ascii=False))
-    print(f"\nGroup image metric average scores saved at: {result_json_path}")
+    print(f"Group image metric average scores saved at: {result_json_path}")
 
 if __name__ == "__main__":
     main()
