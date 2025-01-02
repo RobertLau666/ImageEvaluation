@@ -128,12 +128,15 @@ class ImageEvaluation():
         generate_html_report(result_csv_path)
 
         # 5. generate result json
-        result_json_ = {}
+        result_json_ = {
+            "metric_params": config.metric_params,
+            "test_images_dirs_or_csvs": {}
+        }
         for metric_name in self.metric_names:
-            exec(f'result_json_["{metric_name}"] = {{}}')
-            exec(f'result_json_["{metric_name}"][f"average_{metric_name}_score"] = sum({metric_name}_scores) / len({metric_name}_scores)')
-            exec(f'result_json_["{metric_name}"][f"average_{metric_name}_score_normed"] = sum({metric_name}_scores_normed) / len({metric_name}_scores_normed)')
-            exec(f'result_json_["{metric_name}"][f"average_{metric_name}_time"] = sum({metric_name}_times) / len({metric_name}_times)')
+            exec(f'result_json_["test_images_dirs_or_csvs"]["{metric_name}"] = {{}}')
+            exec(f'result_json_["test_images_dirs_or_csvs"]["{metric_name}"][f"average_{metric_name}_score"] = sum({metric_name}_scores) / len({metric_name}_scores)')
+            exec(f'result_json_["test_images_dirs_or_csvs"]["{metric_name}"][f"average_{metric_name}_score_normed"] = sum({metric_name}_scores_normed) / len({metric_name}_scores_normed)')
+            exec(f'result_json_["test_images_dirs_or_csvs"]["{metric_name}"][f"average_{metric_name}_time"] = sum({metric_name}_times) / len({metric_name}_times)')
         result_json_["average_weighted_score_normed"] = sum([config.metric_params[metric_name]["score_normed_weight"] * result_json_[metric_name][f"average_{metric_name}_score_normed"] for metric_name in self.metric_names]) / sum([config.metric_params[metric_name]["score_normed_weight"] for metric_name in self.metric_names])
 
         return result_json_
