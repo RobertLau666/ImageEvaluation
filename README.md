@@ -38,18 +38,18 @@ python app.py
 ## Result
 The results include the following:
 ### 1. folder ```xlsx``` or ```csv```
-The normalized scores for each metric and normalized weighted scores for each image in each file or folder in ```test_images_dirs_or_csvs```.
+The normalized scores for each metric and normalized weighted scores for each image in each file or folder in parameter ```test_images_dirs_or_csvs```.
 ![csv.png](data/asset/csv.png)
 ### 2. folder ```png```
 The plots according to the column_titles ```"nsfw_detect_train_score_normed"``` and ```"children_detect_train_score_normed"```, classify by ```type``` in each plot. You can see the proportion of different normalized scores.
 ![png.png](data/asset/png.png)
 ### 3. folder ```html```
-The html_report of normalized scores for each metric and normalized weighted scores for each image in each file or folder in ```test_images_dirs_or_csvs```. You can filter the type, raise and drop the metrics, and view the image.
+The html_report of normalized scores for each metric and normalized weighted scores for each image in each file or folder in parameter ```test_images_dirs_or_csvs```. You can filter the ```type```, order different metrics in ascending and descending order, and view the image.
 ![html.png](data/asset/html.png)
 ### 4. folder ```txt```
-During the evaluation process, if the image path or url cannot be loaded, this image will be skipped, and its index, path or url, type will be recorded in a txt file.
+During the evaluation process, if the image path or url cannot be loaded, this image will be skipped, and its ```index```, ```img_path_or_url```, ```type``` will be recorded in a txt file.
 ### 5. folder ```json```
-The normalized average scores for each metric and normalized weighted average scores for each image in each file or folder in ```test_images_dirs_or_csvs```. Some of the information is as follows:
+The normalized average scores for each metric and normalized weighted average scores for each image in each file or folder in parameter ```test_images_dirs_or_csvs```. Some of the information is as follows:
 
 data/input/demo/test_images_1
 |  |  |  |  |  |
