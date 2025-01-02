@@ -9,7 +9,7 @@ def saturation_norm(saturation_score):
         0 represents achromatic (gray or white), i.e., lowest saturation.
         255 represents full saturation, i.e., maximum color intensity.
     
-    Function source: https://zh.numberempire.com/graphingcalculator.php?functions=2*x%2F(2*x%2B10)%2Cx%2F(x%2B10)%2C0.5*x%2F(0.5*x%2B10)%2C0.3*x%2F(0.3*x%2B10)%2C0.1*x%2F(0.1*x%2B10)&xmin=0&xmax=300&ymin=0&ymax=1&var=x
+    Function source: https://zh.numberempire.com/graphingcalculator.php?functions=2*x%2F(2*x%2B10)%2Cx%2F(x%2B10)%2C0.5*x%2F(0.5*x%2B10)%2C0.3*x%2F(0.3*x%2B10)%2C0.1*x%2F(0.1*x%2B10)&xmin=0&xmax=255&ymin=0&ymax=1&var=x
     Chosen function: 0.3*x/(0.3*x+10)
     '''
     saturation_score_normed = 0.3 * saturation_score / (0.3 * saturation_score + 10)
@@ -18,7 +18,7 @@ def saturation_norm(saturation_score):
 def PSNR_norm(PSNR_score):
     '''
     PSNR_score: The PSNR (Peak Signal-to-Noise Ratio) score of the image
-    Range: 0 to infinity typically, where:
+    Range: 0 to INF, where:
         0 represents the worst image quality, indicating maximum noise.
         Higher values represent better image quality, with higher values indicating minimal noise and better similarity to the reference image.
     
@@ -44,14 +44,14 @@ def SSIM_norm(SSIM_score):
 def variance_norm(variance_score):
     '''
     variance_score: reflects the dispersion of the image gray value, that is, the contrast of the image.
-    Range: 0 to infinity, where:
+    Range: 0 to INF, where:
         0 represents the simplest image, with minimal variation (i.e., no texture or noise).
         Higher values represents the most complex image, with high variation (i.e., a high level of texture or noise).
     
-    Function source: https://zh.numberempire.com/graphingcalculator.php?functions=3*x%2F(3*x%2B10)%2Cx%2F(x%2B10)%2C0.5*x%2F(0.5*x%2B10)%2C0.3*x%2F(0.3*x%2B10)%2C0.1*x%2F(0.1*x%2B10)&xmin=0&xmax=30&ymin=0&ymax=1&var=x
-    Chosen function: 3*x/(3*x+10)
+    Function source: https://zh.numberempire.com/graphingcalculator.php?functions=3*x%2F(3*x%2B10)%2Cx%2F(x%2B10)%2C0.5*x%2F(0.5*x%2B10)%2C0.3*x%2F(0.3*x%2B10)%2C0.1*x%2F(0.1*x%2B10)&xmin=0&xmax=100&ymin=0&ymax=1&var=x
+    Chosen function: 0.3*x/(0.3*x+10)
     '''
-    variance_score_normed = 3 * variance_score / (3 * variance_score + 10)
+    variance_score_normed = 0.3 * variance_score / (0.3 * variance_score + 10)
     return variance_score_normed
 
 def improved_aesthetic_predictor_norm(improved_aesthetic_predictor_score):
@@ -59,12 +59,12 @@ def improved_aesthetic_predictor_norm(improved_aesthetic_predictor_score):
     https://github.com/christophschuhmann/improved-aesthetic-predictor
 
     improved_aesthetic_predictor_score: reflects 
-    Range: 0 to infinity, where:
+    Range: 0 to INF, where:
         0 represents 
         Higher values represents 
     
     Function source: https://zh.numberempire.com/graphingcalculator.php?functions=5*x%2F(5*x%2B10)%2C3*x%2F(3*x%2B10)%2Cx%2F(x%2B10)%2C0.5*x%2F(0.5*x%2B10)%2C0.3*x%2F(0.3*x%2B10)%2C0.1*x%2F(0.1*x%2B10)&xmin=0&xmax=30&ymin=0&ymax=1&var=x
-    Chosen function: 5*x/(5*x+10)
+    Chosen function: 3*x/(3*x+10)
     '''
     improved_aesthetic_predictor_score_normed = 3 * improved_aesthetic_predictor_score / (3 * improved_aesthetic_predictor_score + 10)
     return improved_aesthetic_predictor_score_normed
