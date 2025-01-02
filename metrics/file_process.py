@@ -106,7 +106,7 @@ def download_img(url, timeout=30, retry_count=3):
         print(f'[ERROR] url: {url}')
     return img
 
-def get_image_numpy_from_img_url(img_url, timeout=5, retry_count=3):
+def get_image_numpy_from_img_url(img_url, timeout=30, retry_count=3):
     image_numpy = None
     for _ in range(retry_count):
         try:
@@ -141,7 +141,7 @@ def xlsx_to_csv(xlsx_file, csv_file):
     df.to_csv(csv_file, index=False)  # index=False 表示不保存行索引
     print(f"The file {xlsx_file} was successfully converted and saved as {csv_file}")
 
-def plot_by_predict_name(csv_path, predict_name):
+def plot_by_column_title(csv_path, column_title):
     csv_name = os.path.splitext(os.path.basename(csv_path))[0]
     # csv_name = os.path.basename(csv_path)
     # 读取 CSV 文件
@@ -167,7 +167,7 @@ def plot_by_predict_name(csv_path, predict_name):
         filtered_df = df[df["type"] == type]
 
         # 统计 predict 列中各个值的数量
-        predict_counts = filtered_df[predict_name].value_counts()
+        predict_counts = filtered_df[column_title].value_counts()
 
         # 计算当前 type 的总数
         count = filtered_df.shape[0]
@@ -177,22 +177,22 @@ def plot_by_predict_name(csv_path, predict_name):
 
         # 绘制饼状图
         ax.pie(predict_counts, labels=predict_counts.index, autopct='%1.1f%%', startangle=90)
-        ax.set_title(f'type: {type} \npredictname: {predict_name} \ncount: {count}/{all_rows_num}={count/all_rows_num}')
+        ax.set_title(f'type: {type} \ncolumntitle: {column_title} \ncount: {count}/{all_rows_num}={count/all_rows_num}')
         ax.axis('equal')  # 使饼图为圆形
 
         # 保存每个饼状图
         plt.figure(figsize=(7, 7))
         plt.pie(predict_counts, labels=predict_counts.index, autopct='%1.1f%%', startangle=90)
-        plt.title(f'type: {type} \npredictname: {predict_name} \ncount: {count}/{all_rows_num}={count/all_rows_num}')
+        plt.title(f'type: {type} \ncolumntitle: {column_title} \ncount: {count}/{all_rows_num}={count/all_rows_num}')
         plt.axis('equal')
-        # plt.savefig(f'{config.png_dir}/{csv_name}_type:{type}_predictname:{predict_name}_count:{count}.png')
+        # plt.savefig(f'{config.png_dir}/{csv_name}_type:{type}_columntitle:{column_title}_count:{count}.png')
         plt.close()
 
     # 调整布局，防止图表重叠
     plt.tight_layout()
 
     # 将所有图表拼接在一起并保存
-    plt_save_path = os.path.join(config.png_dir, f'{csv_name}_type:{unique_types}_predictname:{predict_name}_totalcount:{all_rows_num}.png')
+    plt_save_path = os.path.join(config.png_dir, f'{csv_name}_type:{unique_types}_columntitle:{column_title}_totalcount:{all_rows_num}.png')
     fig.subplots_adjust(top=0.85)  # 调整子图布局，使得底部留出足够空间放置标题
     fig.suptitle(os.path.basename(plt_save_path), fontsize=10, ha='center', fontweight='bold', color='black')
     plt.savefig(plt_save_path)

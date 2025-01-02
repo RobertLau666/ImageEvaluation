@@ -45,49 +45,49 @@ data/input/demo/test_images_1
     "saturation": {
         "average_saturation_score": 70.83403901883534,
         "average_saturation_score_normed": 0.5896600860005143,
-        "average_saturation_time": 0.008478355407714844
+        "average_saturation_time": 0.010272836685180664
     },
     "PSNR": {
         "average_PSNR_score": 7.5399527297575615,
         "average_PSNR_score_normed": 0.6914899355883903,
-        "average_PSNR_time": 0.0008478164672851562
+        "average_PSNR_time": 0.0006290912628173828
     },
     "SSIM": {
         "average_SSIM_score": 0.15270395908780157,
         "average_SSIM_score_normed": 0.5763519795439007,
-        "average_SSIM_time": 0.03302888870239258
+        "average_SSIM_time": 0.03200154304504395
     },
     "variance": {
         "average_variance_score": 74.87552555096171,
         "average_variance_score_normed": 0.9558609204319042,
-        "average_variance_time": 0.0002655029296875
+        "average_variance_time": 0.00024871826171875
     },
     "improved_aesthetic_predictor": {
-        "average_improved_aesthetic_predictor_score": 5.3603596687316895,
-        "average_improved_aesthetic_predictor_score_normed": 0.6152069520398721,
-        "average_improved_aesthetic_predictor_time": 0.6193296432495117
+        "average_improved_aesthetic_predictor_score": 5.360665607452392,
+        "average_improved_aesthetic_predictor_score_normed": 0.6152192673438415,
+        "average_improved_aesthetic_predictor_time": 0.5425155639648438
     },
     "skytnt_anime_aesthetic": {
         "average_skytnt_anime_aesthetic_score": 0.2086948871612549,
         "average_skytnt_anime_aesthetic_score_normed": 0.2086948871612549,
-        "average_skytnt_anime_aesthetic_time": 1.976353931427002
+        "average_skytnt_anime_aesthetic_time": 1.8137116432189941
     },
     "nsfw_detect": {
         "average_nsfw_detect_score": 0.008214050624519586,
         "average_nsfw_detect_score_normed": 0.9917859493754804,
-        "average_nsfw_detect_time": 1.127815580368042
+        "average_nsfw_detect_time": 1.008475160598755
     },
     "nsfw_detect_train": {
         "average_nsfw_detect_train_score": 0.0,
         "average_nsfw_detect_train_score_normed": 1.0,
-        "average_nsfw_detect_train_time": 0.0810469627380371
+        "average_nsfw_detect_train_time": 0.07926111221313477
     },
     "children_detect_train": {
         "average_children_detect_train_score": 0.4,
         "average_children_detect_train_score_normed": 0.6,
-        "average_children_detect_train_time": 0.06031341552734375
+        "average_children_detect_train_time": 0.04039134979248047
     },
-    "average_weighted_score_normed": 0.6921167455712574
+    "average_weighted_score_normed": 0.6921181139383651
 }
 ```
 
@@ -98,51 +98,51 @@ data/input/demo/test_images_1.csv
 ```json
 {
     "saturation": {
-        "average_saturation_score": 100.46739424954454,
-        "average_saturation_score_normed": 0.7388593776771656,
-        "average_saturation_time": 0.01535409688949585
+        "average_saturation_score": 110.68278628414751,
+        "average_saturation_score_normed": 0.7550276252166752,
+        "average_saturation_time": 0.012058877944946289
     },
     "PSNR": {
-        "average_PSNR_score": 7.627329569401652,
-        "average_PSNR_score_normed": 0.6955068947368226,
-        "average_PSNR_time": 0.0006707310676574707
+        "average_PSNR_score": 7.412721149820788,
+        "average_PSNR_score_normed": 0.6889811394075319,
+        "average_PSNR_time": 0.0007004737854003906
     },
     "SSIM": {
-        "average_SSIM_score": 0.017341455897924046,
-        "average_SSIM_score_normed": 0.5086707279489621,
-        "average_SSIM_time": 0.031845808029174805
+        "average_SSIM_score": -0.006803741715732356,
+        "average_SSIM_score_normed": 0.4965981291421338,
+        "average_SSIM_time": 0.028401279449462892
     },
     "variance": {
-        "average_variance_score": 72.04004586467033,
-        "average_variance_score_normed": 0.9556720571735154,
-        "average_variance_time": 0.0019645094871520996
+        "average_variance_score": 72.05969989333389,
+        "average_variance_score_normed": 0.9557043066971325,
+        "average_variance_time": 0.001936054229736328
     },
     "improved_aesthetic_predictor": {
-        "average_improved_aesthetic_predictor_score": 6.4721983671188354,
-        "average_improved_aesthetic_predictor_score_normed": 0.6593455872065112,
-        "average_improved_aesthetic_predictor_time": 0.13754212856292725
+        "average_improved_aesthetic_predictor_score": 6.398706531524658,
+        "average_improved_aesthetic_predictor_score_normed": 0.6568395915148125,
+        "average_improved_aesthetic_predictor_time": 0.09810209274291992
     },
     "skytnt_anime_aesthetic": {
-        "average_skytnt_anime_aesthetic_score": 0.5620258525013924,
-        "average_skytnt_anime_aesthetic_score_normed": 0.5620258525013924,
-        "average_skytnt_anime_aesthetic_time": 2.1099193692207336
+        "average_skytnt_anime_aesthetic_score": 0.4729860067367554,
+        "average_skytnt_anime_aesthetic_score_normed": 0.4729860067367554,
+        "average_skytnt_anime_aesthetic_time": 2.116146373748779
     },
     "nsfw_detect": {
-        "average_nsfw_detect_score": 0.004821326321689412,
-        "average_nsfw_detect_score_normed": 0.9951786736783106,
-        "average_nsfw_detect_time": 1.049147605895996
+        "average_nsfw_detect_score": 0.004239956592209637,
+        "average_nsfw_detect_score_normed": 0.9957600434077903,
+        "average_nsfw_detect_time": 0.996024227142334
     },
     "nsfw_detect_train": {
-        "average_nsfw_detect_train_score": 0.25,
-        "average_nsfw_detect_train_score_normed": 0.875,
-        "average_nsfw_detect_train_time": 0.2440788745880127
+        "average_nsfw_detect_train_score": 0.2,
+        "average_nsfw_detect_train_score_normed": 0.9,
+        "average_nsfw_detect_train_time": 0.26923203468322754
     },
     "children_detect_train": {
-        "average_children_detect_train_score": 0.75,
-        "average_children_detect_train_score_normed": 0.25,
-        "average_children_detect_train_time": 0.2550063729286194
+        "average_children_detect_train_score": 0.6,
+        "average_children_detect_train_score_normed": 0.4,
+        "average_children_detect_train_time": 0.24373717308044435
     },
-    "average_weighted_score_normed": 0.6933621301025199
+    "average_weighted_score_normed": 0.7024329824580924
 }
 ```
 
@@ -155,48 +155,48 @@ data/input/demo/test_images_1.txt
     "saturation": {
         "average_saturation_score": 84.36497830374753,
         "average_saturation_score_normed": 0.7015640981998904,
-        "average_saturation_time": 0.00192718505859375
+        "average_saturation_time": 0.0019573688507080076
     },
     "PSNR": {
         "average_PSNR_score": 8.638021136277034,
         "average_PSNR_score_normed": 0.7211339274093236,
-        "average_PSNR_time": 0.0004558563232421875
+        "average_PSNR_time": 0.0004626274108886719
     },
     "SSIM": {
         "average_SSIM_score": 0.05933760563501185,
         "average_SSIM_score_normed": 0.5296688028175058,
-        "average_SSIM_time": 0.028080034255981445
+        "average_SSIM_time": 0.02807588577270508
     },
     "variance": {
         "average_variance_score": 54.261109903046574,
         "average_variance_score_normed": 0.9403668821287157,
-        "average_variance_time": 0.00047779083251953125
+        "average_variance_time": 0.0005202770233154296
     },
     "improved_aesthetic_predictor": {
-        "average_improved_aesthetic_predictor_score": 6.682973194122314,
-        "average_improved_aesthetic_predictor_score_normed": 0.6667610610557777,
-        "average_improved_aesthetic_predictor_time": 0.02932314872741699
+        "average_improved_aesthetic_predictor_score": 6.683196544647217,
+        "average_improved_aesthetic_predictor_score_normed": 0.6667690308621647,
+        "average_improved_aesthetic_predictor_time": 0.027332258224487305
     },
     "skytnt_anime_aesthetic": {
         "average_skytnt_anime_aesthetic_score": 0.8005118131637573,
         "average_skytnt_anime_aesthetic_score_normed": 0.8005118131637573,
-        "average_skytnt_anime_aesthetic_time": 1.6837124824523926
+        "average_skytnt_anime_aesthetic_time": 1.7396596908569335
     },
     "nsfw_detect": {
         "average_nsfw_detect_score": 0.005184800742426887,
         "average_nsfw_detect_score_normed": 0.9948151992575731,
-        "average_nsfw_detect_time": 0.7770517349243165
+        "average_nsfw_detect_time": 0.9324620246887207
     },
     "nsfw_detect_train": {
         "average_nsfw_detect_train_score": 0.0,
         "average_nsfw_detect_train_score_normed": 1.0,
-        "average_nsfw_detect_train_time": 0.07996702194213867
+        "average_nsfw_detect_train_time": 0.06197032928466797
     },
     "children_detect_train": {
         "average_children_detect_train_score": 0.8,
         "average_children_detect_train_score_normed": 0.2,
-        "average_children_detect_train_time": 0.08295822143554688
+        "average_children_detect_train_time": 0.09664778709411621
     },
-    "average_weighted_score_normed": 0.7283135315591714
+    "average_weighted_score_normed": 0.7283144170932145
 }
 ```

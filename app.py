@@ -38,7 +38,7 @@ class ImageEvaluation():
         if "children_detect_train" in self.metric_names:
             self.children_detect_train_model = ChildrenSelfTrainCls(model_path_or_url=config.metric_params["children_detect_train"]["model_path_or_url"])
 
-    def get_img_paths_or_urls(self, images_dir_or_file):
+    def get_img_paths_or_urls_and_types(self, images_dir_or_file):
         if images_dir_or_file.endswith(('.csv', '.xlsx', '.txt', '.log')):
             self.is_img_url_file = True
             img_paths_or_urls, types = get_img_urls(images_dir_or_file)
@@ -49,10 +49,10 @@ class ImageEvaluation():
         return img_paths_or_urls, types
 
     def __call__(self, images_dir_or_file):
-        img_paths_or_urls, types = self.get_img_paths_or_urls(images_dir_or_file)
+        img_paths_or_urls, types = self.get_img_paths_or_urls_and_types(images_dir_or_file)
         
-        column_titles = ["img_path_or_url"] + [f"{metric_name}_score_normed" for metric_name in self.metric_names]
-        result_xlsx_path = f'{config.xlsx_dir}/{get_formatted_current_time()}_{os.path.basename(images_dir_or_file)}.xlsx'
+        column_titles = []
+        result_xlsx_path = os.path.join(config.xlsx_dir, f'{get_formatted_current_time()}_{os.path.basename(images_dir_or_file)}.xlsx')
         print(f"Every image metric scores will save at: {result_xlsx_path}")
         if not os.path.exists(result_xlsx_path):
             df = pd.DataFrame(columns=column_titles)
@@ -79,13 +79,13 @@ class ImageEvaluation():
 
         # 1. calculate metrics
         # 1.1 可以对单张图评估的指标
-        img_path_or_url_skip_path = f'{config.txt_dir}/{get_formatted_current_time()}_{os.path.basename(images_dir_or_file)}_skip.txt'
+        img_path_or_url_skip_path = os.path.join(config.txt_dir, f'{get_formatted_current_time()}_{os.path.basename(images_dir_or_file)}_skip.txt')
         print(f"Skipped image paths or urls will save at: {img_path_or_url_skip_path}")
         for index, (img_path_or_url, type) in enumerate(tqdm(zip(img_paths_or_urls, types))):
             img_numpy = get_image_numpy_from_img_url(img_path_or_url) if self.is_img_url_file else cv2.imread(img_path_or_url)
             if img_numpy is None:
                 with open(img_path_or_url_skip_path, 'a', encoding='utf-8') as file:
-                    file.write(f"{index} {img_path_or_url}\n")
+                    file.write(f"{index} {img_path_or_url} {type}\n")
                 continue
             
             result_excel_ = {
@@ -121,8 +121,8 @@ class ImageEvaluation():
         xlsx_to_csv(result_xlsx_path, result_csv_path)
         
         # 3. generate plot png
-        for predict_name in ["nsfw_detect_train_score_normed", "children_detect_train_score_normed"]:
-            plot_by_predict_name(result_csv_path, predict_name)
+        for column_title in ["nsfw_detect_train_score_normed", "children_detect_train_score_normed"]:
+            plot_by_column_title(result_csv_path, column_title)
         
         # 4. generate html
         create_html_report(result_csv_path)
@@ -142,7 +142,7 @@ class ImageEvaluation():
 if __name__ == "__main__":
     img_eval = ImageEvaluation()
 
-    result_json_path = f"{config.json_dir}/{get_formatted_current_time()}_{'_'.join([os.path.basename(test_images_dir_or_csv) for test_images_dir_or_csv in config.test_images_dirs_or_csvs])}.json"
+    result_json_path = os.path.join(config.json_dir, f"{get_formatted_current_time()}_{'_'.join([os.path.basename(test_images_dir_or_csv) for test_images_dir_or_csv in config.test_images_dirs_or_csvs])}.json")
     for test_images_dir_or_file in tqdm(config.test_images_dirs_or_csvs):
         if not os.path.exists(result_json_path):
             result_json = {}
