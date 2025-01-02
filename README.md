@@ -32,7 +32,7 @@ pip install -r requirements.txt
 ```
 ## Run
 ### Code
-Revise parameters ```metric_params``` and ```test_images_dirs_or_files``` in the ```config.py```
+Revise parameters ```metric_params``` and ```test_images_dirs_or_files``` in the ```config.py```.
 ```
 python app.py
 ```
@@ -40,6 +40,7 @@ python app.py
 ```
 python app_gradio.py
 ```
+![gradio.png](data/asset/gradio.png)
 ## Result
 The results include the following:
 ### 1. folder ```xlsx``` or ```csv```
