@@ -128,15 +128,12 @@ class ImageEvaluation():
         generate_html_report(result_csv_path)
 
         # 5. generate result json
-        result_json_ = {
-            "metric_params": config.metric_params,
-            "test_images_dirs_or_csvs": {}
-        }
+        result_json_ = {}
         for metric_name in self.metric_names:
-            exec(f'result_json_["test_images_dirs_or_csvs"]["{metric_name}"] = {{}}')
-            exec(f'result_json_["test_images_dirs_or_csvs"]["{metric_name}"][f"average_{metric_name}_score"] = sum({metric_name}_scores) / len({metric_name}_scores)')
-            exec(f'result_json_["test_images_dirs_or_csvs"]["{metric_name}"][f"average_{metric_name}_score_normed"] = sum({metric_name}_scores_normed) / len({metric_name}_scores_normed)')
-            exec(f'result_json_["test_images_dirs_or_csvs"]["{metric_name}"][f"average_{metric_name}_time"] = sum({metric_name}_times) / len({metric_name}_times)')
+            exec(f'result_json_["{metric_name}"] = {{}}')
+            exec(f'result_json_["{metric_name}"][f"average_{metric_name}_score"] = sum({metric_name}_scores) / len({metric_name}_scores)')
+            exec(f'result_json_["{metric_name}"][f"average_{metric_name}_score_normed"] = sum({metric_name}_scores_normed) / len({metric_name}_scores_normed)')
+            exec(f'result_json_["{metric_name}"][f"average_{metric_name}_time"] = sum({metric_name}_times) / len({metric_name}_times)')
         result_json_["average_weighted_score_normed"] = sum([config.metric_params[metric_name]["score_normed_weight"] * result_json_[metric_name][f"average_{metric_name}_score_normed"] for metric_name in self.metric_names]) / sum([config.metric_params[metric_name]["score_normed_weight"] for metric_name in self.metric_names])
 
         return result_json_
@@ -148,16 +145,22 @@ if __name__ == "__main__":
     result_json_path = os.path.join(config.json_dir, f"{get_formatted_current_time()}_{'_'.join([os.path.basename(test_images_dir_or_csv) for test_images_dir_or_csv in config.test_images_dirs_or_csvs])}.json")
     for test_images_dir_or_file in tqdm(config.test_images_dirs_or_csvs):
         if not os.path.exists(result_json_path):
-            result_json = {}
+            result_json = {
+                "metric_params": config.metric_params,
+                "test_images_dirs_or_csvs": {}
+            }
         else:
             try:
                 with open(result_json_path, 'r', encoding='utf-8') as f:
                     result_json = json.load(f)
             except json.decoder.JSONDecodeError as e:
-                result_json = {}
+                result_json = {
+                    "metric_params": config.metric_params,
+                    "test_images_dirs_or_csvs": {}
+                }
 
         print(f"\n\nProcessing {test_images_dir_or_file}...")
-        result_json[test_images_dir_or_file] = img_eval(test_images_dir_or_file)
+        result_json["test_images_dirs_or_csvs"][test_images_dir_or_file] = img_eval(test_images_dir_or_file)
         
         with open(result_json_path, 'w', encoding='utf-8') as file:
             file.write(json.dumps(result_json, indent=4, ensure_ascii=False))
