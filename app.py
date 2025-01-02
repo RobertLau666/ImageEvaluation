@@ -120,12 +120,12 @@ class ImageEvaluation():
         result_csv_path = os.path.join(config.csv_dir, os.path.splitext(os.path.basename(result_xlsx_path))[0] + '.csv')
         xlsx_to_csv(result_xlsx_path, result_csv_path)
         
-        # 3. generate plot png
+        # 3. generate plot
         for column_title in ["nsfw_detect_train_score_normed", "children_detect_train_score_normed"]:
-            plot_by_column_title(result_csv_path, column_title)
+            generate_plot_by_column_title(result_csv_path, column_title)
         
-        # 4. generate html
-        create_html_report(result_csv_path)
+        # 4. generate html report
+        generate_html_report(result_csv_path)
 
         # 5. generate result json
         result_json_ = {}

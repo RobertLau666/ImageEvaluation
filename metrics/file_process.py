@@ -141,11 +141,12 @@ def xlsx_to_csv(xlsx_file, csv_file):
     df.to_csv(csv_file, index=False)  # index=False 表示不保存行索引
     print(f"The file {xlsx_file} was successfully converted and saved as {csv_file}")
 
-def plot_by_column_title(csv_path, column_title):
+def generate_plot_by_column_title(csv_path, column_title):
     csv_name = os.path.splitext(os.path.basename(csv_path))[0]
-    # csv_name = os.path.basename(csv_path)
-    # 读取 CSV 文件
     df = pd.read_csv(csv_path)
+    if column_title not in df.columns:
+        print(f"column title {column_title} does not exist in {csv_path}, skip generating its plot.")
+        return
     all_rows_num = len(df)
 
     # 获取所有 unique 的 type 值
@@ -198,7 +199,7 @@ def plot_by_column_title(csv_path, column_title):
     plt.savefig(plt_save_path)
     plt.close()
 
-def create_html_report(csv_path):
+def generate_html_report(csv_path):
     df = pd.read_csv(csv_path)
     column_titles = list(df.columns)
 
@@ -350,6 +351,8 @@ def create_html_report(csv_path):
     data_json = df.to_json(orient='records')
     
     # 替换模板中的变量
+    html_name = os.path.splitext(os.path.basename(csv_path))[0] + f'_type:{types}_totalcount:{len(column_titles)}.html'
+    html_content = html_content.replace("<h1>Results Analysis</h1>", f"<h2>{html_name}</h2>")
     html_content = html_content.replace("row.type", "row.type")
     # html_content = html_content.replace("row.predict", f"row.{predict_name}")
     # html_content = html_content.replace("row.url", "row.img_path_or_url")
@@ -367,7 +370,7 @@ def create_html_report(csv_path):
     html_content = html_content.replace("{{ data_json }}", data_json)
     
     # 保存HTML文件
-    html_path = os.path.join(config.html_dir, os.path.splitext(os.path.basename(csv_path))[0] + f'_type:{types}_totalcount:{len(column_titles)}.html')
+    html_path = os.path.join(config.html_dir, html_name)
     with open(html_path, 'w', encoding='utf-8') as f:
         f.write(html_content)
     print(f"HTML report has been generated as '{html_path}'")
