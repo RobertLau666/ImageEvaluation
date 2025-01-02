@@ -31,7 +31,7 @@ pip install -r requirements.txt
 |-------- model.onnx
 ```
 ## Run
-Revise parameters in the ```config.py```
+Revise parameters ```metric_params``` and ```test_images_dirs_or_csvs``` in the ```config.py```
 ```
 python app.py
 ```
