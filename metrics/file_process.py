@@ -63,7 +63,7 @@ def get_img_infos(excel_path, begin_row, end_row):
 
 def get_img_urls(images_file_path, begin_row=0, end_row=-1):
     '''
-    images_file_path: the suffix must be one of '.csv', '.xlsx', '.txt', '.log', the format of each line must be either 'img_url' or 'img_url|type', column titles are not required
+    images_file_path: 1. images_file which suffix in ['.csv', '.xlsx', '.txt', '.log'] 2. the format of each line must be either 'img_url' or 'img_url type'(separate with ' ' in .txt or .log) 3. column titles are not required"
     begin_row: the rows index to start reading data
     end_row: the rows index to end reading data, -1 represents last line
     '''
@@ -72,9 +72,9 @@ def get_img_urls(images_file_path, begin_row=0, end_row=-1):
     if file_extension in ['.csv', '.xlsx']:
         data = pd.read_csv(images_file_path, header=None) if file_extension == '.csv' else pd.read_excel(images_file_path, header=None)
         all_rows_num = len(data)
-        img_paths_or_urls = data.iloc[:, 0].tolist()[begin_row:(all_rows_num if end_row == -1 else end_row)] # img_paths_or_urls = data['image_path'].tolist()[begin_row:(all_rows_num if end_row == -1 else end_row)]
+        img_paths_or_urls = data.iloc[:, 0].tolist()[begin_row:(all_rows_num if end_row == -1 else end_row)]
         if len(data.columns) > 1: # 有第2列，必须得是type
-            types = data.iloc[:, 1].tolist()[begin_row:(all_rows_num if end_row == -1 else end_row)] # types = data['type'].tolist()[begin_row:(all_rows_num if end_row == -1 else end_row)]
+            types = data.iloc[:, 1].tolist()[begin_row:(all_rows_num if end_row == -1 else end_row)]
         else:
             types = ['no_type'] * len(img_paths_or_urls)
     elif file_extension in ['.txt', '.log']:
@@ -156,30 +156,26 @@ def concatenate_images(png_dir):
         for img in images_list:
             concatenate_image.paste(img, (0, current_height))
             current_height += img.height
-        concatenate_image_path = os.path.join(png_dir, f'{os.path.basename(os.path.dirname(png_dir))}_concatenate_image.png') # f"{'+'.join([os.path.splitext(os.path.basename(image_path))[0] for image_path in image_paths])}.png"
+        concatenate_image_path = os.path.join(png_dir, f'{os.path.basename(os.path.dirname(png_dir))}_concatenate_image.png')
         concatenate_image.save(concatenate_image_path)
         return concatenate_image_path
 
 def generate_plot_by_column_title(csv_path, column_title):
-    # 获取 CSV 文件名（不含扩展名）
     csv_name = os.path.splitext(os.path.basename(csv_path))[0]
     df = pd.read_csv(csv_path)
     
-    # 检查指定列是否存在
     if column_title not in df.columns:
         print(f"Column title '{column_title}' does not exist in {csv_path}. Skipping plot generation.")
         return {}
 
     types_count = len(df)
-
-    # 获取所有 unique 的 type 值
     type_names = sorted(df["type"].unique())
 
     # 创建一个大图来拼接所有的饼状图
     num_types = len(type_names)
     per_fig_size = 6
-    num_cols = 3  # 每行显示 3 个图
-    num_rows = math.ceil(num_types / num_cols)  # 计算所需的行数
+    num_cols = 3
+    num_rows = math.ceil(num_types / num_cols)
 
     # 创建子图
     fig, axes = plt.subplots(num_rows, num_cols, figsize=(per_fig_size * num_cols, per_fig_size * num_rows))
@@ -189,25 +185,17 @@ def generate_plot_by_column_title(csv_path, column_title):
         "types_count": types_count,
         "types": {}
     }
-    # 遍历所有 unique 的 type 值，分别绘制饼状图
     for i, type_name in enumerate(type_names):
         types_labels_distribute["types"][type_name] = {}
-        # 筛选出 type 为当前类别的所有行
         filtered_df = df[df["type"] == type_name]
-
-        # 统计指定列中的值的数量
         label_counts = filtered_df[column_title].value_counts()
-
-        # 计算当前 type 的总数
         type_count = filtered_df.shape[0]
-
-        # 获取当前的子图
         ax = axes[i]
 
         # 绘制饼状图
         ax.pie(label_counts, labels=label_counts.index, autopct='%1.1f%%', startangle=90)
         ax.set_title(f'column title: {column_title}\ntype name: {type_name}\ntype count: {type_count}/{types_count}={type_count / types_count}')
-        ax.axis('equal')  # 使饼图为圆形
+        ax.axis('equal')
 
         types_labels_distribute["types"][type_name]["type_count"] = type_count
         types_labels_distribute["types"][type_name]["percentage"] = type_count / types_count

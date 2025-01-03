@@ -45,7 +45,7 @@ def calculate_SSIM_score(img_numpy):
 
 def calculate_variance_score(img_numpy):
     img_numpy = cv2.cvtColor(img_numpy, cv2.COLOR_BGR2GRAY)
-    variance = cv2.meanStdDev(img_numpy)[1] # (0～INF)
+    variance = cv2.meanStdDev(img_numpy)[1]
     variance_score = variance[0][0]
     variance_score_normed = variance_norm(variance_score)
     return variance_score, variance_score_normed

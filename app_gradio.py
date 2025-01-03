@@ -44,10 +44,10 @@ def get_demo():
             </div>  
             """
         )
-        upload_file = gr.File(label="Upload file: 1. upload file which suffix in ['.csv', '.xlsx', '.txt', '.log'] 2. the format of each line must be either 'img_url' or 'img_url type' 3. column titles are not required", file_types=[".csv", ".xlsx", ".txt", ".log"])
-        checked_metric_names = gr.CheckboxGroup(list(config.metric_params.keys()), label="metric_names", info="Check the metric names you want to detect")
+        upload_file = gr.File(label="Upload file: 1. upload file which suffix in ['.csv', '.xlsx', '.txt', '.log'] 2. the format of each line must be either 'img_url' or 'img_url type' (separate with ' ' in .txt or .log) 3. column titles are not required", file_types=['.csv', '.xlsx', '.txt', '.log'])
+        checked_metric_names = gr.CheckboxGroup(list(config.metric_params.keys()), label="Metric names", info="Check the metric names you want to detect")
         process_button = gr.Button("Process")
-        status = gr.Textbox(label="Status", value="Processing not started", interactive=True)
+        status = gr.Textbox(label="Status", value="Processing not started", interactive=False)
         with gr.Row():
             csv_file = gr.File(label="Download csv file")
             html_file = gr.File(label="Download html file")
@@ -64,4 +64,5 @@ def get_demo():
     return demo
 
 if __name__ == "__main__":
-    get_demo().launch(share=True)
+    demo = get_demo()
+    demo.launch(share=True)
