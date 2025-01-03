@@ -82,7 +82,7 @@ class ImageEvaluation():
         # 1.1 metrics for single image
         img_path_or_url_skip_path = os.path.join(config.txt_dir, f'{get_formatted_current_time()}_{os.path.basename(images_dir_or_file)}_skip.txt')
         print(f"Skipped image paths or urls will save at: {img_path_or_url_skip_path}")
-        for index, (img_path_or_url, type) in enumerate(tqdm(zip(img_paths_or_urls, types))):
+        for index, (img_path_or_url, type) in enumerate(tqdm(zip(img_paths_or_urls, types), total=len(img_paths_or_urls))):
             img_numpy = get_image_numpy_from_img_url(img_path_or_url) if self.is_img_url_file else cv2.imread(img_path_or_url)
             if img_numpy is None:
                 with open(img_path_or_url_skip_path, 'a', encoding='utf-8') as file:
@@ -120,7 +120,6 @@ class ImageEvaluation():
         # 2. convert xlsx to csv
         result_csv_path = os.path.join(config.csv_dir, os.path.splitext(os.path.basename(result_xlsx_path))[0] + '.csv')
         convert_xlsx_to_csv(result_xlsx_path, result_csv_path)
-        shutil.rmtree(config.xlsx_dir)
         
         # 3. generate report html
         generate_html_report(result_csv_path)
@@ -168,6 +167,7 @@ def main():
         
         with open(result_json_path, 'w', encoding='utf-8') as file:
             file.write(json.dumps(result_json, indent=4, ensure_ascii=False))
+    shutil.rmtree(config.xlsx_dir)
     print(f"Group image metric average scores saved at: {result_json_path}")
 
 if __name__ == "__main__":

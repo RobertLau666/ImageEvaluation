@@ -211,7 +211,7 @@ def generate_plot_by_column_title(csv_path, column_title):
 
         types_labels_distribute["types"][type_name]["type_count"] = type_count
         types_labels_distribute["types"][type_name]["percentage"] = type_count / types_count
-        types_labels_distribute["types"][type_name]["label"] = []
+        types_labels_distribute["types"][type_name]["labels"] = []
         for label, label_count in zip(label_counts.index, label_counts):
             types_labels_distribute["types"][type_name]["labels"].append({
                 "label": label,
