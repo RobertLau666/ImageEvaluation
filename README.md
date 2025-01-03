@@ -47,7 +47,7 @@ The results include the following:
 The normalized scores for each metric and normalized weighted scores for each image in each file or folder in parameter ```test_images_dirs_or_files```.
 ![csv.png](data/asset/csv.png)
 ### 2. folder ```png```
-The plots according to the column_titles ```"nsfw_detect_train_score_normed"``` and ```"children_detect_train_score_normed"```, classify by ```type``` in each plot. You can see the proportion of different normalized scores.
+The plots according to the column titles ```"nsfw_detect_train_score_normed"``` and ```"children_detect_train_score_normed"```, classify by ```type``` in each plot. You can see the proportion of different normalized scores.
 ![png.png](data/asset/png.png)
 ### 3. folder ```html```
 The html report of normalized scores for each metric and normalized weighted scores for each image in each file or folder in parameter ```test_images_dirs_or_files```. You can filter the ```type```, order different metrics in ascending and descending order, and view the image.
@@ -55,62 +55,7 @@ The html report of normalized scores for each metric and normalized weighted sco
 ### 4. folder ```txt```
 During the evaluation process, if the image path or url cannot be loaded, this image will be skipped, and its ```index```, ```img_path_or_url```, ```type``` will be recorded in a txt file.
 ### 5. folder ```json```
-The parameter ```metric_params``` and the normalized average scores for each metric and normalized weighted average scores for each image in each file or folder in parameter ```test_images_dirs_or_files```. Some of the information is as follows:
-
-data/input/demo/test_images_1
-|  |  |  |  |  |
-|------|------|------|------|------|
-| ![0.png](data/input/demo/test_images_1/0.png) | ![1.png](data/input/demo/test_images_1/1.png) | ![2.png](data/input/demo/test_images_1/2.png) | ![3.png](data/input/demo/test_images_1/3.png) | ![4.png](data/input/demo/test_images_1/4.png) | 
-```json
-{
-    "saturation": {
-        "average_saturation_score": 70.83403901883534,
-        "average_saturation_score_normed": 0.5896600860005143,
-        "average_saturation_time": 0.010272836685180664
-    },
-    "PSNR": {
-        "average_PSNR_score": 7.5399527297575615,
-        "average_PSNR_score_normed": 0.6914899355883903,
-        "average_PSNR_time": 0.0006290912628173828
-    },
-    "SSIM": {
-        "average_SSIM_score": 0.15270395908780157,
-        "average_SSIM_score_normed": 0.5763519795439007,
-        "average_SSIM_time": 0.03200154304504395
-    },
-    "variance": {
-        "average_variance_score": 74.87552555096171,
-        "average_variance_score_normed": 0.9558609204319042,
-        "average_variance_time": 0.00024871826171875
-    },
-    "improved_aesthetic_predictor": {
-        "average_improved_aesthetic_predictor_score": 5.360665607452392,
-        "average_improved_aesthetic_predictor_score_normed": 0.6152192673438415,
-        "average_improved_aesthetic_predictor_time": 0.5425155639648438
-    },
-    "skytnt_anime_aesthetic": {
-        "average_skytnt_anime_aesthetic_score": 0.2086948871612549,
-        "average_skytnt_anime_aesthetic_score_normed": 0.2086948871612549,
-        "average_skytnt_anime_aesthetic_time": 1.8137116432189941
-    },
-    "nsfw_detect": {
-        "average_nsfw_detect_score": 0.008214050624519586,
-        "average_nsfw_detect_score_normed": 0.9917859493754804,
-        "average_nsfw_detect_time": 1.008475160598755
-    },
-    "nsfw_detect_train": {
-        "average_nsfw_detect_train_score": 0.0,
-        "average_nsfw_detect_train_score_normed": 1.0,
-        "average_nsfw_detect_train_time": 0.07926111221313477
-    },
-    "children_detect_train": {
-        "average_children_detect_train_score": 0.4,
-        "average_children_detect_train_score_normed": 0.6,
-        "average_children_detect_train_time": 0.04039134979248047
-    },
-    "average_weighted_score_normed": 0.6921181139383651
-}
-```
+The parameter ```metric_params```, the average scores and the average normalized scores for each metric, and the average weighted normalized scores for each file or folder in parameter ```test_images_dirs_or_files```.
 
 data/input/demo/test_images_1.csv
 |  |  |  |  |  |
@@ -164,60 +109,5 @@ data/input/demo/test_images_1.csv
         "average_children_detect_train_time": 0.24373717308044435
     },
     "average_weighted_score_normed": 0.7024329824580924
-}
-```
-
-data/input/demo/test_images_1.txt
-|  |  |  |  |  |
-|------|------|------|------|------|
-| ![0.png](https://ali-us-sync-image.oss-us-east-1.aliyuncs.com/linky_imggen_ugc/_2109_26853993_1735265741016577435.webp?x-oss-process=image/resize,w_1080/format,webp) | ![1.png](https://ali-us-sync-image.oss-us-east-1.aliyuncs.com/linky_imggen_ugc/_2109_26853993_1735295392767703058.webp?x-oss-process=image/resize,w_1080/format,webp) | ![2.png](https://ali-us-sync-image.oss-us-east-1.aliyuncs.com/linky_imggen_ugc/15090317_2109_26853955_1735265749151587895.webp?x-oss-process=image/resize,w_1080/format,webp) | ![3.png](https://ali-us-sync-image.oss-us-east-1.aliyuncs.com/linky_imggen_ugc/15090317_2109_26853955_1735295400758778905.webp?x-oss-process=image/resize,w_1080/format,webp) | ![4.png](https://ali-us-sync-image.oss-us-east-1.aliyuncs.com/linky_imggen_ugc_nsfw/14090351_2131_596325691_1735562780415595390.webp?x-oss-process=image/resize,w_1080/format,webp) | 
-```json
-{
-    "saturation": {
-        "average_saturation_score": 84.36497830374753,
-        "average_saturation_score_normed": 0.7015640981998904,
-        "average_saturation_time": 0.0019573688507080076
-    },
-    "PSNR": {
-        "average_PSNR_score": 8.638021136277034,
-        "average_PSNR_score_normed": 0.7211339274093236,
-        "average_PSNR_time": 0.0004626274108886719
-    },
-    "SSIM": {
-        "average_SSIM_score": 0.05933760563501185,
-        "average_SSIM_score_normed": 0.5296688028175058,
-        "average_SSIM_time": 0.02807588577270508
-    },
-    "variance": {
-        "average_variance_score": 54.261109903046574,
-        "average_variance_score_normed": 0.9403668821287157,
-        "average_variance_time": 0.0005202770233154296
-    },
-    "improved_aesthetic_predictor": {
-        "average_improved_aesthetic_predictor_score": 6.683196544647217,
-        "average_improved_aesthetic_predictor_score_normed": 0.6667690308621647,
-        "average_improved_aesthetic_predictor_time": 0.027332258224487305
-    },
-    "skytnt_anime_aesthetic": {
-        "average_skytnt_anime_aesthetic_score": 0.8005118131637573,
-        "average_skytnt_anime_aesthetic_score_normed": 0.8005118131637573,
-        "average_skytnt_anime_aesthetic_time": 1.7396596908569335
-    },
-    "nsfw_detect": {
-        "average_nsfw_detect_score": 0.005184800742426887,
-        "average_nsfw_detect_score_normed": 0.9948151992575731,
-        "average_nsfw_detect_time": 0.9324620246887207
-    },
-    "nsfw_detect_train": {
-        "average_nsfw_detect_train_score": 0.0,
-        "average_nsfw_detect_train_score_normed": 1.0,
-        "average_nsfw_detect_train_time": 0.06197032928466797
-    },
-    "children_detect_train": {
-        "average_children_detect_train_score": 0.8,
-        "average_children_detect_train_score_normed": 0.2,
-        "average_children_detect_train_time": 0.09664778709411621
-    },
-    "average_weighted_score_normed": 0.7283144170932145
 }
 ```

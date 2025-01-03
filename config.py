@@ -9,7 +9,7 @@ def get_formatted_current_time():
 output_dir, json_dir, xlsx_dir, csv_dir, txt_dir, html_dir, png_dir = None, None, None, None, None, None, None
 def create_dirs(test_images_dirs_or_files):
     global output_dir, json_dir, xlsx_dir, csv_dir, txt_dir, html_dir, png_dir
-    output_dir = f"data/output/{get_formatted_current_time()}_{'_'.join([os.path.basename(test_images_dir_or_file) for test_images_dir_or_file in test_images_dirs_or_files])}"
+    output_dir = f"data/output/{'_'.join([get_formatted_current_time()] + [os.path.basename(test_images_dir_or_file) for test_images_dir_or_file in test_images_dirs_or_files])}"
     json_dir = f"{output_dir}/json"
     xlsx_dir = f"{output_dir}/xlsx"
     csv_dir = f"{output_dir}/csv"

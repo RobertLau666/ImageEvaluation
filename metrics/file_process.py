@@ -136,10 +136,9 @@ def get_nsfw_rate(output_file):
     nsfw_rate = 1 - nsfw_score / all_rows_num
     return nsfw_rate
 
-def xlsx_to_csv(xlsx_file, csv_file):
+def convert_xlsx_to_csv(xlsx_file, csv_file):
     df = pd.read_excel(xlsx_file)
     df.to_csv(csv_file, index=False)  # index=False 表示不保存行索引
-    print(f"The file {xlsx_file} was successfully converted and saved as {csv_file}")
 
 def concatenate_images(png_dir):
     image_names = os.listdir(png_dir)
@@ -393,4 +392,4 @@ def generate_html_report(csv_path):
     html_path = os.path.join(config.html_dir, html_name)
     with open(html_path, 'w', encoding='utf-8') as f:
         f.write(html_content)
-    print(f"HTML report has been generated as '{html_path}'")
+    print(f"HTML report has been generated at: '{html_path}'")

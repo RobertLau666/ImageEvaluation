@@ -4,6 +4,7 @@ import time
 from tqdm import tqdm
 import config
 from metrics import *
+import shutil
 
 
 class ImageEvaluation():
@@ -78,7 +79,7 @@ class ImageEvaluation():
             children_detect_train_scores, children_detect_train_scores_normed, children_detect_train_times = [], [], []
 
         # 1. calculate metrics
-        # 1.1 可以对单张图评估的指标
+        # 1.1 metrics for single image
         img_path_or_url_skip_path = os.path.join(config.txt_dir, f'{get_formatted_current_time()}_{os.path.basename(images_dir_or_file)}_skip.txt')
         print(f"Skipped image paths or urls will save at: {img_path_or_url_skip_path}")
         for index, (img_path_or_url, type) in enumerate(tqdm(zip(img_paths_or_urls, types))):
@@ -114,17 +115,18 @@ class ImageEvaluation():
                 result_df = pd.concat([existing_df, single_df], ignore_index=True)
                 result_df.to_excel(writer, index=False)
         
-        # 1.2 必须对一组图评估的指标，如FID
+        # 1.2 metrics for group images, such as FID
 
-        # 2. convert excel file
+        # 2. convert xlsx to csv
         result_csv_path = os.path.join(config.csv_dir, os.path.splitext(os.path.basename(result_xlsx_path))[0] + '.csv')
-        xlsx_to_csv(result_xlsx_path, result_csv_path)
+        convert_xlsx_to_csv(result_xlsx_path, result_csv_path)
+        shutil.rmtree(config.xlsx_dir)
         
-        # 3. generate plot
+        # 3. generate plot png
         for column_title in ["nsfw_detect_train_score_normed", "children_detect_train_score_normed"]:
             generate_plot_by_column_title(result_csv_path, column_title)
         
-        # 4. generate html report
+        # 4. generate report html
         generate_html_report(result_csv_path)
 
         # 5. generate result json
