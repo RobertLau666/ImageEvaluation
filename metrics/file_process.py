@@ -161,11 +161,15 @@ def concatenate_images(png_dir):
         return concatenate_image_path
 
 def generate_plot_by_column_title(csv_path, column_title):
+    # 获取 CSV 文件名（不含扩展名）
     csv_name = os.path.splitext(os.path.basename(csv_path))[0]
     df = pd.read_csv(csv_path)
+    
+    # 检查指定列是否存在
     if column_title not in df.columns:
-        print(f"column title {column_title} does not exist in {csv_path}, skip generating its plot.")
+        print(f"Column title '{column_title}' does not exist in {csv_path}. Skipping plot generation.")
         return
+
     all_rows_num = len(df)
 
     # 获取所有 unique 的 type 值
@@ -174,19 +178,19 @@ def generate_plot_by_column_title(csv_path, column_title):
     # 创建一个大图来拼接所有的饼状图
     num_types = len(unique_types)
     per_fig_size = 6
-    num_cols = 3  # 设定每行 3 个图
-    num_rows = math.ceil(num_types / num_cols)  # 计算所需行数
+    num_cols = 3  # 每行显示 3 个图
+    num_rows = math.ceil(num_types / num_cols)  # 计算所需的行数
 
     # 创建子图
     fig, axes = plt.subplots(num_rows, num_cols, figsize=(per_fig_size * num_cols, per_fig_size * num_rows))
     axes = axes.flatten()  # 将 axes 转化为一维数组，方便迭代
 
     # 遍历所有 unique 的 type 值，分别绘制饼状图
-    for i, type in enumerate(unique_types):
+    for i, type_value in enumerate(unique_types):
         # 筛选出 type 为当前类别的所有行
-        filtered_df = df[df["type"] == type]
+        filtered_df = df[df["type"] == type_value]
 
-        # 统计 predict 列中各个值的数量
+        # 统计指定列中的值的数量
         predict_counts = filtered_df[column_title].value_counts()
 
         # 计算当前 type 的总数
@@ -200,23 +204,17 @@ def generate_plot_by_column_title(csv_path, column_title):
         ax.set_title(f'type: {type} \ncolumntitle: {column_title} \ncount: {count}/{all_rows_num}={count/all_rows_num}')
         ax.axis('equal')  # 使饼图为圆形
 
-        # 保存每个饼状图
-        plt.figure(figsize=(7, 7))
-        plt.pie(predict_counts, labels=predict_counts.index, autopct='%1.1f%%', startangle=90)
-        plt.title(f'type: {type} \ncolumntitle: {column_title} \ncount: {count}/{all_rows_num}={count/all_rows_num}')
-        plt.axis('equal')
-        # plt.savefig(f'{config.png_dir}/{csv_name}_type:{type}_columntitle:{column_title}_count:{count}.png')
-        plt.close()
-
     # 调整布局，防止图表重叠
     plt.tight_layout()
 
     # 将所有图表拼接在一起并保存
     plt_save_path = os.path.join(config.png_dir, f'{csv_name}_type:{unique_types}_columntitle:{column_title}_totalcount:{all_rows_num}.png')
-    fig.subplots_adjust(top=0.85)  # 调整子图布局，使得底部留出足够空间放置标题
+    fig.subplots_adjust(top=0.85)
     fig.suptitle(os.path.basename(plt_save_path), fontsize=10, ha='center', fontweight='bold', color='black')
+    
+    # 保存图像
     plt.savefig(plt_save_path)
-    plt.close()
+    plt.close(fig)  # 关闭当前图形
 
 def generate_html_report(csv_path):
     df = pd.read_csv(csv_path)

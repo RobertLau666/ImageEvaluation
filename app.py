@@ -122,14 +122,10 @@ class ImageEvaluation():
         convert_xlsx_to_csv(result_xlsx_path, result_csv_path)
         shutil.rmtree(config.xlsx_dir)
         
-        # 3. generate plot png
-        for column_title in ["nsfw_detect_train_score_normed", "children_detect_train_score_normed"]:
-            generate_plot_by_column_title(result_csv_path, column_title)
-        
-        # 4. generate report html
+        # 3. generate report html
         generate_html_report(result_csv_path)
 
-        # 5. generate result json
+        # 4. generate result json
         result_json_ = {}
         for metric_name in self.metric_names:
             exec(f'result_json_["{metric_name}"] = {{}}')
@@ -137,6 +133,10 @@ class ImageEvaluation():
             exec(f'result_json_["{metric_name}"][f"average_{metric_name}_score_normed"] = sum({metric_name}_scores_normed) / len({metric_name}_scores_normed)')
             exec(f'result_json_["{metric_name}"][f"average_{metric_name}_time"] = sum({metric_name}_times) / len({metric_name}_times)')
         result_json_["average_weighted_score_normed"] = sum([config.metric_params[metric_name]["score_normed_weight"] * result_json_[metric_name][f"average_{metric_name}_score_normed"] for metric_name in self.metric_names]) / sum([config.metric_params[metric_name]["score_normed_weight"] for metric_name in self.metric_names])
+
+        # 5. generate plot png
+        for column_title in ["nsfw_detect_train_score_normed", "children_detect_train_score_normed"]:
+            generate_plot_by_column_title(result_csv_path, column_title)
 
         return result_json_
 
