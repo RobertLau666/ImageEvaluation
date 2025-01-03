@@ -136,7 +136,9 @@ class ImageEvaluation():
 
         # 5. generate plot png
         for column_title in ["nsfw_detect_train_score_normed", "children_detect_train_score_normed"]:
-            generate_plot_by_column_title(result_csv_path, column_title)
+            types_labels_distribute = generate_plot_by_column_title(result_csv_path, column_title)
+            if types_labels_distribute != {}:
+                result_json_[column_title.replace('_score_normed', '')]["types_labels_distribute"] = types_labels_distribute
 
         return result_json_
 

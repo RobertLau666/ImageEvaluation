@@ -168,15 +168,15 @@ def generate_plot_by_column_title(csv_path, column_title):
     # 检查指定列是否存在
     if column_title not in df.columns:
         print(f"Column title '{column_title}' does not exist in {csv_path}. Skipping plot generation.")
-        return
+        return {}
 
-    all_rows_num = len(df)
+    types_count = len(df)
 
     # 获取所有 unique 的 type 值
-    unique_types = sorted(df["type"].unique())
+    type_names = sorted(df["type"].unique())
 
     # 创建一个大图来拼接所有的饼状图
-    num_types = len(unique_types)
+    num_types = len(type_names)
     per_fig_size = 6
     num_cols = 3  # 每行显示 3 个图
     num_rows = math.ceil(num_types / num_cols)  # 计算所需的行数
@@ -185,36 +185,49 @@ def generate_plot_by_column_title(csv_path, column_title):
     fig, axes = plt.subplots(num_rows, num_cols, figsize=(per_fig_size * num_cols, per_fig_size * num_rows))
     axes = axes.flatten()  # 将 axes 转化为一维数组，方便迭代
 
+    types_labels_distribute = {
+        "types_count": types_count,
+        "types": {}
+    }
     # 遍历所有 unique 的 type 值，分别绘制饼状图
-    for i, type_value in enumerate(unique_types):
+    for i, type_name in enumerate(type_names):
+        types_labels_distribute["types"][type_name] = {}
         # 筛选出 type 为当前类别的所有行
-        filtered_df = df[df["type"] == type_value]
+        filtered_df = df[df["type"] == type_name]
 
         # 统计指定列中的值的数量
-        predict_counts = filtered_df[column_title].value_counts()
+        label_counts = filtered_df[column_title].value_counts()
 
         # 计算当前 type 的总数
-        count = filtered_df.shape[0]
+        type_count = filtered_df.shape[0]
 
         # 获取当前的子图
         ax = axes[i]
 
         # 绘制饼状图
-        ax.pie(predict_counts, labels=predict_counts.index, autopct='%1.1f%%', startangle=90)
-        ax.set_title(f'type: {type} \ncolumntitle: {column_title} \ncount: {count}/{all_rows_num}={count/all_rows_num}')
+        ax.pie(label_counts, labels=label_counts.index, autopct='%1.1f%%', startangle=90)
+        ax.set_title(f'column title: {column_title}\ntype name: {type_name}\ntype count: {type_count}/{types_count}={type_count / types_count}')
         ax.axis('equal')  # 使饼图为圆形
+
+        types_labels_distribute["types"][type_name]["type_count"] = type_count
+        types_labels_distribute["types"][type_name]["percentage"] = type_count / types_count
+        types_labels_distribute["types"][type_name]["label"] = []
+        for label, label_count in zip(label_counts.index, label_counts):
+            types_labels_distribute["types"][type_name]["labels"].append({
+                "label": label,
+                "label_count": label_count,
+                "percentage": label_count / type_count
+            })
 
     # 调整布局，防止图表重叠
     plt.tight_layout()
-
-    # 将所有图表拼接在一起并保存
-    plt_save_path = os.path.join(config.png_dir, f'{csv_name}_type:{unique_types}_columntitle:{column_title}_totalcount:{all_rows_num}.png')
+    plt_save_path = os.path.join(config.png_dir, f'{csv_name}_columntitle:{column_title}_typenames:{type_names}_typescount:{types_count}.png')
     fig.subplots_adjust(top=0.85)
     fig.suptitle(os.path.basename(plt_save_path), fontsize=10, ha='center', fontweight='bold', color='black')
-    
-    # 保存图像
     plt.savefig(plt_save_path)
-    plt.close(fig)  # 关闭当前图形
+    plt.close(fig)
+
+    return types_labels_distribute
 
 def generate_html_report(csv_path):
     df = pd.read_csv(csv_path)

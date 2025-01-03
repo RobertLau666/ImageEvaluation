@@ -10,7 +10,7 @@ def process(upload_file, checked_metric_names):
     if upload_file is None:
         return 'Warning: please upload file!', None, None, None, None, None, None
     if len(checked_metric_names) == 0:
-        return 'Warning: please check metric_names!', None, None, None, None, None, None
+        return 'Warning: please check metric names!', None, None, None, None, None, None
     
     gradio_input_dir = "data/input/gradio"
     if not os.path.exists(gradio_input_dir):
@@ -25,7 +25,6 @@ def process(upload_file, checked_metric_names):
 
     app.main()
 
-    status = "Process done!"
     csv_file_path = os.path.join(config.csv_dir, os.listdir(config.csv_dir)[0]) if len(os.listdir(config.csv_dir)) != 0 else None
     html_file_path = os.path.join(config.html_dir, os.listdir(config.html_dir)[0]) if len(os.listdir(config.html_dir)) != 0 else None
     png_file_path = concatenate_images(config.png_dir)
@@ -34,7 +33,7 @@ def process(upload_file, checked_metric_names):
     shutil.make_archive(config.output_dir, 'zip', config.output_dir)
     zip_file_path = config.output_dir + '.zip'
 
-    return status, csv_file_path, html_file_path, png_file_path, txt_file_path, json_file_path, zip_file_path
+    return "Process done!", csv_file_path, html_file_path, png_file_path, txt_file_path, json_file_path, zip_file_path
 
 def get_demo():
     with gr.Blocks() as demo:
@@ -45,7 +44,7 @@ def get_demo():
             </div>  
             """
         )
-        upload_file = gr.File(label="upload file: 1. upload file which suffix in ['.csv', '.xlsx', '.txt', '.log'] 2. the format of each line must be either 'img_url' or 'img_url|type' 3. column titles are not required", file_types=[".csv", ".xlsx", ".txt", ".log"])
+        upload_file = gr.File(label="Upload file: 1. upload file which suffix in ['.csv', '.xlsx', '.txt', '.log'] 2. the format of each line must be either 'img_url' or 'img_url|type' 3. column titles are not required", file_types=[".csv", ".xlsx", ".txt", ".log"])
         checked_metric_names = gr.CheckboxGroup(list(config.metric_params.keys()), label="metric_names", info="Check the metric names you want to detect")
         process_button = gr.Button("Process")
         status = gr.Textbox(label="Status", value="Processing not started", interactive=True)
@@ -56,11 +55,6 @@ def get_demo():
             txt_file = gr.File(label="Download txt file")
             json_file = gr.File(label="Download json file")
             zip_file = gr.File(label="Download zip file")
-
-            # csv_file = gr.DataFrame(label="CSV Preview")
-            # html_file = gr.HTML(label="HTML Preview")
-            # png_file = gr.Image(label="PNG Preview")
-            # json_file = gr.JSON(label="JSON Preview")
 
         process_button.click(
             process,
