@@ -41,7 +41,7 @@ def get_demo():
             """
             <div style="text-align: center; font-size: 32px; font-weight: bold; margin-bottom: 20px;">
             Image Analysis Tool
-            </div>  
+            </div>
             """
         )
         upload_file = gr.File(label="Upload file: 1. upload file which suffix in ['.csv', '.xlsx', '.txt', '.log'] 2. the format of each line must be either 'img_url' or 'img_url type' (separate with ' ' in .txt or .log) 3. column titles are not required", file_types=['.csv', '.xlsx', '.txt', '.log'])
